@@ -435,6 +435,8 @@ const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
     if (settings.getParam("bot") && !botWorkingRightNow) {
       botWorkingRightNow = true;
 
+      document.querySelector("mona-lisa-embed").wakeUp();
+
       // if (document.querySelector("faceplate-toast")) {
       //   await new Promise(resolve => setTimeout(resolve,10000));
       // }
