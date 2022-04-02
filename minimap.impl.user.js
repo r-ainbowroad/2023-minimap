@@ -1,46 +1,58 @@
-if (!arguments[0]) {
-  const docBody = document.querySelector("body");
-  const htmlBlock = `<style>
-    mlpminimap {
-      display: block;
-      position: absolute;
-      top: 0%;
-      right: 0%;
-      background-color: rgba(0,0,0,.75);
-      border: 1px solid black;
-      overflow: hidden;
-    }
-  </style>
-  <mlpminimap>
-    <h1>Please update minimap!</h1>
-    <p>You can do it just clicking <a href="https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/minimap.user.js" target="_blank">here</p>
-  </mlpminimap>`;
-  const htmlObject = document.createElement("div");
-  htmlObject.innerHTML = htmlBlock;
-  docBody.appendChild(htmlObject);
-  return;
-}
+// ==UserScript==
+// @name        DO NOT DIRECTLY USE THIS IMPLEMENTATION OF r/Place MLP Minimap
+// @namespace   http://tampermonkey.net/
+// @description STOP; DO NOT DIRECTLY USE THIS
+// @include     https://hot-potato.reddit.com/embed*
+// @version     0.3
+// @grant       GM.xmlHttpRequest
+// @author      Ponywka, bb010g
+// @connect     raw.githubusercontent.com
+// @connect     media.githubusercontent.com
+// ==/UserScript==
 
-const GM = arguments[0].GM;
+const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
 
 (async function () {
   //document.querySelector("faceplate-toast")
   //document.createElement('mona-lisa-app').isFullScreen.globalState.state = true;
 
-  const rPlaceCanvas = document
-    .querySelector("mona-lisa-embed")
-    .shadowRoot.querySelector("mona-lisa-share-container mona-lisa-canvas")
-    .shadowRoot.querySelector("canvas");
+  const rPlaceCanvas = await new Promise((resolve) => {
+    let interval = setInterval(() => {
+      try {
+        const rPlaceCanvas = document
+          .querySelector("mona-lisa-embed")
+          .shadowRoot.querySelector("mona-lisa-share-container mona-lisa-canvas")
+          .shadowRoot.querySelector("canvas");
+        console.log("Found canvas. Good!");
+        resolve(rPlaceCanvas);
+        clearInterval(interval);
+      } catch (e) {
+        console.error("Failed to attach to canvas. Trying again...");
+      }
+    }, 1000);
+  });
 
   const rPlaceWidth = 2000;
   const rPlaceHeight = 1000;
   const rPlacePixelSize = 10;
 
-  const rPlaceTemplateNormal =
-    "https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/canvas2k.png";
-  const rPlaceTemplateBot =
-    "https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/bot2k.png";
-  let rPlaceTemplate = rPlaceTemplateNormal;
+  const rPlaceTemplatesGithubLfs = true;
+  const rPlaceTemplates = [
+    "mlp",
+  ];
+  const rPlaceTemplateNormal = function (templateName) {
+    if (rPlaceTemplatesGithubLfs) {
+      return `https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
+    }
+    return `https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
+  };
+  const rPlaceTemplateBot = function (templateName) {
+    if (rPlaceTemplatesGithubLfs) {
+      return `https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main/${templateName}/bot2k.png`;
+    }
+    return `https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
+  };
+  let rPlaceTemplate = rPlaceTemplateNormal(rPlaceTemplates[0]);
 
   class Resizer {
     constructor(elResizer, elBlock) {
@@ -139,11 +151,11 @@ const GM = arguments[0].GM;
           .querySelector("mona-lisa-embed")
           .shadowRoot.querySelector("mona-lisa-coordinates")
           .shadowRoot.querySelector("div");
-        console.log("Good!");
+        console.log("Found coordinate block. Good!");
         resolve(coordinateBlock);
         clearInterval(interval);
       } catch (e) {
-        console.error("Attaching failed... trying again...");
+        console.error("Failed to attach to coordinate block. Trying again...");
       }
     }, 1000);
   });
@@ -164,7 +176,7 @@ const GM = arguments[0].GM;
     border: 1px solid black;
     overflow: hidden;
   }
-  
+
   mlpminimap .map {
     position: absolute;
     margin: 0;
@@ -173,7 +185,7 @@ const GM = arguments[0].GM;
     image-rendering: pixelated;
     pointer-events: none;
   }
-  
+
   mlpminimap .crosshair {
     position: absolute;
     top: 50%;
@@ -181,7 +193,7 @@ const GM = arguments[0].GM;
     border: 2px solid red;
     transform: translateX(-50%) translateY(-50%);
   }
-  
+
   mlpminimap #resizer {
     position: absolute;
     bottom: 0%;
@@ -193,12 +205,12 @@ const GM = arguments[0].GM;
     border-top: 10px solid transparent;
     border-right: 10px solid transparent;
   }
-  
+
   mlpminimap .settings {
     position: absolute;
     background-color: rgba(0,0,0,.75);
   }
-  
+
   mlpminimap .settings .clickable {
     cursor: pointer;
     user-select: none;
@@ -291,7 +303,7 @@ const GM = arguments[0].GM;
   };
 
   function updateTemplate() {
-    GM.xmlHttpRequest({
+    mlp_GM.xmlHttpRequest({
       method: "GET",
       responseType: "arraybuffer",
       url: `${rPlaceTemplate}?t=${new Date().getTime()}`,
@@ -313,9 +325,9 @@ const GM = arguments[0].GM;
   settings.createSwitch("Bot", "bot", false, () => {
     settings.setParam("autocolor", false);
     if (settings.getParam("bot")) {
-      rPlaceTemplate = rPlaceTemplateBot;
+      rPlaceTemplate = rPlaceTemplateBot(rPlaceTemplates[0]);
     } else {
-      rPlaceTemplate = rPlaceTemplateNormal;
+      rPlaceTemplate = rPlaceTemplateNormal(rPlaceTemplates[0]);
     }
     updateTemplate();
   });
@@ -423,9 +435,9 @@ const GM = arguments[0].GM;
     if (settings.getParam("bot") && !botWorkingRightNow) {
       botWorkingRightNow = true;
 
-      /*if(document.querySelector("faceplate-toast")){
-			await new Promise(resolve => setTimeout(resolve,10000));
-		}*/
+      // if (document.querySelector("faceplate-toast")) {
+      //   await new Promise(resolve => setTimeout(resolve,10000));
+      // }
 
       const placeButton = document
         .querySelector("mona-lisa-embed")
@@ -504,3 +516,5 @@ const GM = arguments[0].GM;
     }
   }, 1000);
 })();
+
+// vim:et:sw=2
