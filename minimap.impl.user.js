@@ -493,10 +493,11 @@ const { html, render } = mlp_uhtml;
     const parsedData = paletteButton.children[0].style.backgroundColor.match(
       /rgb\(([0-9]{1,3}), ([0-9]{1,3}), ([0-9]{1,3})\)/
     );
+    const colorID = parseInt(paletteButton.getAttribute("data-color"));
     if (parsedData) {
-      palette.push([parsedData[1], parsedData[2], parsedData[3]]);
+      palette.push([parsedData[1], parsedData[2], parsedData[3], colorID]);
     } else {
-      palette.push([0, 0, 0]);
+      palette.push([0, 0, 0, -1]);
     }
   }
 
@@ -514,8 +515,8 @@ const { html, render } = mlp_uhtml;
     for (let i = 0; i < diff.length; i++) {
       if (diff[correctColorID] > diff[i]) correctColorID = i;
     }
-    //console.log(correctColorID);
-    paletteButtons[correctColorID].click();
+
+    document.querySelector("mona-lisa-embed").selectedColor = palette[correctColorID][3];
   }
 
   function intToHex(int1) {
@@ -577,7 +578,13 @@ const { html, render } = mlp_uhtml;
     return [diff, nCisPixels];
   }
 
-  setInterval(async () => {
+  let lastUpdate = 0;
+  const botTimeout = 1000;
+  setInterval(() => {
+    // Fix bug when tab goes to sleep
+    if(Date.now() - lastUpdate < botTimeout * 0.9) return;
+    lastUpdate = Date.now();
+
     // Update the minimap image (necessary for checking the diff)
     botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
     botCtx.drawImage(canvas, 0, 0);
@@ -605,72 +612,18 @@ const { html, render } = mlp_uhtml;
 
       document.querySelector("mona-lisa-embed").wakeUp();
 
-      // if (document.querySelector("faceplate-toast")) {
-      //   await new Promise(resolve => setTimeout(resolve,10000));
-      // }
+      const em = document.querySelector("mona-lisa-embed");
 
-      let placeButton = document
-        .querySelector("mona-lisa-embed")
-        .shadowRoot.querySelector("mona-lisa-color-picker")
-        .shadowRoot.querySelector("button.confirm");
-      if (placeButton && diff.length > 0) {
+      if (!em.nextTileAvailableIn && diff.length > 0) {
         const randID = Math.floor(Math.random() * diff.length);
         const randPixel = diff[randID];
-        let timedOut = false;
-        let arrived = false;
-        setTimeout(function () {
-          if (!arrived) {
-            timedOut = true;
-          }
-        }, 10 * 1000);
-        while (!timedOut) {
-          document
-            .querySelector("mona-lisa-embed")
-            .selectPixel({ x: randPixel[0], y: randPixel[1] });
-          const arrivedPromise = new Promise(function (resolve) {
-            setTimeout(function () {
-              if (!arrived) {
-                resolve(arrived);
-              }
-            }, 1100);
-            const posChangedListener = function () {
-              const coordinatesData = posParser.pos;
-              if (randPixel[0] === coordinatesData.x && randPixel[1] === coordinatesData.y) {
-                arrived = true;
-                resolve(arrived);
-                posParser.removeEventListener("posChanged", posChangedListener);
-              }
-            };
-            posParser.addEventListener("posChanged", posChangedListener);
-          });
-          if (await arrivedPromise) {
-            break;
-          }
-        }
-        if (!timedOut) {
-          let placeButton = document
-            .querySelector("mona-lisa-embed")
-            .shadowRoot.querySelector("mona-lisa-color-picker")
-            .shadowRoot.querySelector("button.confirm");
-          if (placeButton) {
-            const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
-            autoColorPick(imageDataRight);
-            botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
-            botCtx.drawImage(rPlaceCanvas, 0, 0);
-            const imageDataNew = botCtx.getImageData(randPixel[0], randPixel[1], 1, 1);
-
-            if (
-              imageDataRight.data[0] !== imageDataNew.data[0] ||
-              imageDataRight.data[1] !== imageDataNew.data[1] ||
-              imageDataRight.data[2] !== imageDataNew.data[2]
-            ) {
-              placeButton.click();
-            } else {
-              console.log("Correct!");
-            }
-          }
-        }
+        const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
+        autoColorPick(imageDataRight);
+        em.camera.applyPosition({ x: randPixel[0], y: randPixel[1] });
+        em.showColorPicker = true;
+        em.onConfirmPixel();
       }
+
       botWorkingRightNow = false;
     }
   }, 1000);
