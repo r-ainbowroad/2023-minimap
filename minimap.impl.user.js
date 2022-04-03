@@ -66,6 +66,7 @@ const { html, render } = mlp_uhtml;
     rPlaceTemplateNames.push(templateName);
   };
   addRPlaceTemplate("mlp", { bot: true });
+  addRPlaceTemplate("r-ainbowroad", { bot: false });
   let rPlaceTemplateName;
   let rPlaceTemplate;
   const setRPlaceTemplate = function (templateName) {
@@ -533,6 +534,9 @@ const { html, render } = mlp_uhtml;
     >`;
 
     if (settings.getSetting("bot").enabled && !botWorkingRightNow) {
+      if (rPlaceTemplate.botUrl === undefined) {
+        return;
+      }
       botWorkingRightNow = true;
 
       document.querySelector("mona-lisa-embed").wakeUp();
