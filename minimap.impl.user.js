@@ -455,7 +455,7 @@ const { html, render } = mlp_uhtml;
     })
   );
 
-  let botWorkingRightNow = false;
+  let botLock = false;
 
   // Fetch template, returns a Promise<Uint8Array>, on error returns the response object
   function fetchTemplate(url) {
@@ -479,24 +479,15 @@ const { html, render } = mlp_uhtml;
   }
 
   updateTemplate = function () {
-    const previousBotWorkingRightNow = botWorkingRightNow;
-    botWorkingRightNow = true;
-    restoredBotWorkingRightNow = false;
-    const restoreBotWorkingRightNow = function () {
-      if (!restoredBotWorkingRightNow && previousBotWorkingRightNow !== true) {
-        restoredBotWorkingRightNow = true;
-        botWorkingRightNow = previousBotWorkingRightNow;
-      }
-    };
+    botLock = true;
     const rPlaceTemplateUrl =
       rPlaceTemplate.botUrl !== undefined && settings.getSetting("bot").enabled
         ? rPlaceTemplate.botUrl
         : rPlaceTemplate.canvasUrl;
-    setTimeout(restoreBotWorkingRightNow, 10 * 1000);
     fetchTemplate(rPlaceTemplateUrl)
       .then((array) => {
         imageBlock.src = getPngDataUrlForBytes(array);
-        restoreBotWorkingRightNow();
+        botLock = false;
       })
       .catch((err) => {
         console.error("Error updating template", err);
@@ -764,12 +755,10 @@ const { html, render } = mlp_uhtml;
         >${percentage}% (${nMissingPixels}/${nCisPixels})</span
       >`;
 
-      if (settings.getSetting("bot").enabled && !botWorkingRightNow) {
+      if (settings.getSetting("bot").enabled && !botLock) {
         if (rPlaceTemplate.botUrl === undefined) {
           return;
         }
-        botWorkingRightNow = true;
-
         embed.wakeUp();
 
         if (!embed.nextTileAvailableIn && diff.length > 0) {
@@ -786,8 +775,6 @@ const { html, render } = mlp_uhtml;
           );
           await waitMs(botAfterPlaceTimeout);
         }
-
-        botWorkingRightNow = false;
       }
 
       await waitMs(botTimeout);
