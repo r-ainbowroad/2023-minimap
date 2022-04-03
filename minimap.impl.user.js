@@ -116,6 +116,19 @@ const { html, render } = mlp_uhtml;
     }
   }
 
+  const posEqualsPos = function (pos0, pos1) {
+    if (pos0.x !== pos1.x) {
+      return false;
+    }
+    if (pos0.y !== pos1.y) {
+      return false;
+    }
+    if (pos0.scale !== pos1.scale) {
+      return false;
+    }
+    return true;
+  };
+
   class PosParser extends Emitter {
     parseCoordinateBlock() {
       const parsedData = this.coordinateBlock.innerText.match(/\(([0-9]+),([0-9]+)\) ([0-9.]+)x/);
@@ -145,7 +158,7 @@ const { html, render } = mlp_uhtml;
 
       requestAnimationFrame(function measure(time) {
         const coordinatesData = _root.parseCoordinateBlock();
-        if (JSON.stringify(_root.pos) !== JSON.stringify(coordinatesData)) {
+        if (!posEqualsPos(_root.pos, coordinatesData)) {
           _root.pos = coordinatesData;
           _root.dispatchEvent(new Event("posChanged"));
         }
@@ -372,6 +385,7 @@ const { html, render } = mlp_uhtml;
     "autoColor",
     new CheckboxSetting("Auto color picker", false, function (autoColorSetting) {
       settings.getSetting("bot").enabled = false;
+      updateTemplate();
     })
   );
   settings.addSetting(
@@ -389,7 +403,10 @@ const { html, render } = mlp_uhtml;
     })
   );
 
+  let botWorkingRightNow = false;
   updateTemplate = function () {
+    const previousBotWorkingRightNow = botWorkingRightNow;
+    botWorkingRightNow = true;
     const rPlaceTemplateUrl =
       rPlaceTemplate.botUrl !== undefined && settings.getSetting("bot").enabled
         ? rPlaceTemplate.botUrl
@@ -402,6 +419,9 @@ const { html, render } = mlp_uhtml;
         imageBlock.src =
           "data:image/png;base64," +
           btoa(String.fromCharCode.apply(null, new Uint8Array(res.response)));
+        if (previousBotWorkingRightNow !== true) {
+          botWorkingRightNow = previousBotWorkingRightNow;
+        }
       },
     });
   };
@@ -482,8 +502,6 @@ const { html, render } = mlp_uhtml;
     }
   });
 
-  let botWorkingRightNow = false;
-
   const botCanvas = document.createElement("canvas");
   botCanvas.width = rPlaceCanvas.width;
   botCanvas.height = rPlaceCanvas.height;
@@ -552,8 +570,31 @@ const { html, render } = mlp_uhtml;
       if (placeButton && diff.length > 0) {
         const randID = Math.floor(Math.random() * diff.length);
         const randPixel = diff[randID];
-        document.querySelector("mona-lisa-embed").selectPixel({ x: randPixel[0], y: randPixel[1] });
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        while (true) {
+          document
+            .querySelector("mona-lisa-embed")
+            .selectPixel({ x: randPixel[0], y: randPixel[1] });
+          const arrived = await new Promise(function (resolve) {
+            let arrived = false;
+            setInterval(function () {
+              if (!arrived) {
+                resolve(arrived);
+              }
+            }, 500);
+            const posChangedListener = function () {
+              const coordinatesData = posParser.pos;
+              if (randPixel[0] === coordinatesData.x && randPixel[1] === coordinatesData.y) {
+                arrived = true;
+                resolve(arrived);
+                posParser.removeEventListener("posChanged", posChangedListener);
+              }
+            };
+            posParser.addEventListener("posChanged", posChangedListener);
+          });
+          if (arrived) {
+            break;
+          }
+        }
         const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
         autoColorPick(imageDataRight);
         botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
