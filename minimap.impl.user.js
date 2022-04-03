@@ -588,56 +588,66 @@ const { html, render } = mlp_uhtml;
     return [diff, nCisPixels];
   }
 
-  let lastUpdate = 0;
+  function waitMs(ms) {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        resolve();
+      }, ms)
+    );
+  }
+
   const botTimeout = 1000;
-  setInterval(() => {
-    // Fix bug when tab goes to sleep
-    if (Date.now() - lastUpdate < botTimeout * 0.9) return;
-    lastUpdate = Date.now();
+  (async () => {
+    while (true) {
+      // Update the minimap image (necessary for checking the diff)
+      botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
+      botCtx.drawImage(canvas, 0, 0);
+      botCtx.globalCompositeOperation = "source-in";
+      botCtx.drawImage(rPlaceCanvas, 0, 0);
+      botCtx.globalCompositeOperation = "source-over";
 
-    // Update the minimap image (necessary for checking the diff)
-    botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
-    botCtx.drawImage(canvas, 0, 0);
-    botCtx.globalCompositeOperation = "source-in";
-    botCtx.drawImage(rPlaceCanvas, 0, 0);
-    botCtx.globalCompositeOperation = "source-over";
+      // Compute the diff
+      const diffAndCisPixels = getDiff(botCanvas.width, botCanvas.height, botCtx, ctx);
+      const diff = diffAndCisPixels[0];
+      const nCisPixels = diffAndCisPixels[1];
 
-    // Compute the diff
-    const diffAndCisPixels = getDiff(botCanvas.width, botCanvas.height, botCtx, ctx);
-    const diff = diffAndCisPixels[0];
-    const nCisPixels = diffAndCisPixels[1];
+      // Update the display with current stats
+      const nMissingPixels = nCisPixels - diff.length;
+      const percentage = ((100 * nMissingPixels) / nCisPixels).toPrecision(3);
+      settings.getSetting("pixelDisplayProgress").content = html`<span style="font-weight: bold;"
+        >${percentage}% (${nMissingPixels}/${nCisPixels})</span
+      >`;
 
-    // Update the display with current stats
-    const nMissingPixels = nCisPixels - diff.length;
-    const percentage = ((100 * nMissingPixels) / nCisPixels).toPrecision(3);
-    settings.getSetting("pixelDisplayProgress").content = html`<span style="font-weight: bold;"
-      >${percentage}% (${nMissingPixels}/${nCisPixels})</span
-    >`;
+      if (settings.getSetting("bot").enabled && !botWorkingRightNow) {
+        if (rPlaceTemplate.botUrl === undefined) {
+          return;
+        }
+        botWorkingRightNow = true;
 
-    if (settings.getSetting("bot").enabled && !botWorkingRightNow) {
-      if (rPlaceTemplate.botUrl === undefined) {
-        return;
+        embed.wakeUp();
+
+        if (!embed.nextTileAvailableIn && diff.length > 0) {
+          const randID = Math.floor(Math.random() * diff.length);
+          const randPixel = diff[randID];
+          const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
+          autoColorPick(imageDataRight);
+          embed.camera.applyPosition({
+            x: randPixel[0],
+            y: randPixel[1],
+          });
+          embed.showColorPicker = true;
+          embed.onConfirmPixel();
+          console.log(
+            `Placed [x: ${randPixel[0]}, y: ${randPixel[1]}, color: ${embed.selectedColor}]`
+          );
+        }
+
+        botWorkingRightNow = false;
       }
-      botWorkingRightNow = true;
 
-      embed.wakeUp();
-
-      if (!embed.nextTileAvailableIn && diff.length > 0) {
-        const randID = Math.floor(Math.random() * diff.length);
-        const randPixel = diff[randID];
-        const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
-        autoColorPick(imageDataRight);
-        embed.camera.applyPosition({ x: randPixel[0], y: randPixel[1] });
-        embed.showColorPicker = true;
-        embed.onConfirmPixel();
-        console.log(
-          `Placed [x: ${randPixel[0]}, y: ${randPixel[1]}, color: ${embed.selectedColor}]`
-        );
-      }
-
-      botWorkingRightNow = false;
+      await waitMs(botTimeout);
     }
-  }, botTimeout);
+  })().then((r) => {});
 })();
 
 // vim:et:sw=2
