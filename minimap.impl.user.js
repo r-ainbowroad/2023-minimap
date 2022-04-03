@@ -51,7 +51,7 @@ const { html, render } = mlp_uhtml;
   });
 
   const rPlaceWidth = 2000;
-  const rPlaceHeight = 1000;
+  const rPlaceHeight = 2000;
   const rPlacePixelSize = 10;
 
   const rPlaceTemplatesGithubLfs = true;
@@ -59,7 +59,7 @@ const { html, render } = mlp_uhtml;
     ? "https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main"
     : "https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main";
   const getRPlaceTemplateUrl = function (templateName, type) {
-    return `${rPlaceTemplateBaseUrl}/${templateName}/${type}2k.png`;
+    return `${rPlaceTemplateBaseUrl}/${templateName}/${type}2k2k.png`;
   };
   const rPlaceTemplateNames = [];
   const rPlaceTemplates = new Map();
