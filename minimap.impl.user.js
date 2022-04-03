@@ -50,6 +50,13 @@ const { html, render } = mlp_uhtml;
     }, 1000);
   });
 
+  // Load all canvases
+  embed.camera.applyPosition({x: 0, y: 0});
+  embed.camera.applyPosition({x: 0, y: rPlaceCanvas.height});
+  embed.camera.applyPosition({x: rPlaceCanvas.width, y: 0});
+  embed.camera.applyPosition({x: rPlaceCanvas.width, y: rPlaceCanvas.height});
+  embed.camera.applyPosition({x: Math.floor(rPlaceCanvas.width / 2), y: Math.floor(rPlaceCanvas.height / 2) });
+
   const rPlacePixelSize = 10;
 
   const rPlaceTemplatesGithubLfs = true;
