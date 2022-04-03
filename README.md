@@ -22,3 +22,8 @@
 * To get the template changed:
   * For /r/MyLittlePony: ping `@Midnight Ponywka#4625` or `@Bigcheese#3910`
   * For /r/ainbowroad: in `#minimap`, ping `@bb010g#5294`
+
+## Joining the minimap
+
+If your subreddit wants to join the collaborative minimap, have whoever's going to be updating templates join <https://manechat.net> and, in `#rplace`'s "Tool Creation" thread, ping `@bb010g#5294` or `@Bigcheese#3910` with information.
+Please ask whoever's managing the minimap for your subreddit for changes to the minimap or template, to avoid disrupting Manechat.
