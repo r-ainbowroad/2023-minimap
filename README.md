@@ -1,6 +1,7 @@
 # /r/Place collaborative minimap userscript
 ## Help [/r/MyLittlePony](https://reddit.com/r/mylittlepony) get a pony on /r/place!
 ## Help [/r/ainbowroad](https://reddit.com/r/ainbowroad) build a rainbow road on /r/place!
+## Do you speak Spanish? [Read this instead.](README.es.md)
 
 ![example of the /r/mylittlepony overlay](https://i.imgur.com/gseABgb.png)
 
