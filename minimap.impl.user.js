@@ -780,7 +780,7 @@ const { html, render } = mlp_uhtml;
           embed.showColorPicker = true;
           embed.onConfirmPixel();
           console.log(
-            `[${Date()}] Placed [x: ${randPixel[0]}, y: ${randPixel[1]}, color: ${
+            `[${Date()}] Placed [x: ${randPixel.x}, y: ${randPixel.y}, color: ${
               embed.selectedColor
             }]`
           );
