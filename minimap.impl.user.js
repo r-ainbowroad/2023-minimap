@@ -66,7 +66,7 @@ const { html, render } = mlp_uhtml;
     rPlaceTemplateNames.push(templateName);
   };
   addRPlaceTemplate("mlp", { bot: true });
-  addRPlaceTemplate("r-ainbowroad", { bot: false });
+  addRPlaceTemplate("r-ainbowroad", { bot: true });
   let rPlaceTemplateName;
   let rPlaceTemplate;
   const setRPlaceTemplate = function (templateName) {
