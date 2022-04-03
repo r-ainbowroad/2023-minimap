@@ -639,7 +639,9 @@ const { html, render } = mlp_uhtml;
           embed.showColorPicker = true;
           embed.onConfirmPixel();
           console.log(
-            `Placed [x: ${randPixel[0]}, y: ${randPixel[1]}, color: ${embed.selectedColor}]`
+            `[${Date()}] Placed [x: ${randPixel[0]}, y: ${randPixel[1]}, color: ${
+              embed.selectedColor
+            }]`
           );
         }
 
