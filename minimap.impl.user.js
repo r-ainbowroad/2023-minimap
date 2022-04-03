@@ -233,6 +233,18 @@ const { html, render } = mlp_uhtml;
     position: absolute;
     background-color: rgba(0,0,0,.75);
   }
+  
+  mlpminimap .settings > div{
+    display: none;
+  }
+  
+  mlpminimap .settings > .alwaysshow{
+    display: block;
+  }
+  
+  mlpminimap:hover .settings > div{
+    display: block;
+  }
 
   mlpminimap .settings .clickable {
     cursor: pointer;
@@ -267,18 +279,27 @@ const { html, render } = mlp_uhtml;
       //   ${this.name}: <input type="checkbox" .checked=${this.enabled} onchange=${onchange} />
       // </label>`;
       const onclick = () => this.onclick();
-      return html.for(ref, id)`<div data-id=${id} class="clickable" onclick=${onclick}>
+      const classes = ["clickable"];
+      this.enabled ? classes.push("alwaysshow") : null;
+      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")} onclick=${onclick}>
         ${this.name}: <span>${this.enabled ? "Enabled" : "Disabled"}</span>
       </div>`;
     }
   }
 
   class CycleSetting {
-    constructor(name, values = ["Unset"], valueIx = 0, callback = function (setting) {}) {
+    constructor(
+      name,
+      values = ["Unset"],
+      valueIx = 0,
+      callback = function (setting) {},
+      alwaysShow = false
+    ) {
       this.name = name;
       this.values = values;
       this.valueIx = valueIx;
       this.callback = callback;
+      this.alwaysShow = alwaysShow;
     }
     get value() {
       return this.values[this.valueIx];
@@ -289,35 +310,45 @@ const { html, render } = mlp_uhtml;
     }
     htmlFor(ref, id) {
       const onclick = () => this.onclick();
-      return html.for(ref, id)`<div data-id=${id} class="clickable" onclick=${onclick}>
+      const classes = ["clickable"];
+      this.alwaysShow ? classes.push("alwaysshow") : null;
+      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")} onclick=${onclick}>
         ${this.name}: <span>${this.value}</span>
       </div>`;
     }
   }
 
   class ButtonSetting {
-    constructor(name, callback = function (setting) {}) {
+    constructor(name, callback = function (setting) {}, alwaysShow = false) {
       this.name = name;
       this.callback = callback;
+      this.alwaysShow = alwaysShow;
     }
     onclick() {
       this.callback(this);
     }
     htmlFor(ref, id) {
       const onclick = () => this.onclick();
-      return html.for(ref, id)`<div data-id=${id} class="clickable" onclick=${onclick}>
+      const classes = ["clickable"];
+      this.alwaysShow ? classes.push("alwaysshow") : null;
+      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")} onclick=${onclick}>
         ${this.name}
       </div>`;
     }
   }
 
   class DisplaySetting {
-    constructor(name, content) {
+    constructor(name, content, alwaysShow = false) {
       this.name = name;
       this.content = content;
+      this.alwaysShow = alwaysShow;
     }
     htmlFor(ref, id) {
-      return html.for(ref, id)`<div data-id=${id}>${this.name}: ${this.content}</b>`;
+      const classes = [];
+      this.alwaysShow ? classes.push("alwaysshow") : null;
+      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")}>${this.name}: ${
+        this.content
+      }</b>`;
     }
   }
 
@@ -376,10 +407,16 @@ const { html, render } = mlp_uhtml;
   const settings = new Settings(settingsBlock, mlpMinimapBlock);
   settings.addSetting(
     "templateName",
-    new CycleSetting("Template", rPlaceTemplateNames, 0, function (templateNameSetting) {
-      setRPlaceTemplate(templateNameSetting.value);
-      updateTemplate();
-    })
+    new CycleSetting(
+      "Template",
+      rPlaceTemplateNames,
+      0,
+      function (templateNameSetting) {
+        setRPlaceTemplate(templateNameSetting.value);
+        updateTemplate();
+      },
+      true
+    )
   );
   settings.addSetting(
     "autoColor",
@@ -395,7 +432,10 @@ const { html, render } = mlp_uhtml;
       updateTemplate();
     })
   );
-  settings.addSetting("pixelDisplayProgress", new DisplaySetting("Current progress", "Unknown"));
+  settings.addSetting(
+    "pixelDisplayProgress",
+    new DisplaySetting("Current progress", "Unknown", true)
+  );
   settings.addSetting(
     "donate",
     new ButtonSetting("Donate me plz", function (donateSetting) {
