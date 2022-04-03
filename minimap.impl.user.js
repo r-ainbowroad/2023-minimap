@@ -471,7 +471,7 @@ const { html, render } = mlp_uhtml;
       updateTemplate();
     })
   );
-  settings.addSetting("nosleep", new CheckboxSetting("NoTabFreeze (SOUNDS!!!)", false));
+  settings.addSetting("nosleep", new CheckboxSetting("NoTabFreeze (🔇 Need to mute tab)", false));
   settings.addSetting(
     "pixelDisplayProgress",
     new DisplaySetting("Current progress", "Unknown", true)
