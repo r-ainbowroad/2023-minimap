@@ -51,15 +51,18 @@ const { html, render } = mlp_uhtml;
   });
 
   // Load all canvases
-  embed.camera.applyPosition({x: 0, y: 0});
+  embed.camera.applyPosition({ x: 0, y: 0 });
   await waitMs(10);
-  embed.camera.applyPosition({x: 0, y: rPlaceCanvas.height});
+  embed.camera.applyPosition({ x: 0, y: rPlaceCanvas.height });
   await waitMs(10);
-  embed.camera.applyPosition({x: rPlaceCanvas.width, y: 0});
+  embed.camera.applyPosition({ x: rPlaceCanvas.width, y: 0 });
   await waitMs(10);
-  embed.camera.applyPosition({x: rPlaceCanvas.width, y: rPlaceCanvas.height});
+  embed.camera.applyPosition({ x: rPlaceCanvas.width, y: rPlaceCanvas.height });
   await waitMs(10);
-  embed.camera.applyPosition({x: Math.floor(rPlaceCanvas.width / 2), y: Math.floor(rPlaceCanvas.height / 2) });
+  embed.camera.applyPosition({
+    x: Math.floor(rPlaceCanvas.width / 2),
+    y: Math.floor(rPlaceCanvas.height / 2),
+  });
 
   const rPlacePixelSize = 10;
 
@@ -266,12 +269,17 @@ const { html, render } = mlp_uhtml;
     cursor: pointer;
     user-select: none;
   }
+  
+  mlpminimap #noSleep {
+	display: none;
+  }
 </style>
 <mlpminimap>
   <img class="map">
   <div class="crosshair"></div>
   <div class="settings"></div>
   <div id="resizer"></div>
+  <audio id="noSleep" src="https://hot-potato.reddit.com/media/interactions/select-color.mp3" playsinline></audio>
 </mlpminimap>`;
 
   class CheckboxSetting {
@@ -439,6 +447,16 @@ const { html, render } = mlp_uhtml;
       true
     )
   );
+
+  const noSleepAudio = mlpMinimapBlock.querySelector("#noSleep");
+  noSleepAudio.volume = 0.1;
+
+  setInterval(() => {
+    if (settings.getSetting("nosleep")) {
+      noSleepAudio.play();
+    }
+  }, 30000);
+
   settings.addSetting(
     "autoColor",
     new CheckboxSetting("Auto color picker", false, function (autoColorSetting) {
@@ -453,6 +471,7 @@ const { html, render } = mlp_uhtml;
       updateTemplate();
     })
   );
+  settings.addSetting("nosleep", new CheckboxSetting("NoTabFreeze (SOUNDS!!!)", false));
   settings.addSetting(
     "pixelDisplayProgress",
     new DisplaySetting("Current progress", "Unknown", true)
