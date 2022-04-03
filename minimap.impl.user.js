@@ -280,14 +280,8 @@ const { html, render } = mlp_uhtml;
       this.settingsByName.set(name, setting);
     }
 
-    getParam(argname) {
-      if (!this.settings[argname]) return;
-      return this.settings[argname].enabled;
-    }
-
-    setParam(argname, stat) {
-      if (!this.settings[argname]) return;
-      this.settings[argname].enabled = stat;
+    getSetting(name) {
+      return this.settingsByName.get(name);
     }
   }
 
@@ -329,14 +323,14 @@ const { html, render } = mlp_uhtml;
   settings.addSetting(
     "autocolor",
     new SwitchSetting("Auto color picker", false, function () {
-      settings.setParam("bot", false);
+      settings.getSetting("bot").enabled = false;
     })
   );
   settings.addSetting(
     "bot",
     new SwitchSetting("Bot", false, function () {
-      settings.setParam("autocolor", false);
-      if (settings.getParam("bot")) {
+      settings.getSetting("autocolor").enabled = false;
+      if (settings.getSetting("bot").enabled) {
         rPlaceTemplate = rPlaceTemplateBot(rPlaceTemplates[0]);
       } else {
         rPlaceTemplate = rPlaceTemplateNormal(rPlaceTemplates[0]);
@@ -415,7 +409,7 @@ const { html, render } = mlp_uhtml;
     }px`;
     crosshairBlock.style.width = `${rPlacePixelSize * coordinatesData.scale}px`;
     crosshairBlock.style.height = `${rPlacePixelSize * coordinatesData.scale}px`;
-    if (settings.getParam("autocolor")) {
+    if (settings.getSetting("autocolor").enabled) {
       try {
         const imageData = ctx.getImageData(coordinatesData.x, coordinatesData.y, 1, 1);
         autoColorPick(imageData);
@@ -433,7 +427,7 @@ const { html, render } = mlp_uhtml;
   const botCtx = botCanvas.getContext("2d");
 
   setInterval(async () => {
-    if (settings.getParam("bot") && !botWorkingRightNow) {
+    if (settings.getSetting("bot").enabled && !botWorkingRightNow) {
       botWorkingRightNow = true;
 
       document.querySelector("mona-lisa-embed").wakeUp();
