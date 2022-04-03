@@ -407,10 +407,18 @@ const { html, render } = mlp_uhtml;
   updateTemplate = function () {
     const previousBotWorkingRightNow = botWorkingRightNow;
     botWorkingRightNow = true;
+    restoredBotWorkingRightNow = false;
+    const restoreBotWorkingRightNow = function () {
+      if (!restoredBotWorkingRightNow && previousBotWorkingRightNow !== true) {
+        restoredBotWorkingRightNow = true;
+        botWorkingRightNow = previousBotWorkingRightNow;
+      }
+    };
     const rPlaceTemplateUrl =
       rPlaceTemplate.botUrl !== undefined && settings.getSetting("bot").enabled
         ? rPlaceTemplate.botUrl
         : rPlaceTemplate.canvasUrl;
+    setInterval(restoreBotWorkingRightNow, 10 * 1000);
     mlp_GM.xmlHttpRequest({
       method: "GET",
       responseType: "arraybuffer",
@@ -419,9 +427,7 @@ const { html, render } = mlp_uhtml;
         imageBlock.src =
           "data:image/png;base64," +
           btoa(String.fromCharCode.apply(null, new Uint8Array(res.response)));
-        if (previousBotWorkingRightNow !== true) {
-          botWorkingRightNow = previousBotWorkingRightNow;
-        }
+          restoreBotWorkingRightNow();
       },
     });
   };
@@ -563,19 +569,23 @@ const { html, render } = mlp_uhtml;
       //   await new Promise(resolve => setTimeout(resolve,10000));
       // }
 
-      const placeButton = document
+      let placeButton = document
         .querySelector("mona-lisa-embed")
         .shadowRoot.querySelector("mona-lisa-color-picker")
         .shadowRoot.querySelector("button.confirm");
       if (placeButton && diff.length > 0) {
         const randID = Math.floor(Math.random() * diff.length);
         const randPixel = diff[randID];
-        while (true) {
-          document
-            .querySelector("mona-lisa-embed")
-            .selectPixel({ x: randPixel[0], y: randPixel[1] });
-          const arrived = await new Promise(function (resolve) {
-            let arrived = false;
+        let timedOut = false;
+        let arrived = false;
+        setInterval(function () {
+          if (!arrived) {
+            timedOut = true;
+          }
+        }, 10 * 1000);
+        while (!timedOut) {
+          document.querySelector("mona-lisa-embed").selectPixel({ x: randPixel[0], y: randPixel[1] });
+          const arrivedPromise = new Promise(function (resolve) {
             setInterval(function () {
               if (!arrived) {
                 resolve(arrived);
@@ -591,24 +601,32 @@ const { html, render } = mlp_uhtml;
             };
             posParser.addEventListener("posChanged", posChangedListener);
           });
-          if (arrived) {
+          if (await arrivedPromise) {
             break;
           }
         }
-        const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
-        autoColorPick(imageDataRight);
-        botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
-        botCtx.drawImage(rPlaceCanvas, 0, 0);
-        const imageDataNew = botCtx.getImageData(randPixel[0], randPixel[1], 1, 1);
+        if (!timedOut) {
+          let placeButton = document
+            .querySelector("mona-lisa-embed")
+            .shadowRoot.querySelector("mona-lisa-color-picker")
+            .shadowRoot.querySelector("button.confirm");
+          if (placeButton) {
+            const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
+            autoColorPick(imageDataRight);
+            botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
+            botCtx.drawImage(rPlaceCanvas, 0, 0);
+            const imageDataNew = botCtx.getImageData(randPixel[0], randPixel[1], 1, 1);
 
-        if (
-          imageDataRight.data[0] !== imageDataNew.data[0] ||
-          imageDataRight.data[1] !== imageDataNew.data[1] ||
-          imageDataRight.data[2] !== imageDataNew.data[2]
-        ) {
-          placeButton.click();
-        } else {
-          console.log("Correct!");
+            if (
+              imageDataRight.data[0] !== imageDataNew.data[0] ||
+              imageDataRight.data[1] !== imageDataNew.data[1] ||
+              imageDataRight.data[2] !== imageDataNew.data[2]
+            ) {
+              placeButton.click();
+            } else {
+              console.log("Correct!");
+            }
+          }
         }
       }
       botWorkingRightNow = false;
