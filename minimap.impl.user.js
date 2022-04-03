@@ -43,20 +43,41 @@ const { html, render } = mlp_uhtml;
   const rPlacePixelSize = 10;
 
   const rPlaceTemplatesGithubLfs = true;
-  const rPlaceTemplates = ["mlp"];
-  const rPlaceTemplateNormal = function (templateName) {
+  const getRPlaceTemplateCanvasUrl = function (templateName) {
     if (rPlaceTemplatesGithubLfs) {
       return `https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
     }
     return `https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
   };
-  const rPlaceTemplateBot = function (templateName) {
+  const getRPlaceTemplateBotUrl = function (templateName) {
     if (rPlaceTemplatesGithubLfs) {
       return `https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main/${templateName}/bot2k.png`;
     }
     return `https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
   };
-  let rPlaceTemplate = rPlaceTemplateNormal(rPlaceTemplates[0]);
+  const rPlaceTemplateNames = [];
+  const rPlaceTemplates = new Map();
+  const addRPlaceTemplate = function (templateName, options) {
+    let bot = options.bot === undefined ? false : options.bot;
+    rPlaceTemplates.set(templateName, {
+      canvasUrl: getRPlaceTemplateCanvasUrl(templateName),
+      botUrl: bot ? getRPlaceTemplateBotUrl(templateName) : undefined,
+    });
+    rPlaceTemplateNames.push(templateName);
+  };
+  addRPlaceTemplate("mlp", { bot: true });
+  let rPlaceTemplateName;
+  let rPlaceTemplate;
+  const setRPlaceTemplate = function (templateName) {
+    const template = rPlaceTemplates.get(templateName);
+    if (template === undefined) {
+      console.log("Invalid /r/place template name:", templateName);
+      return;
+    }
+    rPlaceTemplateName = templateName;
+    rPlaceTemplate = template;
+  };
+  setRPlaceTemplate(rPlaceTemplateNames[0]);
 
   class Resizer {
     constructor(elResizer, elBlock) {
@@ -211,8 +232,8 @@ const { html, render } = mlp_uhtml;
   <div id="resizer"></div>
 </mlpminimap>`;
 
-  class SwitchSetting {
-    constructor(name, enabled = false, callback = function () {}) {
+  class CheckboxSetting {
+    constructor(name, enabled = false, callback = function (setting) {}) {
       this.name = name;
       this.enabled = enabled;
       this.callback = callback;
@@ -223,7 +244,7 @@ const { html, render } = mlp_uhtml;
     // }
     onclick() {
       this.enabled = !this.enabled;
-      this.callback();
+      this.callback(this);
     }
     htmlFor(ref, id) {
       // NOTE(Dusk): It looks like Reddit hijacks all native checkboxes.
@@ -238,13 +259,35 @@ const { html, render } = mlp_uhtml;
     }
   }
 
+  class CycleSetting {
+    constructor(name, values = ["Unset"], valueIx = 0, callback = function (setting) {}) {
+      this.name = name;
+      this.values = values;
+      this.valueIx = valueIx;
+      this.callback = callback;
+    }
+    get value() {
+      return this.values[this.valueIx];
+    }
+    onclick() {
+      this.valueIx = (this.valueIx + 1) % this.values.length;
+      this.callback(this);
+    }
+    htmlFor(ref, id) {
+      const onclick = () => this.onclick();
+      return html.for(ref, id)`<div data-id=${id} class="clickable" onclick=${onclick}>
+        ${this.name}: <span>${this.value}</span>
+      </div>`;
+    }
+  }
+
   class ButtonSetting {
-    constructor(name, callback = function () {}) {
+    constructor(name, callback = function (setting) {}) {
       this.name = name;
       this.callback = callback;
     }
     onclick() {
-      this.callback();
+      this.callback(this);
     }
     htmlFor(ref, id) {
       const onclick = () => this.onclick();
@@ -312,44 +355,33 @@ const { html, render } = mlp_uhtml;
     ctx.drawImage(this, 0, 0);
   };
 
-  function updateTemplate() {
-    mlp_GM.xmlHttpRequest({
-      method: "GET",
-      responseType: "arraybuffer",
-      url: `${rPlaceTemplate}?t=${new Date().getTime()}`,
-      onload: function (res) {
-        imageBlock.src =
-          "data:image/png;base64," +
-          btoa(String.fromCharCode.apply(null, new Uint8Array(res.response)));
-      },
-    });
-  }
-  setInterval(updateTemplate, 1 * 60 * 1000);
-  updateTemplate();
+  let updateTemplate = function () {};
 
   const settingsBlock = mlpMinimapBlock.querySelector(".settings");
   const settings = new Settings(settingsBlock, mlpMinimapBlock);
   settings.addSetting(
-    "autocolor",
-    new SwitchSetting("Auto color picker", false, function () {
+    "templateName",
+    new CycleSetting("Template", rPlaceTemplateNames, 0, function (templateNameSetting) {
+      setRPlaceTemplate(templateNameSetting.value);
+      updateTemplate();
+    })
+  );
+  settings.addSetting(
+    "autoColor",
+    new CheckboxSetting("Auto color picker", false, function (autoColorSetting) {
       settings.getSetting("bot").enabled = false;
     })
   );
   settings.addSetting(
     "bot",
-    new SwitchSetting("Bot", false, function () {
-      settings.getSetting("autocolor").enabled = false;
-      if (settings.getSetting("bot").enabled) {
-        rPlaceTemplate = rPlaceTemplateBot(rPlaceTemplates[0]);
-      } else {
-        rPlaceTemplate = rPlaceTemplateNormal(rPlaceTemplates[0]);
-      }
+    new CheckboxSetting("Bot", false, function (botSetting) {
+      settings.getSetting("autoColor").enabled = false;
       updateTemplate();
     })
   );
   settings.addSetting(
     "donate",
-    new ButtonSetting("Donate me plz", function () {
+    new ButtonSetting("Donate me plz", function (donateSetting) {
       window.open("https://www.donationalerts.com/r/vovskic2002");
     })
   );
@@ -357,6 +389,25 @@ const { html, render } = mlp_uhtml;
     "progress",
     new DisplaySetting("pixelDisplay")
   );
+
+  updateTemplate = function () {
+    const rPlaceTemplateUrl =
+      rPlaceTemplate.botUrl !== undefined && settings.getSetting("bot").enabled
+        ? rPlaceTemplate.botUrl
+        : rPlaceTemplate.canvasUrl;
+    mlp_GM.xmlHttpRequest({
+      method: "GET",
+      responseType: "arraybuffer",
+      url: `${rPlaceTemplateUrl}?t=${new Date().getTime()}`,
+      onload: function (res) {
+        imageBlock.src =
+          "data:image/png;base64," +
+          btoa(String.fromCharCode.apply(null, new Uint8Array(res.response)));
+      },
+    });
+  };
+  setInterval(updateTemplate, 1 * 60 * 1000);
+  updateTemplate();
 
   const resizerBlock = mlpMinimapBlock.querySelector("#resizer");
   const resizerAction = new Resizer(resizerBlock, mlpMinimapBlock);
@@ -422,7 +473,7 @@ const { html, render } = mlp_uhtml;
     }px`;
     crosshairBlock.style.width = `${rPlacePixelSize * coordinatesData.scale}px`;
     crosshairBlock.style.height = `${rPlacePixelSize * coordinatesData.scale}px`;
-    if (settings.getSetting("autocolor").enabled) {
+    if (settings.getSetting("autoColor").enabled) {
       try {
         const imageData = ctx.getImageData(coordinatesData.x, coordinatesData.y, 1, 1);
         autoColorPick(imageData);
