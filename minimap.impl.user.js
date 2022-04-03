@@ -55,33 +55,28 @@ const { html, render } = mlp_uhtml;
   const rPlacePixelSize = 10;
 
   const rPlaceTemplatesGithubLfs = true;
-  const getRPlaceTemplateCanvasUrl = function (templateName) {
-    if (rPlaceTemplatesGithubLfs) {
-      return `https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
-    }
-    return `https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
-  };
-  const getRPlaceTemplateBotUrl = function (templateName) {
-    if (rPlaceTemplatesGithubLfs) {
-      return `https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main/${templateName}/bot2k.png`;
-    }
-    return `https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
+  const rPlaceTemplateBaseUrl = rPlaceTemplatesGithubLfs
+    ? "https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main"
+    : "https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main";
+  const getRPlaceTemplateUrl = function (templateName, type) {
+    return `${rPlaceTemplateBaseUrl}/${templateName}/${type}2k.png`;
   };
   const rPlaceTemplateNames = [];
   const rPlaceTemplates = new Map();
   const addRPlaceTemplate = function (templateName, options) {
-    let bot = options.bot === undefined ? false : options.bot;
     rPlaceTemplates.set(templateName, {
-      canvasUrl: getRPlaceTemplateCanvasUrl(templateName),
-      botUrl: bot ? getRPlaceTemplateBotUrl(templateName) : undefined,
+      canvasUrl: getRPlaceTemplateUrl(templateName, "canvas"),
+      botUrl: options.bot ? getRPlaceTemplateUrl(templateName, "bot") : undefined,
+      maskUrl: options.mask ? getRPlaceTemplateUrl(templateName, "mask") : undefined,
     });
     rPlaceTemplateNames.push(templateName);
   };
-  addRPlaceTemplate("mlp", { bot: true });
+  addRPlaceTemplate("mlp", { bot: true, mask: true });
   addRPlaceTemplate("r-ainbowroad", { bot: true });
   addRPlaceTemplate("spain", { bot: true });
   let rPlaceTemplateName;
   let rPlaceTemplate;
+  let rPlaceMask = undefined;
   const setRPlaceTemplate = function (templateName) {
     const template = rPlaceTemplates.get(templateName);
     if (template === undefined) {
@@ -406,6 +401,11 @@ const { html, render } = mlp_uhtml;
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
+  const maskCanvas = document.createElement("canvas");
+  maskCanvas.width = rPlaceCanvas.width;
+  maskCanvas.height = rPlaceCanvas.height;
+  const maskCtx = maskCanvas.getContext("2d");
+
   imageBlock.onload = function () {
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;
@@ -456,6 +456,28 @@ const { html, render } = mlp_uhtml;
   );
 
   let botWorkingRightNow = false;
+
+  // Fetch template, returns a Promise<Uint8Array>, on error returns the response object
+  function fetchTemplate(url) {
+    return new Promise((resolve, reject) => {
+      mlp_GM.xmlHttpRequest({
+        method: "GET",
+        responseType: "arraybuffer",
+        url: `${url}?t=${new Date().getTime()}`,
+        onload: function (res) {
+          resolve(new Uint8Array(res.response));
+        },
+        onerror: function (res) {
+          reject(res);
+        },
+      });
+    });
+  }
+
+  function getPngDataUrlForBytes(bytes) {
+    return "data:image/png;base64," + btoa(String.fromCharCode.apply(null, bytes));
+  }
+
   updateTemplate = function () {
     const previousBotWorkingRightNow = botWorkingRightNow;
     botWorkingRightNow = true;
@@ -471,20 +493,142 @@ const { html, render } = mlp_uhtml;
         ? rPlaceTemplate.botUrl
         : rPlaceTemplate.canvasUrl;
     setTimeout(restoreBotWorkingRightNow, 10 * 1000);
-    mlp_GM.xmlHttpRequest({
-      method: "GET",
-      responseType: "arraybuffer",
-      url: `${rPlaceTemplateUrl}?t=${new Date().getTime()}`,
-      onload: function (res) {
-        imageBlock.src =
-          "data:image/png;base64," +
-          btoa(String.fromCharCode.apply(null, new Uint8Array(res.response)));
+    fetchTemplate(rPlaceTemplateUrl)
+      .then((array) => {
+        imageBlock.src = getPngDataUrlForBytes(array);
         restoreBotWorkingRightNow();
-      },
-    });
+      })
+      .catch((err) => {
+        console.error("Error updating template", err);
+      });
+    // Also update mask if needed
+    if (typeof rPlaceTemplate.maskUrl !== "undefined") {
+      fetchTemplate(rPlaceTemplate.maskUrl)
+        .then((array) => {
+          const img = new Image();
+          img.src = getPngDataUrlForBytes(array);
+          img.onload = () => {
+            maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
+            maskCtx.drawImage(img, 0, 0);
+            loadMask();
+          };
+        })
+        .catch((err) => {
+          console.error("Error updating mask", err);
+        });
+    } else {
+      // Free memory if we don't need it.
+      rPlaceMask = undefined;
+    }
   };
   setInterval(updateTemplate, 1 * 60 * 1000);
   updateTemplate();
+
+  function loadMask() {
+    const maskData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height).data;
+
+    rPlaceMask = new Array(maskCanvas.width * maskCanvas.height);
+    for (let i = 0; i < rPlaceMask.length; i++) {
+      // Grayscale, pick green channel!
+      rPlaceMask[i] = maskData[i * 4 + 1];
+    }
+  }
+
+  /**
+   * Pick a pixel from a list of buckets
+   *
+   * The `position` argument is the position in the virtual pool to be selected.  See the
+   * docs for `selectRandomPixelWeighted` for information on what this is hand how it
+   * works
+   *
+   * @param {Map<number, [number, number][]>} buckets
+   * @param {number} position
+   * @return {[number, number]}
+   */
+  function pickFromBuckets(buckets, position) {
+    // All of the buckets, sorted in order from highest priority to lowest priority
+    const orderedBuckets = [...buckets.entries()] // Convert map to array of tuples
+      .sort() // Order by key (priority) ASC
+      .reverse() // Order by key (priority) DESC
+      .map((bucket, _index) => bucket[1]); // Drop the priority, leaving an array of buckets
+
+    // Select the position'th element from the buckets
+    for (const bucket of orderedBuckets) {
+      if (bucket.length <= position) position -= bucket.length;
+      else return bucket[position];
+    }
+
+    // If for some reason this breaks, just return a random pixel from the largest bucket
+    const value = Array.from(buckets.keys()).reduce((a, b) => Math.max(a, b), 0);
+    const bucket = buckets.get(value);
+    return bucket[Math.floor(Math.random() * bucket.length)];
+  }
+
+  /**
+   * Select a random pixel weighted by the mask.
+   *
+   * The selection algorithm works as follows:
+   * - Pixels are grouped into buckets based on the mask
+   * - A virtual pool of 150 of the highest priority pixels is defined.
+   *   - If the highest priority bucket contains fewer than 150 pixels, the next highest
+   *     bucket is pulled from, and so on until the 150 pixel threshold is met.
+   * - A pixel is picked from this virtual pool without any weighting
+   *
+   * This algorithm avoids the collision dangers of only using one bucket, while requiring
+   * no delays, and ensures that the size of the selection pool is always constant.
+   *
+   * Another way of looking at this:
+   * - If >=150 pixels are missing from the crystal, 100% of the bots will be working there
+   * - If 100 pixels are missing from the crystal, 67% of the bots will be working there
+   * - If 50 pixels are missing from the crystal, 33% of the bots will be working there
+   * - If 3 pixels are missing from the crystal, 1% of the bots will be working there
+   *
+   * @param {[number, number][]} diff
+   * @return {[number, number]}
+   */
+  function selectRandomPixelWeighted(diff) {
+    // Build the buckets
+    const buckets = new Map();
+    var totalAvailablePixels = 0;
+    for (let i = 0; i < diff.length; i++) {
+      const coords = diff[i];
+      const [x, y] = coords;
+      const maskValue = rPlaceMask[x + y * rPlaceCanvas.width];
+      if (maskValue === 0) {
+        continue;
+      }
+      totalAvailablePixels++;
+      const bucket = buckets.get(maskValue);
+      if (bucket === undefined) {
+        buckets.set(maskValue, [coords]);
+      } else {
+        bucket.push(coords);
+      }
+    }
+
+    // Select from buckets
+    // Position represents the index in the virtual pool that we are selecting
+    const position = Math.floor(Math.random() * Math.min(150, totalAvailablePixels));
+    const pixel = pickFromBuckets(buckets, position);
+    return pixel;
+  }
+
+  /**
+   * Select a random pixel.
+   *
+   * @param {[number, number][]} diff
+   * @return {{x: number, y: number}}
+   */
+  function selectRandomPixel(diff) {
+    var pixel;
+    if (rPlaceTemplate.maskUrl === undefined || rPlaceMask === undefined) {
+      pixel = diff[Math.floor(Math.random() * diff.length)];
+    } else {
+      pixel = selectRandomPixelWeighted(diff);
+    }
+    const [x, y] = pixel;
+    return { x, y };
+  }
 
   const resizerBlock = mlpMinimapBlock.querySelector("#resizer");
   const resizerAction = new Resizer(resizerBlock, mlpMinimapBlock);
@@ -629,14 +773,10 @@ const { html, render } = mlp_uhtml;
         embed.wakeUp();
 
         if (!embed.nextTileAvailableIn && diff.length > 0) {
-          const randID = Math.floor(Math.random() * diff.length);
-          const randPixel = diff[randID];
-          const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
+          const randPixel = selectRandomPixel(diff);
+          const imageDataRight = ctx.getImageData(randPixel.x, randPixel.y, 1, 1);
           autoColorPick(imageDataRight);
-          embed.camera.applyPosition({
-            x: randPixel[0],
-            y: randPixel[1],
-          });
+          embed.camera.applyPosition(randPixel);
           embed.showColorPicker = true;
           embed.onConfirmPixel();
           console.log(
