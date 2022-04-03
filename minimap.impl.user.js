@@ -551,7 +551,6 @@ const { html, render } = mlp_uhtml;
     }
   }
 
-
   const NEXT_ART_MIN_DIST = 100; // art within this range is considered the same
   let currentLocationIndex = null;
   function findNextArt() {
@@ -561,23 +560,24 @@ const { html, render } = mlp_uhtml;
     for (let i = 0; i < templateData.length; i += 4) {
       if (templateData[i + 3] === 0) continue;
       const x = (i / 4) % rPlaceCanvas.width;
-      const y = Math.floor((i / 4) / rPlaceCanvas.width);
+      const y = Math.floor(i / 4 / rPlaceCanvas.width);
 
-      const isNearOtherArt = !!locations.find((loc) => Math.abs(x - loc.x) < NEXT_ART_MIN_DIST || Math.abs(y - loc.y) < NEXT_ART_MIN_DIST);
+      const isNearOtherArt = !!locations.find(
+        (loc) => Math.abs(x - loc.x) < NEXT_ART_MIN_DIST || Math.abs(y - loc.y) < NEXT_ART_MIN_DIST
+      );
       if (isNearOtherArt) continue;
 
       locations.push({ x, y });
     }
 
-    const sortedLocations = locations
-      .sort((a, b) => {
-        if (a.x < b.x) return -1;
-        if (a.x > b.x) return 1;
-        if (a.y < b.y) return -1;
-        if (a.y > b.y) return 1;
-        return 0;
-      });
-    
+    const sortedLocations = locations.sort((a, b) => {
+      if (a.x < b.x) return -1;
+      if (a.x > b.x) return 1;
+      if (a.y < b.y) return -1;
+      if (a.y > b.y) return 1;
+      return 0;
+    });
+
     if (sortedLocations.length > 0) {
       if (currentLocationIndex === null) {
         currentLocationIndex = 0;
