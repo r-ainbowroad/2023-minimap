@@ -418,7 +418,7 @@ const { html, render } = mlp_uhtml;
       rPlaceTemplate.botUrl !== undefined && settings.getSetting("bot").enabled
         ? rPlaceTemplate.botUrl
         : rPlaceTemplate.canvasUrl;
-    setInterval(restoreBotWorkingRightNow, 10 * 1000);
+    setTimeout(restoreBotWorkingRightNow, 10 * 1000);
     mlp_GM.xmlHttpRequest({
       method: "GET",
       responseType: "arraybuffer",
@@ -427,7 +427,7 @@ const { html, render } = mlp_uhtml;
         imageBlock.src =
           "data:image/png;base64," +
           btoa(String.fromCharCode.apply(null, new Uint8Array(res.response)));
-          restoreBotWorkingRightNow();
+        restoreBotWorkingRightNow();
       },
     });
   };
@@ -578,15 +578,17 @@ const { html, render } = mlp_uhtml;
         const randPixel = diff[randID];
         let timedOut = false;
         let arrived = false;
-        setInterval(function () {
+        setTimeout(function () {
           if (!arrived) {
             timedOut = true;
           }
         }, 10 * 1000);
         while (!timedOut) {
-          document.querySelector("mona-lisa-embed").selectPixel({ x: randPixel[0], y: randPixel[1] });
+          document
+            .querySelector("mona-lisa-embed")
+            .selectPixel({ x: randPixel[0], y: randPixel[1] });
           const arrivedPromise = new Promise(function (resolve) {
-            setInterval(function () {
+            setTimeout(function () {
               if (!arrived) {
                 resolve(arrived);
               }
