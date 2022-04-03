@@ -52,9 +52,13 @@ const { html, render } = mlp_uhtml;
 
   // Load all canvases
   embed.camera.applyPosition({x: 0, y: 0});
+  await waitMs(10);
   embed.camera.applyPosition({x: 0, y: rPlaceCanvas.height});
+  await waitMs(10);
   embed.camera.applyPosition({x: rPlaceCanvas.width, y: 0});
+  await waitMs(10);
   embed.camera.applyPosition({x: rPlaceCanvas.width, y: rPlaceCanvas.height});
+  await waitMs(10);
   embed.camera.applyPosition({x: Math.floor(rPlaceCanvas.width / 2), y: Math.floor(rPlaceCanvas.height / 2) });
 
   const rPlacePixelSize = 10;
