@@ -512,53 +512,27 @@ const { html, render } = mlp_uhtml;
         .querySelector("mona-lisa-embed")
         .shadowRoot.querySelector("mona-lisa-color-picker")
         .shadowRoot.querySelector("button.confirm");
-      if (placeButton) {
+      if (placeButton && diff.length > 0) {
+        const randID = Math.floor(Math.random() * diff.length);
+        const randPixel = diff[randID];
+        document
+          .querySelector("mona-lisa-embed")
+          .selectPixel({ x: randPixel[0], y: randPixel[1] });
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
+        autoColorPick(imageDataRight);
         botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
-        botCtx.drawImage(canvas, 0, 0);
-        botCtx.globalCompositeOperation = "source-in";
         botCtx.drawImage(rPlaceCanvas, 0, 0);
-        botCtx.globalCompositeOperation = "source-over";
+        const imageDataNew = botCtx.getImageData(randPixel[0], randPixel[1], 1, 1);
 
-        const currentData = botCtx.getImageData(0, 0, botCanvas.width, botCanvas.height).data;
-        const templateData = ctx.getImageData(0, 0, botCanvas.width, botCanvas.height).data;
-
-        const diff = [];
-
-        for (let i = 0; i < templateData.length / 4; i++) {
-          if (currentData[i * 4 + 3] === 0) continue;
-          if (
-            templateData[i * 4 + 0] !== currentData[i * 4 + 0] ||
-            templateData[i * 4 + 1] !== currentData[i * 4 + 1] ||
-            templateData[i * 4 + 2] !== currentData[i * 4 + 2]
-          ) {
-            const x = i % botCanvas.width;
-            const y = (i - x) / botCanvas.width;
-            diff.push([x, y]);
-          }
-        }
-
-        if (diff.length > 0) {
-          const randID = Math.floor(Math.random() * diff.length);
-          const randPixel = diff[randID];
-          document
-            .querySelector("mona-lisa-embed")
-            .selectPixel({ x: randPixel[0], y: randPixel[1] });
-          await new Promise((resolve) => setTimeout(resolve, 1500));
-          const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
-          autoColorPick(imageDataRight);
-          botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
-          botCtx.drawImage(rPlaceCanvas, 0, 0);
-          const imageDataNew = botCtx.getImageData(randPixel[0], randPixel[1], 1, 1);
-
-          if (
-            imageDataRight.data[0] !== imageDataNew.data[0] ||
-            imageDataRight.data[1] !== imageDataNew.data[1] ||
-            imageDataRight.data[2] !== imageDataNew.data[2]
-          ) {
-            placeButton.click();
-          } else {
-            console.log("Correct!");
-          }
+        if (
+          imageDataRight.data[0] !== imageDataNew.data[0] ||
+          imageDataRight.data[1] !== imageDataNew.data[1] ||
+          imageDataRight.data[2] !== imageDataNew.data[2]
+        ) {
+          placeButton.click();
+        } else {
+          console.log("Correct!");
         }
       }
       botWorkingRightNow = false;
