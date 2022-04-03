@@ -298,11 +298,12 @@ const { html, render } = mlp_uhtml;
   }
 
   class DisplaySetting {
-    constructor(elemId) {
-      this.elemId = elemId;
+    constructor(name, content) {
+      this.name = name;
+      this.content = content;
     }
     htmlFor(ref, id) {
-      return html.for(ref, id)`<b data-id=${id} id=${this.elemId}></b>`;
+      return html.for(ref, id)`<div data-id=${id}>${this.name}: ${this.content}</b>`;
     }
   }
 
@@ -379,15 +380,12 @@ const { html, render } = mlp_uhtml;
       updateTemplate();
     })
   );
+  settings.addSetting("pixelDisplayProgress", new DisplaySetting("Current progress", "Unknown"));
   settings.addSetting(
     "donate",
     new ButtonSetting("Donate me plz", function (donateSetting) {
       window.open("https://www.donationalerts.com/r/vovskic2002");
     })
-  );
-  settings.addSetting(
-    "progress",
-    new DisplaySetting("pixelDisplay")
   );
 
   updateTemplate = function () {
@@ -491,41 +489,30 @@ const { html, render } = mlp_uhtml;
   const botCtx = botCanvas.getContext("2d");
 
   function getDiff(botCanvasWidth, botCanvasHeight, botCtx, ctx) {
-    const currentData = botCtx.getImageData(
-        0,
-        0,
-        botCanvasWidth,
-        botCanvasHeight
-    ).data;
-    const templateData = ctx.getImageData(
-        0,
-        0,
-        botCanvasWidth,
-        botCanvasHeight
-    ).data;
+    const currentData = botCtx.getImageData(0, 0, botCanvasWidth, botCanvasHeight).data;
+    const templateData = ctx.getImageData(0, 0, botCanvasWidth, botCanvasHeight).data;
 
     const diff = [];
     var nCisPixels = 0; // count of non-transparent pixels
 
     for (let i = 0; i < templateData.length / 4; i++) {
-        if (currentData[i * 4 + 3] === 0) continue;
-        nCisPixels++;
-        if (
-            templateData[i * 4 + 0] !== currentData[i * 4 + 0] ||
-            templateData[i * 4 + 1] !== currentData[i * 4 + 1] ||
-            templateData[i * 4 + 2] !== currentData[i * 4 + 2]
-        ) {
-            const x = i % botCanvasWidth;
-            const y = (i - x) / botCanvasWidth;
-            diff.push([x, y]);
-        }
+      if (currentData[i * 4 + 3] === 0) continue;
+      nCisPixels++;
+      if (
+        templateData[i * 4 + 0] !== currentData[i * 4 + 0] ||
+        templateData[i * 4 + 1] !== currentData[i * 4 + 1] ||
+        templateData[i * 4 + 2] !== currentData[i * 4 + 2]
+      ) {
+        const x = i % botCanvasWidth;
+        const y = (i - x) / botCanvasWidth;
+        diff.push([x, y]);
+      }
     }
 
-    return [diff, nCisPixels]
+    return [diff, nCisPixels];
   }
 
   setInterval(async () => {
-
     // Update the minimap image (necessary for checking the diff)
     botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
     botCtx.drawImage(canvas, 0, 0);
@@ -539,10 +526,11 @@ const { html, render } = mlp_uhtml;
     const nCisPixels = diffAndCisPixels[1];
 
     // Update the display with current stats
-    const display = document.getElementById("pixelDisplay");
     const nMissingPixels = nCisPixels - diff.length;
-    const percentage = (100 * nMissingPixels / nCisPixels).toPrecision(3);
-    display.innerText = "Current progress: " + percentage + "% (" + nMissingPixels + "/" + nCisPixels + ")";
+    const percentage = ((100 * nMissingPixels) / nCisPixels).toPrecision(3);
+    settings.getSetting("pixelDisplayProgress").content = html`<span style="font-weight: bold;"
+      >${percentage}% (${nMissingPixels}/${nCisPixels})</span
+    >`;
 
     if (settings.getSetting("bot").enabled && !botWorkingRightNow) {
       botWorkingRightNow = true;
@@ -560,9 +548,7 @@ const { html, render } = mlp_uhtml;
       if (placeButton && diff.length > 0) {
         const randID = Math.floor(Math.random() * diff.length);
         const randPixel = diff[randID];
-        document
-          .querySelector("mona-lisa-embed")
-          .selectPixel({ x: randPixel[0], y: randPixel[1] });
+        document.querySelector("mona-lisa-embed").selectPixel({ x: randPixel[0], y: randPixel[1] });
         await new Promise((resolve) => setTimeout(resolve, 1500));
         const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
         autoColorPick(imageDataRight);
