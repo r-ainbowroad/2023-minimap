@@ -453,7 +453,7 @@ const { html, render } = mlp_uhtml;
     "findArt",
     new ButtonSetting("Find our art!", function () {
       findNextArt();
-    }, true)
+    })
   );
   settings.addSetting(
     "autoColor",
