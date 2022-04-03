@@ -246,6 +246,15 @@ const { html, render } = mlp_uhtml;
     }
   }
 
+  class DisplaySetting {
+    constructor(elemId) {
+      this.elemId = elemId;
+    }
+    htmlFor(ref, id) {
+      return html.for(ref, id)`<b data-id=${id} id=${this.elemId}></b>`;
+    }
+  }
+
   class Settings {
     settings = [];
     settingNames = new Map();
@@ -342,6 +351,10 @@ const { html, render } = mlp_uhtml;
       window.open("https://www.donationalerts.com/r/vovskic2002");
     })
   );
+  settings.addSetting(
+    "progress",
+    new DisplaySetting("pixelDisplay")
+  );
 
   const resizerBlock = mlpMinimapBlock.querySelector("#resizer");
   const resizerAction = new Resizer(resizerBlock, mlpMinimapBlock);
@@ -424,7 +437,60 @@ const { html, render } = mlp_uhtml;
   botCanvas.height = rPlaceCanvas.height;
   const botCtx = botCanvas.getContext("2d");
 
+  function getDiff(botCanvasWidth, botCanvasHeight, botCtx, ctx) {
+    const currentData = botCtx.getImageData(
+        0,
+        0,
+        botCanvasWidth,
+        botCanvasHeight
+    ).data;
+    const templateData = ctx.getImageData(
+        0,
+        0,
+        botCanvasWidth,
+        botCanvasHeight
+    ).data;
+
+    const diff = [];
+    var nCisPixels = 0; // count of non-transparent pixels
+
+    for (let i = 0; i < templateData.length / 4; i++) {
+        if (currentData[i * 4 + 3] === 0) continue;
+        nCisPixels++;
+        if (
+            templateData[i * 4 + 0] !== currentData[i * 4 + 0] ||
+            templateData[i * 4 + 1] !== currentData[i * 4 + 1] ||
+            templateData[i * 4 + 2] !== currentData[i * 4 + 2]
+        ) {
+            const x = i % botCanvasWidth;
+            const y = (i - x) / botCanvasWidth;
+            diff.push([x, y]);
+        }
+    }
+
+    return [diff, nCisPixels]
+  }
+
   setInterval(async () => {
+
+    // Update the minimap image (necessary for checking the diff)
+    botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
+    botCtx.drawImage(canvas, 0, 0);
+    botCtx.globalCompositeOperation = "source-in";
+    botCtx.drawImage(rPlaceCanvas, 0, 0);
+    botCtx.globalCompositeOperation = "source-over";
+
+    // Compute the diff
+    const diffAndCisPixels = getDiff(botCanvas.width, botCanvas.height, botCtx, ctx);
+    const diff = diffAndCisPixels[0];
+    const nCisPixels = diffAndCisPixels[1];
+
+    // Update the display with current stats
+    const display = document.getElementById("pixelDisplay");
+    const nMissingPixels = nCisPixels - diff.length;
+    const percentage = (100 * nMissingPixels / nCisPixels).toPrecision(3);
+    display.innerText = "Current progress: " + percentage + "% (" + nMissingPixels + "/" + nCisPixels + ")";
+
     if (settings.getParam("bot") && !botWorkingRightNow) {
       botWorkingRightNow = true;
 
