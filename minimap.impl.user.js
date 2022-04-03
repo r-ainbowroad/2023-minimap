@@ -348,7 +348,7 @@ const { html, render } = mlp_uhtml;
       this.alwaysShow ? classes.push("alwaysshow") : null;
       return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")}>${this.name}: ${
         this.content
-      }</b>`;
+      }</div>`;
     }
   }
 
