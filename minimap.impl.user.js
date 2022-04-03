@@ -592,7 +592,7 @@ const { html, render } = mlp_uhtml;
               if (!arrived) {
                 resolve(arrived);
               }
-            }, 500);
+            }, 1100);
             const posChangedListener = function () {
               const coordinatesData = posParser.pos;
               if (randPixel[0] === coordinatesData.x && randPixel[1] === coordinatesData.y) {
