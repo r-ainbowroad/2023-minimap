@@ -79,6 +79,7 @@ const { html, render } = mlp_uhtml;
   };
   addRPlaceTemplate("mlp", { bot: true });
   addRPlaceTemplate("r-ainbowroad", { bot: true });
+  addRPlaceTemplate("spain", { bot: true });
   let rPlaceTemplateName;
   let rPlaceTemplate;
   const setRPlaceTemplate = function (templateName) {
