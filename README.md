@@ -21,4 +21,4 @@
 * Refresh the page to fetch the latest script
 * To get the template changed:
   * For /r/MyLittlePony: ping `@Midnight Ponywka#4625` or `@Bigcheese#3910`
-  * For /r/ainbowroad: get the "Maintainence" role from `#get-roles`, open `#🚧maintenance`, and ping `@bb010g#5294`
+  * For /r/ainbowroad: in `#minimap`, ping `@bb010g#5294`
