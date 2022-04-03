@@ -50,8 +50,6 @@ const { html, render } = mlp_uhtml;
     }, 1000);
   });
 
-  const rPlaceWidth = 2000;
-  const rPlaceHeight = 2000;
   const rPlacePixelSize = 10;
 
   const rPlaceTemplatesGithubLfs = true;
@@ -672,8 +670,12 @@ const { html, render } = mlp_uhtml;
   posParser.addEventListener("posChanged", () => {
     const coordinatesData = posParser.pos;
     const minimapData = getMinimapSize();
-    imageBlock.style.width = `${rPlaceWidth * rPlacePixelSize * coordinatesData.scale}px`;
-    imageBlock.style.height = `${rPlaceHeight * rPlacePixelSize * coordinatesData.scale}px`;
+    imageBlock.style.width = `${
+      imageBlock.naturalWidth * rPlacePixelSize * coordinatesData.scale
+    }px`;
+    imageBlock.style.height = `${
+      imageBlock.naturalHeight * rPlacePixelSize * coordinatesData.scale
+    }px`;
     imageBlock.style["margin-left"] = `${
       -1 *
       ((coordinatesData.x * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
