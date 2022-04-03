@@ -8,9 +8,15 @@
 // @author      Ponywka, bb010g
 // @connect     raw.githubusercontent.com
 // @connect     media.githubusercontent.com
+// @require     https://unpkg.com/uhtml@2.8.1
 // ==/UserScript==
 
+// To format: `npx prettier --print-width 100 -w minimap.impl.user.js`
+
 const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
+const mlp_uhtml = "uhtml" in this ? this.uhtml : arguments[0].uhtml;
+
+const { html, render } = mlp_uhtml;
 
 (async function () {
   //document.querySelector("faceplate-toast")
@@ -37,9 +43,7 @@ const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
   const rPlacePixelSize = 10;
 
   const rPlaceTemplatesGithubLfs = true;
-  const rPlaceTemplates = [
-    "mlp",
-  ];
+  const rPlaceTemplates = ["mlp"];
   const rPlaceTemplateNormal = function (templateName) {
     if (rPlaceTemplatesGithubLfs) {
       return `https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
@@ -64,29 +68,15 @@ const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
       }
 
       function stopDrag(e) {
-        document.documentElement.removeEventListener(
-          "mousemove",
-          doDrag,
-          false
-        );
-        document.documentElement.removeEventListener(
-          "mouseup",
-          stopDrag,
-          false
-        );
+        document.documentElement.removeEventListener("mousemove", doDrag, false);
+        document.documentElement.removeEventListener("mouseup", stopDrag, false);
       }
 
       function initDrag(e) {
         startX = e.clientX;
         startY = e.clientY;
-        startWidth = parseInt(
-          document.defaultView.getComputedStyle(elBlock).width,
-          10
-        );
-        startHeight = parseInt(
-          document.defaultView.getComputedStyle(elBlock).height,
-          10
-        );
+        startWidth = parseInt(document.defaultView.getComputedStyle(elBlock).width, 10);
+        startHeight = parseInt(document.defaultView.getComputedStyle(elBlock).height, 10);
         document.documentElement.addEventListener("mousemove", doDrag, false);
         document.documentElement.addEventListener("mouseup", stopDrag, false);
       }
@@ -106,9 +96,7 @@ const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
 
   class PosParser extends Emitter {
     parseCoordinateBlock() {
-      const parsedData = this.coordinateBlock.innerText.match(
-        /\(([0-9]+),([0-9]+)\) ([0-9.]+)x/
-      );
+      const parsedData = this.coordinateBlock.innerText.match(/\(([0-9]+),([0-9]+)\) ([0-9.]+)x/);
       if (parsedData) {
         return {
           x: parseInt(parsedData[1]),
@@ -224,63 +212,74 @@ const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
   <div id="resizer"></div>
 </mlpminimap>`;
 
+  class SwitchSetting {
+    constructor(name, enabled = false, callback = function () {}) {
+      this.name = name;
+      this.enabled = enabled;
+      this.callback = callback;
+    }
+    onclick() {
+      this.enabled = !this.enabled;
+      this.callback();
+    }
+    htmlFor(ref, id) {
+      const onclick = () => this.onclick();
+      return html.for(ref, id)`<div data-id=${id} class="clickable" onclick=${onclick}>
+        ${this.name}: <span>${this.enabled ? "Enabled" : "Disabled"}</span>
+      </div>`;
+    }
+  }
+
+  class ButtonSetting {
+    constructor(name, callback = function () {}) {
+      this.name = name;
+      this.callback = callback;
+    }
+    onclick() {
+      this.callback();
+    }
+    htmlFor(ref, id) {
+      const onclick = () => this.onclick();
+      return html.for(ref, id)`<div data-id=${id} class="clickable" onclick=${onclick}>
+        ${this.name}
+      </div>`;
+    }
+  }
+
   class Settings {
-    createSwitch(name, argname, def = false, callback = () => {}) {
-      const _root = this;
-      const elBlock = document.createElement("div");
-      elBlock.classList.add("clickable");
-      elBlock.innerText = `${name}: `;
-      const elSwitch = document.createElement("span");
-      elBlock.appendChild(elSwitch);
-      this.rootEl.appendChild(elBlock);
-      this.settingElements[argname] = {
-        root: elBlock,
-        status: elSwitch,
-        enabled: def,
-      };
-      elBlock.addEventListener("click", () => {
-        _root.settingElements[argname].enabled =
-          !_root.settingElements[argname].enabled;
-        callback();
-      });
-    }
+    settings = [];
+    settingNames = new Map();
+    settingsByName = new Map();
 
-    createButton(name, callback = () => {}) {
+    constructor(settingsBlock, mlpMinimapBlock) {
       const _root = this;
-      const elBlock = document.createElement("div");
-      elBlock.classList.add("clickable");
-      elBlock.innerText = name;
-      this.rootEl.appendChild(elBlock);
-      elBlock.addEventListener("click", () => {
-        callback();
-      });
-    }
-
-    constructor(rootEl) {
-      const _root = this;
-      this.rootEl = rootEl;
-      this.settingElements = {};
 
       requestAnimationFrame(function measure(time) {
-        Object.keys(_root.settingElements).forEach((arg) => {
-          _root.settingElements[arg].status.innerText = _root.settingElements[
-            arg
-          ].enabled
-            ? "Enabled"
-            : "Disabled";
-        });
+        render(settingsBlock, _root.htmlFor(mlpMinimapBlock, "settings"));
         requestAnimationFrame(measure);
       });
     }
 
+    htmlFor(ref, id) {
+      return html.for(ref, id)`${this.settings.map((setting) =>
+        setting.htmlFor(this, this.settingNames.get(setting))
+      )}`;
+    }
+
+    addSetting(name, setting) {
+      this.settings.push(setting);
+      this.settingNames.set(setting, name);
+      this.settingsByName.set(name, setting);
+    }
+
     getParam(argname) {
-      if (!this.settingElements[argname]) return;
-      return this.settingElements[argname].enabled;
+      if (!this.settings[argname]) return;
+      return this.settings[argname].enabled;
     }
 
     setParam(argname, stat) {
-      if (!this.settingElements[argname]) return;
-      this.settingElements[argname].enabled = stat;
+      if (!this.settings[argname]) return;
+      this.settings[argname].enabled = stat;
     }
   }
 
@@ -318,22 +317,31 @@ const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
   updateTemplate();
 
   const settingsBlock = mlpMinimapBlock.querySelector(".settings");
-  const settings = new Settings(settingsBlock);
-  settings.createSwitch("Auto color picker", "autocolor", false, () => {
-    settings.setParam("bot", false);
-  });
-  settings.createSwitch("Bot", "bot", false, () => {
-    settings.setParam("autocolor", false);
-    if (settings.getParam("bot")) {
-      rPlaceTemplate = rPlaceTemplateBot(rPlaceTemplates[0]);
-    } else {
-      rPlaceTemplate = rPlaceTemplateNormal(rPlaceTemplates[0]);
-    }
-    updateTemplate();
-  });
-  settings.createButton("Donate me plz", ()=>{
-    window.open('https://www.donationalerts.com/r/vovskic2002');
-  });
+  const settings = new Settings(settingsBlock, mlpMinimapBlock);
+  settings.addSetting(
+    "autocolor",
+    new SwitchSetting("Auto color picker", false, function () {
+      settings.setParam("bot", false);
+    })
+  );
+  settings.addSetting(
+    "bot",
+    new SwitchSetting("Bot", false, function () {
+      settings.setParam("autocolor", false);
+      if (settings.getParam("bot")) {
+        rPlaceTemplate = rPlaceTemplateBot(rPlaceTemplates[0]);
+      } else {
+        rPlaceTemplate = rPlaceTemplateNormal(rPlaceTemplates[0]);
+      }
+      updateTemplate();
+    })
+  );
+  settings.addSetting(
+    "donate",
+    new ButtonSetting("Donate me plz", function () {
+      window.open("https://www.donationalerts.com/r/vovskic2002");
+    })
+  );
 
   const resizerBlock = mlpMinimapBlock.querySelector("#resizer");
   const resizerAction = new Resizer(resizerBlock, mlpMinimapBlock);
@@ -369,9 +377,7 @@ const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
     const b = imageData.data[2];
     let diff = [];
     for (const color of palette) {
-      diff.push(
-        Math.abs(r - color[0]) + Math.abs(g - color[1]) + Math.abs(b - color[2])
-      );
+      diff.push(Math.abs(r - color[0]) + Math.abs(g - color[1]) + Math.abs(b - color[2]));
     }
     let correctColorID = 0;
     for (let i = 0; i < diff.length; i++) {
@@ -387,36 +393,23 @@ const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
   posParser.addEventListener("posChanged", () => {
     const coordinatesData = posParser.pos;
     const minimapData = getMinimapSize();
-    imageBlock.style.width = `${
-      rPlaceWidth * rPlacePixelSize * coordinatesData.scale
-    }px`;
-    imageBlock.style.height = `${
-      rPlaceHeight * rPlacePixelSize * coordinatesData.scale
-    }px`;
+    imageBlock.style.width = `${rPlaceWidth * rPlacePixelSize * coordinatesData.scale}px`;
+    imageBlock.style.height = `${rPlaceHeight * rPlacePixelSize * coordinatesData.scale}px`;
     imageBlock.style["margin-left"] = `${
       -1 *
-      ((coordinatesData.x * rPlacePixelSize + rPlacePixelSize / 2) *
-        coordinatesData.scale -
+      ((coordinatesData.x * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
         minimapData.width / 2)
     }px`;
     imageBlock.style["margin-top"] = `${
       -1 *
-      ((coordinatesData.y * rPlacePixelSize + rPlacePixelSize / 2) *
-        coordinatesData.scale -
+      ((coordinatesData.y * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
         minimapData.height / 2)
     }px`;
     crosshairBlock.style.width = `${rPlacePixelSize * coordinatesData.scale}px`;
-    crosshairBlock.style.height = `${
-      rPlacePixelSize * coordinatesData.scale
-    }px`;
+    crosshairBlock.style.height = `${rPlacePixelSize * coordinatesData.scale}px`;
     if (settings.getParam("autocolor")) {
       try {
-        const imageData = ctx.getImageData(
-          coordinatesData.x,
-          coordinatesData.y,
-          1,
-          1
-        );
+        const imageData = ctx.getImageData(coordinatesData.x, coordinatesData.y, 1, 1);
         autoColorPick(imageData);
       } catch (e) {
         console.error(e);
@@ -452,18 +445,8 @@ const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
         botCtx.drawImage(rPlaceCanvas, 0, 0);
         botCtx.globalCompositeOperation = "source-over";
 
-        const currentData = botCtx.getImageData(
-          0,
-          0,
-          botCanvas.width,
-          botCanvas.height
-        ).data;
-        const templateData = ctx.getImageData(
-          0,
-          0,
-          botCanvas.width,
-          botCanvas.height
-        ).data;
+        const currentData = botCtx.getImageData(0, 0, botCanvas.width, botCanvas.height).data;
+        const templateData = ctx.getImageData(0, 0, botCanvas.width, botCanvas.height).data;
 
         const diff = [];
 
@@ -487,21 +470,11 @@ const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
             .querySelector("mona-lisa-embed")
             .selectPixel({ x: randPixel[0], y: randPixel[1] });
           await new Promise((resolve) => setTimeout(resolve, 1500));
-          const imageDataRight = ctx.getImageData(
-            randPixel[0],
-            randPixel[1],
-            1,
-            1
-          );
+          const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
           autoColorPick(imageDataRight);
           botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
           botCtx.drawImage(rPlaceCanvas, 0, 0);
-          const imageDataNew = botCtx.getImageData(
-            randPixel[0],
-            randPixel[1],
-            1,
-            1
-          );
+          const imageDataNew = botCtx.getImageData(randPixel[0], randPixel[1], 1, 1);
 
           if (
             imageDataRight.data[0] !== imageDataNew.data[0] ||
