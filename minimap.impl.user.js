@@ -598,6 +598,7 @@ const { html, render } = mlp_uhtml;
   }
 
   const botTimeout = 1000;
+  const botAfterPlaceTimeout = 3000;
   (async () => {
     while (true) {
       // Update the minimap image (necessary for checking the diff)
@@ -643,6 +644,7 @@ const { html, render } = mlp_uhtml;
               embed.selectedColor
             }]`
           );
+          await waitMs(botAfterPlaceTimeout);
         }
 
         botWorkingRightNow = false;
