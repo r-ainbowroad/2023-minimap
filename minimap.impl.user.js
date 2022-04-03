@@ -746,7 +746,7 @@ const { html, render } = mlp_uhtml;
     );
   }
 
-  const botTimeout = 1000;
+  const botTimeout = 5000;
   const botAfterPlaceTimeout = 3000;
   (async () => {
     while (true) {
