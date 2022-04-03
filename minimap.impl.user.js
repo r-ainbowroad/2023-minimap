@@ -450,6 +450,12 @@ const { html, render } = mlp_uhtml;
   }, 30000);
 
   settings.addSetting(
+    "findArt",
+    new ButtonSetting("Find our art!", function () {
+      findNextArt();
+    }, true)
+  );
+  settings.addSetting(
     "autoColor",
     new CheckboxSetting("Auto color picker", false, function (autoColorSetting) {
       settings.getSetting("bot").enabled = false;
@@ -542,6 +548,48 @@ const { html, render } = mlp_uhtml;
     for (let i = 0; i < rPlaceMask.length; i++) {
       // Grayscale, pick green channel!
       rPlaceMask[i] = maskData[i * 4 + 1];
+    }
+  }
+
+
+  const NEXT_ART_MIN_DIST = 100; // art within this range is considered the same
+  let currentLocationIndex = null;
+  function findNextArt() {
+    const templateData = ctx.getImageData(0, 0, rPlaceCanvas.width, rPlaceCanvas.height).data;
+
+    const locations = [];
+    for (let i = 0; i < templateData.length; i += 4) {
+      if (templateData[i + 3] === 0) continue;
+      const x = (i / 4) % rPlaceCanvas.width;
+      const y = Math.floor((i / 4) / rPlaceCanvas.width);
+
+      const isNearOtherArt = !!locations.find((loc) => Math.abs(x - loc.x) < NEXT_ART_MIN_DIST || Math.abs(y - loc.y) < NEXT_ART_MIN_DIST);
+      if (isNearOtherArt) continue;
+
+      locations.push({ x, y });
+    }
+
+    const sortedLocations = locations
+      .sort((a, b) => {
+        if (a.x < b.x) return -1;
+        if (a.x > b.x) return 1;
+        if (a.y < b.y) return -1;
+        if (a.y > b.y) return 1;
+        return 0;
+      });
+    
+    if (sortedLocations.length > 0) {
+      if (currentLocationIndex === null) {
+        currentLocationIndex = 0;
+      } else {
+        currentLocationIndex++;
+        if (currentLocationIndex >= sortedLocations.length) {
+          currentLocationIndex = 0;
+        }
+      }
+      const nextLocation = sortedLocations[currentLocationIndex];
+      console.log(`Moving to art at: [x: ${nextLocation.x}, y: ${nextLocation.y}]`);
+      embed.camera.applyPosition(nextLocation);
     }
   }
 
