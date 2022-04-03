@@ -46,6 +46,8 @@ TODO
 
 Al entrar en r/place verás un visor en la esquina superior derecha. En ese visor se muestra la plantilla de España.
 
+**IMPORTANTE:** Tienes que hacer click en template hasta que aparezca "spain". En este proyecto hay mas comunidades y todos compartimos el script.
+
 Si haces click en "Bot: Disabled" entrarás en el modo automático, donde cada vez que puedas poner un pixel la herramienta lo colocará donde sea necesario.
 
 Si haces click en "Auto color picker", el color de tu pixel cambiará automáticamente para tener el color que debería según la plantilla.
