@@ -22,12 +22,24 @@ const { html, render } = mlp_uhtml;
   //document.querySelector("faceplate-toast")
   //document.createElement('mona-lisa-app').isFullScreen.globalState.state = true;
 
+  const embed = await new Promise((resolve) => {
+    let interval = setInterval(() => {
+      try {
+        const embed = document.querySelector("mona-lisa-embed");
+        console.log("Found embed. Good!");
+        resolve(embed);
+        clearInterval(interval);
+      } catch (e) {
+        console.error("Found embed. Trying again...");
+      }
+    }, 1000);
+  });
+
   const rPlaceCanvas = await new Promise((resolve) => {
     let interval = setInterval(() => {
       try {
-        const rPlaceCanvas = document
-          .querySelector("mona-lisa-embed")
-          .shadowRoot.querySelector("mona-lisa-share-container mona-lisa-canvas")
+        const rPlaceCanvas = embed.shadowRoot
+          .querySelector("mona-lisa-share-container mona-lisa-canvas")
           .shadowRoot.querySelector("canvas");
         console.log("Found canvas. Good!");
         resolve(rPlaceCanvas);
@@ -170,9 +182,8 @@ const { html, render } = mlp_uhtml;
   const coordinateBlock = await new Promise((resolve) => {
     let interval = setInterval(() => {
       try {
-        const coordinateBlock = document
-          .querySelector("mona-lisa-embed")
-          .shadowRoot.querySelector("mona-lisa-coordinates")
+        const coordinateBlock = embed.shadowRoot
+          .querySelector("mona-lisa-coordinates")
           .shadowRoot.querySelector("div");
         console.log("Found coordinate block. Good!");
         resolve(coordinateBlock);
@@ -484,9 +495,8 @@ const { html, render } = mlp_uhtml;
     };
   }
 
-  const paletteButtons = document
-    .querySelector("mona-lisa-embed")
-    .shadowRoot.querySelector("mona-lisa-color-picker")
+  const paletteButtons = embed.shadowRoot
+    .querySelector("mona-lisa-color-picker")
     .shadowRoot.querySelectorAll(".palette button.color");
   const palette = [];
   for (const paletteButton of paletteButtons) {
@@ -516,7 +526,7 @@ const { html, render } = mlp_uhtml;
       if (diff[correctColorID] > diff[i]) correctColorID = i;
     }
 
-    document.querySelector("mona-lisa-embed").selectedColor = palette[correctColorID][3];
+    embed.selectedColor = palette[correctColorID][3];
   }
 
   function intToHex(int1) {
@@ -582,7 +592,7 @@ const { html, render } = mlp_uhtml;
   const botTimeout = 1000;
   setInterval(() => {
     // Fix bug when tab goes to sleep
-    if(Date.now() - lastUpdate < botTimeout * 0.9) return;
+    if (Date.now() - lastUpdate < botTimeout * 0.9) return;
     lastUpdate = Date.now();
 
     // Update the minimap image (necessary for checking the diff)
@@ -610,23 +620,24 @@ const { html, render } = mlp_uhtml;
       }
       botWorkingRightNow = true;
 
-      document.querySelector("mona-lisa-embed").wakeUp();
+      embed.wakeUp();
 
-      const em = document.querySelector("mona-lisa-embed");
-
-      if (!em.nextTileAvailableIn && diff.length > 0) {
+      if (!embed.nextTileAvailableIn && diff.length > 0) {
         const randID = Math.floor(Math.random() * diff.length);
         const randPixel = diff[randID];
         const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
         autoColorPick(imageDataRight);
-        em.camera.applyPosition({ x: randPixel[0], y: randPixel[1] });
-        em.showColorPicker = true;
-        em.onConfirmPixel();
+        embed.camera.applyPosition({ x: randPixel[0], y: randPixel[1] });
+        embed.showColorPicker = true;
+        embed.onConfirmPixel();
+        console.log(
+          `Placed [x: ${randPixel[0]}, y: ${randPixel[1]}, color: ${embed.selectedColor}]`
+        );
       }
 
       botWorkingRightNow = false;
     }
-  }, 1000);
+  }, botTimeout);
 })();
 
 // vim:et:sw=2
