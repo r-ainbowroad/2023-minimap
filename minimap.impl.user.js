@@ -207,8 +207,7 @@ const { html, render } = mlp_uhtml;
 <mlpminimap>
   <img class="map">
   <div class="crosshair"></div>
-  <div class="settings">
-  </div>
+  <div class="settings"></div>
   <div id="resizer"></div>
 </mlpminimap>`;
 
@@ -218,11 +217,20 @@ const { html, render } = mlp_uhtml;
       this.enabled = enabled;
       this.callback = callback;
     }
+    // onchange(e) {
+    //   this.enabled = e.target.checked;
+    //   this.callback();
+    // }
     onclick() {
       this.enabled = !this.enabled;
       this.callback();
     }
     htmlFor(ref, id) {
+      // NOTE(Dusk): It looks like Reddit hijacks all native checkboxes.
+      // const onchange = () => this.onchange();
+      // return html.for(ref, id)`<label data-id=${id}>
+      //   ${this.name}: <input type="checkbox" .checked=${this.enabled} onchange=${onchange} />
+      // </label>`;
       const onclick = () => this.onclick();
       return html.for(ref, id)`<div data-id=${id} class="clickable" onclick=${onclick}>
         ${this.name}: <span>${this.enabled ? "Enabled" : "Disabled"}</span>
