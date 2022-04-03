@@ -555,24 +555,25 @@ const { html, render } = mlp_uhtml;
     return bucket[Math.floor(Math.random() * bucket.length)];
   }
 
+  const FOCUS_AREA_SIZE = 75;
   /**
    * Select a random pixel weighted by the mask.
    *
    * The selection algorithm works as follows:
    * - Pixels are grouped into buckets based on the mask
-   * - A virtual pool of 150 of the highest priority pixels is defined.
-   *   - If the highest priority bucket contains fewer than 150 pixels, the next highest
-   *     bucket is pulled from, and so on until the 150 pixel threshold is met.
+   * - A virtual pool of {FOCUS_AREA_SIZE} of the highest priority pixels is defined.
+   *   - If the highest priority bucket contains fewer than FOCUS_AREA_SIZE pixels, the
+   *     next highest bucket is pulled from, and so on until the $FOCUS_AREA_SIZE pixel
+   *     threshold is met.
    * - A pixel is picked from this virtual pool without any weighting
    *
    * This algorithm avoids the collision dangers of only using one bucket, while requiring
    * no delays, and ensures that the size of the selection pool is always constant.
    *
    * Another way of looking at this:
-   * - If >=150 pixels are missing from the crystal, 100% of the bots will be working there
-   * - If 100 pixels are missing from the crystal, 67% of the bots will be working there
-   * - If 50 pixels are missing from the crystal, 33% of the bots will be working there
-   * - If 3 pixels are missing from the crystal, 1% of the bots will be working there
+   * - If >= 75 pixels are missing from the crystal, 100% of the bots will be working there
+   * - If 50 pixels are missing from the crystal, 67% of the bots will be working there
+   * - If 25 pixels are missing from the crystal, 33% of the bots will be working there
    *
    * @param {[number, number][]} diff
    * @return {[number, number]}
@@ -599,7 +600,7 @@ const { html, render } = mlp_uhtml;
 
     // Select from buckets
     // Position represents the index in the virtual pool that we are selecting
-    const position = Math.floor(Math.random() * Math.min(150, totalAvailablePixels));
+    const position = Math.floor(Math.random() * Math.min(FOCUS_AREA_SIZE, totalAvailablePixels));
     const pixel = pickFromBuckets(buckets, position);
     return pixel;
   }
