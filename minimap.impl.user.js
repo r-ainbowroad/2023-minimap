@@ -812,6 +812,18 @@ const { html, render } = mlp_uhtml;
     );
   }
 
+  function log() {
+    console.log(`[${new Date().toISOString()}]`, ...arguments);
+  }
+
+  function logError() {
+    console.error(`[${new Date().toISOString()}]`, ...arguments);
+  }
+
+  const timeOutPillBlock = embed.shadowRoot
+    .querySelector("mona-lisa-status-pill")
+    .shadowRoot.querySelector("div");
+
   const botTimeout = 5000;
   const botAfterPlaceTimeout = 3000;
   (async () => {
@@ -835,6 +847,10 @@ const { html, render } = mlp_uhtml;
         >${percentage}% (${nMissingPixels}/${nCisPixels})</span
       >`;
 
+      log(
+        `Status: ${percentage}% (${nMissingPixels}/${nCisPixels}) [${timeOutPillBlock.innerText}]`
+      );
+
       if (settings.getSetting("bot").enabled && !botLock) {
         if (rPlaceTemplate.botUrl === undefined) {
           return;
@@ -851,18 +867,10 @@ const { html, render } = mlp_uhtml;
           embed
             .onConfirmPixel()
             .then(() => {
-              console.log(
-                `[${new Date().toISOString()}] Placed [x: ${randPixel.x}, y: ${
-                  randPixel.y
-                }, color: ${selectedColor}]`
-              );
+              log(`Placed [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
             })
             .catch(() => {
-              console.log(
-                `[${new Date().toISOString()}] FAILED! [x: ${randPixel.x}, y: ${
-                  randPixel.y
-                }, color: ${selectedColor}]`
-              );
+              logError(`FAILED! [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
             });
           await waitMs(botAfterPlaceTimeout);
         }
