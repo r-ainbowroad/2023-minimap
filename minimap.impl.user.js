@@ -446,7 +446,7 @@ const { html, render } = mlp_uhtml;
   noSleepAudio.volume = 0.1;
 
   setInterval(() => {
-    if (settings.getSetting("nosleep")) {
+    if (settings.getSetting("botstability")) {
       noSleepAudio.play();
     }
   }, 30000);
@@ -471,7 +471,10 @@ const { html, render } = mlp_uhtml;
       updateTemplate();
     })
   );
-  settings.addSetting("nosleep", new CheckboxSetting("NoTabFreeze (🔇 Need to mute tab)", false));
+  settings.addSetting(
+    "botstability",
+    new CheckboxSetting("Bot stability (🔇 Need to mute tab)", false)
+  );
   settings.addSetting(
     "pixelDisplayProgress",
     new DisplaySetting("Current progress", "Unknown", true)
@@ -850,12 +853,14 @@ const { html, render } = mlp_uhtml;
         }
         embed.wakeUp();
 
-        // Move camera to center
-        embed.camera.applyPosition({
-          x: Math.floor(rPlaceCanvas.width / 2),
-          y: Math.floor(rPlaceCanvas.height / 2),
-          zoom: 0,
-        });
+        if (settings.getSetting("botstability")) {
+          // Move camera to center
+          embed.camera.applyPosition({
+            x: Math.floor(rPlaceCanvas.width / 2),
+            y: Math.floor(rPlaceCanvas.height / 2),
+            zoom: 0,
+          });
+        }
 
         const timeOutPillBlock = embed.shadowRoot
           .querySelector("mona-lisa-status-pill")
