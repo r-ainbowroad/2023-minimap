@@ -849,6 +849,12 @@ const { html, render } = mlp_uhtml;
         }
         embed.wakeUp();
 
+        // Move camera to center
+        embed.camera.applyPosition({
+          x: Math.floor(rPlaceCanvas.width / 2),
+          y: Math.floor(rPlaceCanvas.height / 2),
+        });
+
         const timeOutPillBlock = embed.shadowRoot
           .querySelector("mona-lisa-status-pill")
           .shadowRoot.querySelector("div");
