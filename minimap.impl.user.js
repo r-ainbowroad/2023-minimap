@@ -446,7 +446,7 @@ const { html, render } = mlp_uhtml;
   noSleepAudio.volume = 0.1;
 
   setInterval(() => {
-    if (settings.getSetting("botstability")) {
+    if (settings.getSetting("botstability").enabled) {
       noSleepAudio.play();
     }
   }, 30000);
@@ -853,7 +853,7 @@ const { html, render } = mlp_uhtml;
         }
         embed.wakeUp();
 
-        if (settings.getSetting("botstability")) {
+        if (settings.getSetting("botstability").enabled) {
           // Move camera to center
           embed.camera.applyPosition({
             x: Math.floor(rPlaceCanvas.width / 2),
