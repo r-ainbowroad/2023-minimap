@@ -613,11 +613,12 @@ const { html, render } = mlp_uhtml;
   function pickFromBuckets(buckets, position) {
     // All of the buckets, sorted in order from highest priority to lowest priority
     const orderedBuckets = [...buckets.entries()] // Convert map to array of tuples
-      .sort(([ka], [kb]) => kb - ka) // Order by key (priority) DESC
-      .map((bucket, _index) => bucket[1]); // Drop the priority, leaving an array of buckets
+      .sort(([ka], [kb]) => kb - ka); // Order by key (priority) DESC
+
+    console.log("Buckets:", orderedBuckets);
 
     // Select the position'th element from the buckets
-    for (const bucket of orderedBuckets) {
+    for (const [, bucket] of orderedBuckets) {
       if (bucket.length <= position) position -= bucket.length;
       else return bucket[position];
     }
