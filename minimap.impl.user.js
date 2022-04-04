@@ -93,12 +93,13 @@ const { html, render } = mlp_uhtml;
   setRPlaceTemplate(rPlaceTemplateNames[0]);
 
   class Resizer {
-    constructor(elResizer, elBlock) {
+    constructor(elResizer, elBlock, callback = () => {}) {
       var startX, startY, startWidth, startHeight;
 
       function doDrag(e) {
         elBlock.style.width = startWidth - e.clientX + startX + "px";
         elBlock.style.height = startHeight + e.clientY - startY + "px";
+        callback();
       }
 
       function stopDrag(e) {
@@ -512,6 +513,7 @@ const { html, render } = mlp_uhtml;
         : rPlaceTemplate.canvasUrl;
     fetchTemplate(rPlaceTemplateUrl)
       .then((array) => {
+        recalculateImagePos();
         imageBlock.src = getPngDataUrlForBytes(array);
         botLock = false;
       })
@@ -691,7 +693,7 @@ const { html, render } = mlp_uhtml;
   }
 
   const resizerBlock = mlpMinimapBlock.querySelector("#resizer");
-  const resizerAction = new Resizer(resizerBlock, mlpMinimapBlock);
+  const resizerAction = new Resizer(resizerBlock, mlpMinimapBlock, recalculateImagePos);
 
   function getMinimapSize() {
     return {
@@ -737,7 +739,8 @@ const { html, render } = mlp_uhtml;
   function intToHex(int1) {
     return ("0" + int1.toString(16)).slice(-2);
   }
-  posParser.addEventListener("posChanged", () => {
+
+  function recalculateImagePos() {
     const coordinatesData = posParser.pos;
     const minimapData = getMinimapSize();
     imageBlock.style.width = `${
@@ -758,9 +761,13 @@ const { html, render } = mlp_uhtml;
     }px`;
     crosshairBlock.style.width = `${rPlacePixelSize * coordinatesData.scale}px`;
     crosshairBlock.style.height = `${rPlacePixelSize * coordinatesData.scale}px`;
+  }
+
+  posParser.addEventListener("posChanged", () => {
+    recalculateImagePos();
     if (settings.getSetting("autoColor").enabled) {
       try {
-        const imageData = ctx.getImageData(coordinatesData.x, coordinatesData.y, 1, 1);
+        const imageData = ctx.getImageData(posParser.pos.x, posParser.pos.y, 1, 1);
         autoColorPick(imageData);
       } catch (e) {
         console.error(e);
