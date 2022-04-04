@@ -820,10 +820,6 @@ const { html, render } = mlp_uhtml;
     console.error(`[${new Date().toISOString()}]`, ...arguments);
   }
 
-  const timeOutPillBlock = embed.shadowRoot
-    .querySelector("mona-lisa-status-pill")
-    .shadowRoot.querySelector("div");
-
   const botTimeout = 5000;
   const botAfterPlaceTimeout = 3000;
   (async () => {
@@ -847,15 +843,18 @@ const { html, render } = mlp_uhtml;
         >${percentage}% (${nMissingPixels}/${nCisPixels})</span
       >`;
 
-      log(
-        `Status: ${percentage}% (${nMissingPixels}/${nCisPixels}) [${timeOutPillBlock.innerText}]`
-      );
-
       if (settings.getSetting("bot").enabled && !botLock) {
         if (rPlaceTemplate.botUrl === undefined) {
           return;
         }
         embed.wakeUp();
+
+        const timeOutPillBlock = embed.shadowRoot
+          .querySelector("mona-lisa-status-pill")
+          .shadowRoot.querySelector("div");
+        log(
+          `Status: ${percentage}% (${nMissingPixels}/${nCisPixels}) [${timeOutPillBlock.innerText}]`
+        );
 
         if (!embed.nextTileAvailableIn && diff.length > 0) {
           const randPixel = selectRandomPixel(diff);
