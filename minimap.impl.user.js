@@ -77,6 +77,7 @@ const { html, render } = mlp_uhtml;
     rPlaceTemplateNames.push(templateName);
   };
   addRPlaceTemplate("mlp", { bot: true, mask: true });
+  addRPlaceTemplate("whiteout_mlp", { bot: true, mask: false });
   addRPlaceTemplate("r-ainbowroad", { bot: true, mask: true });
   addRPlaceTemplate("spain", { bot: true, mask: true });
   addRPlaceTemplate("phoenixmc", { bot: true, mask: true });
