@@ -563,7 +563,7 @@ const { html, render } = mlp_uhtml;
       const y = Math.floor(i / 4 / rPlaceCanvas.width);
 
       const isNearOtherArt = !!locations.find(
-        (loc) => Math.abs(x - loc.x) < NEXT_ART_MIN_DIST || Math.abs(y - loc.y) < NEXT_ART_MIN_DIST
+        (loc) => Math.abs(x - loc.x) < NEXT_ART_MIN_DIST && Math.abs(y - loc.y) < NEXT_ART_MIN_DIST
       );
       if (isNearOtherArt) continue;
 
