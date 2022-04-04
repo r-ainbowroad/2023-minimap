@@ -54,6 +54,7 @@ const { html, render } = mlp_uhtml;
   embed.camera.applyPosition({
     x: Math.floor(rPlaceCanvas.width / 2),
     y: Math.floor(rPlaceCanvas.height / 2),
+    zoom: 0,
   });
 
   const rPlacePixelSize = 10;
@@ -853,6 +854,7 @@ const { html, render } = mlp_uhtml;
         embed.camera.applyPosition({
           x: Math.floor(rPlaceCanvas.width / 2),
           y: Math.floor(rPlaceCanvas.height / 2),
+          zoom: 0,
         });
 
         const timeOutPillBlock = embed.shadowRoot
