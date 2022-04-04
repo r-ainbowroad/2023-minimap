@@ -847,12 +847,23 @@ const { html, render } = mlp_uhtml;
           autoColorPick(imageDataRight);
           embed.camera.applyPosition(randPixel);
           embed.showColorPicker = true;
-          embed.onConfirmPixel();
-          console.log(
-            `[${Date()}] Placed [x: ${randPixel.x}, y: ${randPixel.y}, color: ${
-              embed.selectedColor
-            }]`
-          );
+          const selectedColor = embed.selectedColor;
+          embed
+            .onConfirmPixel()
+            .then(() => {
+              console.log(
+                `[${new Date().toISOString()}] Placed [x: ${randPixel.x}, y: ${
+                  randPixel.y
+                }, color: ${selectedColor}]`
+              );
+            })
+            .catch(() => {
+              console.log(
+                `[${new Date().toISOString()}] FAILED! [x: ${randPixel.x}, y: ${
+                  randPixel.y
+                }, color: ${selectedColor}]`
+              );
+            });
           await waitMs(botAfterPlaceTimeout);
         }
       }
