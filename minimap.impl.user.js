@@ -481,11 +481,57 @@ const { html, render } = mlp_uhtml;
     "pixelDisplayProgress",
     new DisplaySetting("Current progress", "Unknown", true)
   );
+
   settings.addSetting(
-    "donate",
-    new ButtonSetting("Donate me plz", function (donateSetting) {
-      window.open("https://www.donationalerts.com/r/vovskic2002");
+    "pythonBot",
+    new ButtonSetting("Python bot", function (pythonBotSetting) {
+      window.open("https://github.com/CloudburstSys/PonyPixel");
     })
+  );
+
+  const newDonateSetting = function (name, url) {
+    return new ButtonSetting(`Donate (${name})`, function (donateSetting) {
+      window.open(url);
+    });
+  };
+  settings.addSetting(
+    "donatePonywka",
+    newDonateSetting(
+      "Midnight Ponywka - primary dev, MLP template",
+      "https://www.donationalerts.com/r/vovskic2002"
+    )
+  );
+  settings.addSetting(
+    "donateCloudburstSys",
+    newDonateSetting(
+      "Twi/Leah (@CloudburstSys) - primary Python dev",
+      "https://ko-fi.com/cloudburstsys"
+    )
+  );
+  settings.addSetting(
+    "donateAlchEmi",
+    newDonateSetting(
+      "Ember Hearth (@Alch-Emi) - dev (priority, progress)",
+      "https://paypal.me/alchemi336"
+    )
+  );
+  settings.addSetting(
+    "donateBb010g",
+    newDonateSetting(
+      "Dusk 💛 💜 (@bb010g) - dev (GitHub org, dev install, multi-template, UI, bot), r/ainbowroad template",
+      "https://www.tgijp.org/"
+    )
+  );
+  settings.addSetting(
+    "donateOctylFractal",
+    newDonateSetting(
+      "octylFractal - dev (bugfixes), MLP template",
+      "https://github.com/sponsors/octylFractal"
+    )
+  );
+  settings.addSetting(
+    "donateLumiereEleve",
+    newDonateSetting("Lumière Élevé - Python dev", "https://buymeacoffee.com/belkasempaiowo")
   );
 
   let botLock = false;
