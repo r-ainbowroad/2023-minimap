@@ -17,7 +17,7 @@ We all have monorepo experience now! :p
   * Android folks can use Kiwi Browser + Tampermonkey.
 * Install "Tampermonkey" extension (https://www.tampermonkey.net/)
 * Firefox isn't working for now. 
-* Open the following page in your browser: <https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/minimap.user.js>
+* Open the following page in your browser: <https://raw.githubusercontent.com/r-ainbowroad/2022-minimap/d/main/minimap.user.js>
   * This will invite you to install the userscript.
 * Click on the canvas to get it to load.
 * Cycle to your template, if necessary, by clicking on the "Template: ..." setting.
@@ -47,7 +47,7 @@ Please ask whoever's managing the minimap for your subreddit for changes to the 
   * En Android se puede usar Kiwi Browser + Tampermonkey.
 * Instalar la extensión "Tampermonkey" (https://www.tampermonkey.net/)
 * En Firefox hay que usar https://addons.mozilla.org/es/firefox/addon/violentmonkey/ (ViolentMonkey).
-* Abre la siguiente página en el navegador: https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/minimap.user.js
+* Abre la siguiente página en el navegador: https://raw.githubusercontent.com/r-ainbowroad/2022-minimap/d/main/minimap.user.js
   * Haz click en instalar.
 * Haz click en el canvas de r/place para que carge.
 * Puedes cambiar entre las plantillas haciendo click en "Template: ...".
