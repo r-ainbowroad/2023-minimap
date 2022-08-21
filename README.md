@@ -35,6 +35,10 @@ We all have monorepo experience now! :p
 If your subreddit wants to join the collaborative minimap, have whoever's going to be updating templates join <https://manechat.net> and, in `#rplace`'s "Tool Creation" thread, ping `@bb010g#5294` or `@Bigcheese#3910` with information.
 Please ask whoever's managing the minimap for your subreddit for changes to the minimap or template, to avoid disrupting Manechat.
 
+## Licensing
+
+The code in this repository is dual licensed under the Apache License 2.0 and the ISC license (SPDX license expression: `Apache-2.0 OR ISC`).
+
 ---
 
 # Spanish translation

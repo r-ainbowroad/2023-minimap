@@ -6,10 +6,13 @@
 // @version     0.3
 // @grant       GM.xmlHttpRequest
 // @author      Ponywka, bb010g
+// @license     Apache-2.0 OR ISC
 // @connect     raw.githubusercontent.com
 // @connect     media.githubusercontent.com
 // @require     https://unpkg.com/uhtml@2.8.1
 // ==/UserScript==
+// SPDX-FileCopyrightText: 2022 bb010g, Ember Hearth, LydianLights, octylFractal, Ponywka
+// SPDX-License-Identifier: Apache-2.0 OR ISC
 
 // To format: `npx prettier --print-width 100 -w minimap.impl.user.js`
 
