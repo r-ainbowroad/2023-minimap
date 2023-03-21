@@ -1,0 +1,29 @@
+name: Blob upload
+
+on:
+  workflow_dispatch:
+  push:
+    branches: "main"
+    paths: ["mlp/bot.png", "mlp/canvas.png", "mlp/mask.png"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+          creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
+      
+    - name: Upload to blob storage
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+            az storage blob upload-batch --account-name ponyplace --auth-mode key -d '$web' --overwrite true -s ./mlp --pattern *.png
