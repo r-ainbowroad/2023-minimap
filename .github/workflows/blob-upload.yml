@@ -26,4 +26,4 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-            az storage blob upload-batch --account-name ponyplace --auth-mode key -d '$web' --overwrite true -s ./mlp --pattern *.png
+            az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./mlp --pattern *.png
