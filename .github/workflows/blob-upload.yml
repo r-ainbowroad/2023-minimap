@@ -1,10 +1,10 @@
-name: Blob upload
+name: MLP blob upload
 
 on:
   workflow_dispatch:
   push:
     branches: "main"
-    paths: ["mlp/bot.png", "mlp/canvas.png", "mlp/mask.png"]
+    paths: ["mlp/bot.png", "mlp/canvas.png", "mlp/mask.png", "mlp/endu_template.json"]
 
 permissions:
   contents: read
@@ -16,14 +16,25 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
-      
+      with:
+        lfs: true
+    
+    - name: Copy canvas files
+      run: |
+          mkdir ./dist
+          cp -f ./mlp/bot.png ./mlp/canvas.png ./mlp/mask.png mlp/endu_template.json ./dist
+    
     - name: Azure login
       uses: azure/login@v1
       with:
           creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
-      
+    
     - name: Upload to blob storage
       uses: azure/CLI@v1
       with:
         inlineScript: |
-            az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./mlp --pattern *.png
+            az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
+    
+    - name: Azure logout
+      run: az logout
+      if: always()
