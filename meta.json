@@ -1,0 +1,19 @@
+{
+  "name": "r/place MLP Minimap",
+  "author": "r/place MLP Minimap Authors",
+  "description": "Minimap overlay and bot for r/place",
+  "namespace": "https://place.equestria.dev/",
+  "grant": [
+    "GM.xmlHttpRequest"
+  ],
+  "include": [
+    "https://hot-potato.reddit.com/embed*",
+    "https://place.equestria.dev/embed*"
+  ],
+  "downloadURL": "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/d/main/minimap.user.js",
+  "updateURL": "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/d/main/minimap.user.js",
+  "connect": [
+    "raw.githubusercontent.com",
+    "media.githubusercontent.com"
+  ]
+}

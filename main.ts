@@ -1,34 +1,22 @@
-// ==UserScript==
-// @name        DO NOT DIRECTLY USE THIS IMPLEMENTATION OF r/Place MLP Minimap
-// @namespace   http://tampermonkey.net/
-// @description STOP; DO NOT DIRECTLY USE THIS
-// @include     https://hot-potato.reddit.com/embed*
-// @version     0.3
-// @grant       GM.xmlHttpRequest
-// @author      Ponywka, bb010g
-// @license     Apache-2.0 OR ISC
-// @connect     raw.githubusercontent.com
-// @connect     media.githubusercontent.com
-// @require     https://unpkg.com/uhtml@2.8.1
-// ==/UserScript==
-// SPDX-FileCopyrightText: 2022 bb010g, Ember Hearth, LydianLights, octylFractal, Ponywka
-// SPDX-License-Identifier: Apache-2.0 OR ISC
+/**
+ *
+ * Part of the MLP r/place Project, under the Apache License v2.0 or ISC.
+ * SPDX-License-Identifier: Apache-2.0 OR ISC
+ * SPDX-FileCopyrightText: Copyright CONTRIBUTORS.md
+ *
+ **
+ *
+ * @file All of the minimap. This needs to be split up.
+ *
+ **/
 
-// To format: `npx prettier --print-width 100 -w minimap.impl.user.js`
-
-const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
-const mlp_uhtml = "uhtml" in this ? this.uhtml : arguments[0].uhtml;
-
-const { html, render } = mlp_uhtml;
+ import {html, render} from 'uhtml';
 
 (async function () {
-  //document.querySelector("faceplate-toast")
-  //document.createElement('mona-lisa-app').isFullScreen.globalState.state = true;
-
-  const embed = await new Promise((resolve) => {
+  const embed: MonaLisa.Embed = await new Promise((resolve) => {
     let interval = setInterval(() => {
       try {
-        const embed = document.querySelector("mona-lisa-embed");
+        const embed = document.querySelector("mona-lisa-embed") as MonaLisa.Embed;
         console.log("Found embed. Good!");
         resolve(embed);
         clearInterval(interval);
@@ -36,14 +24,14 @@ const { html, render } = mlp_uhtml;
         console.error("Found embed. Trying again...");
       }
     }, 1000);
-  });
+  })!;
 
-  const rPlaceCanvas = await new Promise((resolve) => {
+  const rPlaceCanvas: HTMLCanvasElement = await new Promise((resolve) => {
     let interval = setInterval(() => {
       try {
-        const rPlaceCanvas = embed.shadowRoot
-          .querySelector("mona-lisa-share-container mona-lisa-canvas")
-          .shadowRoot.querySelector("canvas");
+        const rPlaceCanvas: HTMLCanvasElement = embed!.shadowRoot!
+          .querySelector("mona-lisa-share-container mona-lisa-canvas")!
+          .shadowRoot!.querySelector("canvas")!;
         console.log("Found canvas. Good!");
         resolve(rPlaceCanvas);
         clearInterval(interval);
@@ -51,7 +39,7 @@ const { html, render } = mlp_uhtml;
         console.error("Failed to attach to canvas. Trying again...");
       }
     }, 1000);
-  });
+  })!;
 
   // Move camera to center
   embed.camera.applyPosition({
@@ -64,14 +52,14 @@ const { html, render } = mlp_uhtml;
 
   const rPlaceTemplatesGithubLfs = true;
   const rPlaceTemplateBaseUrl = rPlaceTemplatesGithubLfs
-    ? "https://media.githubusercontent.com/media/r-ainbowroad/2022-minimap/d/main"
-    : "https://raw.githubusercontent.com/r-ainbowroad/2022-minimap/d/main";
-  const getRPlaceTemplateUrl = function (templateName, type) {
+    ? "https://media.githubusercontent.com/media/r-ainbowroad/2023-minimap/main"
+    : "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/main";
+  const getRPlaceTemplateUrl = function (templateName: string, type: string) {
     return `${rPlaceTemplateBaseUrl}/${templateName}/${type}.png`;
   };
-  const rPlaceTemplateNames = [];
+  const rPlaceTemplateNames: Array<string> = [];
   const rPlaceTemplates = new Map();
-  const addRPlaceTemplate = function (templateName, options) {
+  const addRPlaceTemplate = function (templateName: string, options) {
     rPlaceTemplates.set(templateName, {
       canvasUrl: getRPlaceTemplateUrl(templateName, "canvas"),
       botUrl: options.bot ? getRPlaceTemplateUrl(templateName, "bot") : undefined,
@@ -86,7 +74,7 @@ const { html, render } = mlp_uhtml;
   addRPlaceTemplate("phoenixmc", { bot: true, mask: true });
   let rPlaceTemplateName;
   let rPlaceTemplate;
-  let rPlaceMask = undefined;
+  let rPlaceMask: Array<number> | undefined;
   const setRPlaceTemplate = function (templateName) {
     const template = rPlaceTemplates.get(templateName);
     if (template === undefined) {
@@ -116,8 +104,8 @@ const { html, render } = mlp_uhtml;
       function initDrag(e) {
         startX = e.clientX;
         startY = e.clientY;
-        startWidth = parseInt(document.defaultView.getComputedStyle(elBlock).width, 10);
-        startHeight = parseInt(document.defaultView.getComputedStyle(elBlock).height, 10);
+        startWidth = parseInt(document.defaultView!.getComputedStyle(elBlock).width, 10);
+        startHeight = parseInt(document.defaultView!.getComputedStyle(elBlock).height, 10);
         document.documentElement.addEventListener("mousemove", doDrag, false);
         document.documentElement.addEventListener("mouseup", stopDrag, false);
       }
@@ -126,8 +114,9 @@ const { html, render } = mlp_uhtml;
     }
   }
 
-  class Emitter {
+  class Emitter extends EventTarget {
     constructor() {
+      super();
       var delegate = document.createDocumentFragment();
       ["addEventListener", "dispatchEvent", "removeEventListener"].forEach(
         (f) => (this[f] = (...xs) => delegate[f](...xs))
@@ -149,6 +138,9 @@ const { html, render } = mlp_uhtml;
   };
 
   class PosParser extends Emitter {
+    coordinateBlock: HTMLDivElement;
+    pos: MonaLisa.Pos;
+
     parseCoordinateBlock() {
       const parsedData = this.coordinateBlock.innerText.match(/\(([0-9]+),([0-9]+)\) ([0-9.]+)x/);
       if (parsedData) {
@@ -189,9 +181,9 @@ const { html, render } = mlp_uhtml;
   const coordinateBlock = await new Promise((resolve) => {
     let interval = setInterval(() => {
       try {
-        const coordinateBlock = embed.shadowRoot
-          .querySelector("mona-lisa-coordinates")
-          .shadowRoot.querySelector("div");
+        const coordinateBlock = embed!.shadowRoot!
+          .querySelector("mona-lisa-coordinates")!
+          .shadowRoot!.querySelector("div")!;
         console.log("Found coordinate block. Good!");
         resolve(coordinateBlock);
         clearInterval(interval);
@@ -203,7 +195,7 @@ const { html, render } = mlp_uhtml;
 
   const posParser = new PosParser(coordinateBlock);
 
-  const docBody = document.querySelector("body");
+  const docBody = document.querySelector("body")!;
   const htmlBlock = `<style>
   mlpminimap {
     display: block;
@@ -282,6 +274,10 @@ const { html, render } = mlp_uhtml;
 </mlpminimap>`;
 
   class CheckboxSetting {
+    name: string;
+    enabled: boolean;
+    callback: Function;
+
     constructor(name, enabled = false, callback = function (setting) {}) {
       this.name = name;
       this.enabled = enabled;
@@ -311,6 +307,12 @@ const { html, render } = mlp_uhtml;
   }
 
   class CycleSetting {
+    name: string;
+    values: Array<string>;
+    valueIx: number;
+    callback: (setting) => void;
+    alwaysShow: boolean;
+
     constructor(
       name,
       values = ["Unset"],
@@ -342,6 +344,10 @@ const { html, render } = mlp_uhtml;
   }
 
   class ButtonSetting {
+    name: string;
+    callback: (setting) => void;
+    alwaysShow: boolean;
+
     constructor(name, callback = function (setting) {}, alwaysShow = false) {
       this.name = name;
       this.callback = callback;
@@ -361,13 +367,17 @@ const { html, render } = mlp_uhtml;
   }
 
   class DisplaySetting {
+    name: string;
+    content: string;
+    alwaysShow: boolean;
+
     constructor(name, content, alwaysShow = false) {
       this.name = name;
       this.content = content;
       this.alwaysShow = alwaysShow;
     }
     htmlFor(ref, id) {
-      const classes = [];
+      const classes: Array<string> = [];
       this.alwaysShow ? classes.push("alwaysshow") : null;
       return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")}>${this.name}: ${
         this.content
@@ -376,7 +386,7 @@ const { html, render } = mlp_uhtml;
   }
 
   class Settings {
-    settings = [];
+    settings: Array<any> = [];
     settingNames = new Map();
     settingsByName = new Map();
 
@@ -409,29 +419,29 @@ const { html, render } = mlp_uhtml;
   const htmlObject = document.createElement("div");
   htmlObject.innerHTML = htmlBlock;
   docBody.appendChild(htmlObject);
-  const mlpMinimapBlock = htmlObject.querySelector("mlpminimap");
+  const mlpMinimapBlock = htmlObject.querySelector("mlpminimap")! as HTMLElement;
 
-  const imageBlock = mlpMinimapBlock.querySelector(".map");
-  const crosshairBlock = mlpMinimapBlock.querySelector(".crosshair");
+  const imageBlock = mlpMinimapBlock.querySelector(".map")! as HTMLImageElement;
+  const crosshairBlock = mlpMinimapBlock.querySelector(".crosshair")! as HTMLElement;
 
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
+  const canvas = document.createElement("canvas")!;
+  const ctx = canvas.getContext("2d")!;
 
-  const maskCanvas = document.createElement("canvas");
+  const maskCanvas = document.createElement("canvas")!;
   maskCanvas.width = rPlaceCanvas.width;
   maskCanvas.height = rPlaceCanvas.height;
-  const maskCtx = maskCanvas.getContext("2d");
+  const maskCtx = maskCanvas.getContext("2d")!;
 
-  imageBlock.onload = function () {
+  imageBlock.addEventListener('load', function () {
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(this, 0, 0);
-  };
+    ctx!.clearRect(0, 0, canvas.width, canvas.height);
+    ctx!.drawImage(this, 0, 0);
+  });
 
   let updateTemplate = function () {};
 
-  const settingsBlock = mlpMinimapBlock.querySelector(".settings");
+  const settingsBlock = mlpMinimapBlock.querySelector(".settings")!;
   const settings = new Settings(settingsBlock, mlpMinimapBlock);
   settings.addSetting(
     "templateName",
@@ -447,7 +457,7 @@ const { html, render } = mlp_uhtml;
     )
   );
 
-  const noSleepAudio = mlpMinimapBlock.querySelector("#noSleep");
+  const noSleepAudio = mlpMinimapBlock!.querySelector("#noSleep")! as HTMLAudioElement;
   noSleepAudio.volume = 0.1;
 
   setInterval(() => {
@@ -542,7 +552,7 @@ const { html, render } = mlp_uhtml;
   // Fetch template, returns a Promise<Uint8Array>, on error returns the response object
   function fetchTemplate(url) {
     return new Promise((resolve, reject) => {
-      mlp_GM.xmlHttpRequest({
+      GM.xmlHttpRequest({
         method: "GET",
         responseType: "arraybuffer",
         url: `${url}?t=${new Date().getTime()}`,
@@ -609,11 +619,11 @@ const { html, render } = mlp_uhtml;
   }
 
   const NEXT_ART_MIN_DIST = 100; // art within this range is considered the same
-  let currentLocationIndex = null;
+  let currentLocationIndex: number | null = null;
   function findNextArt() {
     const templateData = ctx.getImageData(0, 0, rPlaceCanvas.width, rPlaceCanvas.height).data;
 
-    const locations = [];
+    const locations: Array<{x: number, y: number}> = [];
     for (let i = 0; i < templateData.length; i += 4) {
       if (templateData[i + 3] === 0) continue;
       const x = (i / 4) % rPlaceCanvas.width;
@@ -661,7 +671,7 @@ const { html, render } = mlp_uhtml;
    * @param {number} position
    * @return {[number, number]}
    */
-  function pickFromBuckets(buckets, position) {
+  function pickFromBuckets(buckets: Map<number, [number, number][]>, position) {
     // All of the buckets, sorted in order from highest priority to lowest priority
     const orderedBuckets = [...buckets.entries()] // Convert map to array of tuples
       .sort(([ka], [kb]) => kb - ka); // Order by key (priority) DESC
@@ -676,7 +686,7 @@ const { html, render } = mlp_uhtml;
 
     // If for some reason this breaks, just return a random pixel from the largest bucket
     const value = Array.from(buckets.keys()).reduce((a, b) => Math.max(a, b), 0);
-    const bucket = buckets.get(value);
+    const bucket = buckets.get(value)!;
     return bucket[Math.floor(Math.random() * bucket.length)];
   }
 
@@ -710,7 +720,7 @@ const { html, render } = mlp_uhtml;
     for (let i = 0; i < diff.length; i++) {
       const coords = diff[i];
       const [x, y] = coords;
-      const maskValue = rPlaceMask[x + y * rPlaceCanvas.width];
+      const maskValue = rPlaceMask![x + y * rPlaceCanvas.width];
       if (maskValue === 0) {
         continue;
       }
@@ -757,17 +767,17 @@ const { html, render } = mlp_uhtml;
     };
   }
 
-  const paletteButtons = embed.shadowRoot
-    .querySelector("mona-lisa-color-picker")
-    .shadowRoot.querySelectorAll(".palette button.color");
-  const palette = [];
+  const paletteButtons = embed.shadowRoot!
+    .querySelector("mona-lisa-color-picker")!
+    .shadowRoot!.querySelectorAll(".palette button.color")! as NodeListOf<HTMLElement>;
+  const palette: number[][] = [];
   for (const paletteButton of paletteButtons) {
-    const parsedData = paletteButton.children[0].style.backgroundColor.match(
+    const parsedData = (paletteButton.children[0] as HTMLElement).style.backgroundColor.match(
       /rgb\(([0-9]{1,3}), ([0-9]{1,3}), ([0-9]{1,3})\)/
     );
-    const colorID = parseInt(paletteButton.getAttribute("data-color"));
+    const colorID = parseInt(paletteButton.getAttribute("data-color")!);
     if (parsedData) {
-      palette.push([parsedData[1], parsedData[2], parsedData[3], colorID]);
+      palette.push([+parsedData[1], +parsedData[2], +parsedData[3], colorID]);
     } else {
       palette.push([0, 0, 0, -1]);
     }
@@ -779,7 +789,7 @@ const { html, render } = mlp_uhtml;
     const r = imageData.data[0];
     const g = imageData.data[1];
     const b = imageData.data[2];
-    let diff = [];
+    let diff: number[] = [];
     for (const color of palette) {
       diff.push(Math.abs(r - color[0]) + Math.abs(g - color[1]) + Math.abs(b - color[2]));
     }
@@ -833,13 +843,13 @@ const { html, render } = mlp_uhtml;
   const botCanvas = document.createElement("canvas");
   botCanvas.width = rPlaceCanvas.width;
   botCanvas.height = rPlaceCanvas.height;
-  const botCtx = botCanvas.getContext("2d");
+  const botCtx = botCanvas.getContext("2d")!;
 
-  function getDiff(botCanvasWidth, botCanvasHeight, botCtx, ctx) {
+  function getDiff(botCanvasWidth, botCanvasHeight, botCtx, ctx): [number[][], number] {
     const currentData = botCtx.getImageData(0, 0, botCanvasWidth, botCanvasHeight).data;
     const templateData = ctx.getImageData(0, 0, botCanvasWidth, botCanvasHeight).data;
 
-    const diff = [];
+    const diff: number[][] = [];
     var nCisPixels = 0; // count of non-transparent pixels
 
     for (let i = 0; i < templateData.length / 4; i++) {
@@ -860,19 +870,19 @@ const { html, render } = mlp_uhtml;
   }
 
   function waitMs(ms) {
-    return new Promise((resolve) =>
+    return new Promise<void>((resolve) =>
       setTimeout(() => {
         resolve();
       }, ms)
     );
   }
 
-  function log() {
-    console.log(`[${new Date().toISOString()}]`, ...arguments);
+  function log(...args) {
+    console.log(`[${new Date().toISOString()}]`, ...args);
   }
 
-  function logError() {
-    console.error(`[${new Date().toISOString()}]`, ...arguments);
+  function logError(...args) {
+    console.error(`[${new Date().toISOString()}]`, ...args);
   }
 
   const botTimeout = 5000;
@@ -913,9 +923,9 @@ const { html, render } = mlp_uhtml;
           });
         }
 
-        const timeOutPillBlock = embed.shadowRoot
-          .querySelector("mona-lisa-status-pill")
-          .shadowRoot.querySelector("div");
+        const timeOutPillBlock = embed.shadowRoot!
+          .querySelector("mona-lisa-status-pill")!
+          .shadowRoot!.querySelector("div")! as HTMLElement;
         log(
           `Status: ${percentage}% (${nMissingPixels}/${nCisPixels}) [${timeOutPillBlock.innerText}]`
         );
@@ -943,5 +953,3 @@ const { html, render } = mlp_uhtml;
     }
   })().then((r) => {});
 })();
-
-// vim:et:sw=2
