@@ -23,10 +23,10 @@ The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwis
   
 * `priority`
 
-    integer (multiples of 10 between 0 and 250 inclusive)
+    integer (between 0 and 25, inclusive)
     * relative priority of this image for the bots
-    * optional, defaults to 0
-    * "edge" pixels receive +5 priority automatically
+    * optional, defaults to 0 (which effectively disables bots, so don't do this)
+    * "edge" pixels receive additional priority automatically
         * edge pixels are non-transparent pixels which are either on the boundary of the image or have a transparent pixel in the surrounding 8 pixels
 
 * `pony`
