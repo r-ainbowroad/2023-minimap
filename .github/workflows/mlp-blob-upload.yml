@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: "main"
-    paths: ["mlp/bot.png", "mlp/canvas.png", "mlp/mask.png", "mlp/endu_template.json"]
+    paths: ["templates/mlp/bot.png", "templates/mlp/canvas.png", "templates/mlp/mask.png", "templates/mlp/endu_template.json"]
 
 permissions:
   contents: read
@@ -22,7 +22,7 @@ jobs:
     - name: Copy canvas files
       run: |
           mkdir ./dist
-          cp -f ./mlp/bot.png ./mlp/canvas.png ./mlp/mask.png mlp/endu_template.json ./dist
+          cp -f ./templates/mlp/bot.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu_template.json ./dist
     
     - name: Azure login
       uses: azure/login@v1
