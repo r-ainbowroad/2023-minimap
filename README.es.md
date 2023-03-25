@@ -15,23 +15,23 @@
 
 Vete a [tampermonkey.net](https://www.tampermonkey.net/). En el apartado de descargas dale al botón verde para instalar la extensión.
 
-![](es-img/instalar-tampermonkey.png)
+![](templates/es-img/instalar-tampermonkey.png)
 
 Haz click en Añadir a Chrome
 
-![](es-img/instalar-tampermonkey2.png)
+![](templates/es-img/instalar-tampermonkey2.png)
 
-![](es-img/instalar-tampermonkey3.png)
+![](templates/es-img/instalar-tampermonkey3.png)
 
 Ahora entra en el siguente enlace [https://raw.githubusercontent.com/r-ainbowroad/2022-minimap/d/main/minimap.user.js](<https://raw.githubusercontent.com/r-ainbowroad/2022-minimap/d/main/minimap.user.js>)
 
 Lo que vas a ver es el código que hará que puedas tener el visor y poner pixeles automáticamente, tienes que hacer click en "Instalar".
 
-![](es-img/instalar-tampermonkey4.png)
+![](templates/es-img/instalar-tampermonkey4.png)
 
 Listo, ahora recarga r/place y verás el visor con la plantilla de España
 
-![](es-img/visor.png)
+![](templates/es-img/visor.png)
 
 ### Firefox
 

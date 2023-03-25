@@ -52,8 +52,8 @@
 
   const rPlaceTemplatesGithubLfs = true;
   const rPlaceTemplateBaseUrl = rPlaceTemplatesGithubLfs
-    ? "https://media.githubusercontent.com/media/r-ainbowroad/2023-minimap/main"
-    : "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/main";
+    ? "https://media.githubusercontent.com/media/r-ainbowroad/2023-minimap/main/templates"
+    : "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/main/templates";
   const getRPlaceTemplateUrl = function (templateName: string, type: string) {
     return `${rPlaceTemplateBaseUrl}/${templateName}/${type}.png`;
   };
