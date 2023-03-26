@@ -6,7 +6,7 @@ on:
     branches:
       - "main"
     paths:
-      - "*.ts"
+      - "src/**.ts"
       - "*.json"
       - "rollup.config.mjs"
       - "templates/mlp/canvas*.png"
@@ -38,7 +38,6 @@ jobs:
         mkdir -p ./dist
         npm install
         npm run build
-        
     
     - name: Copy canvas files
       run: |  

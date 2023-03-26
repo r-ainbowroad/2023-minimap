@@ -75,7 +75,7 @@ The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwis
       * all sources should be the same image
       * sources are tried in order until one works
   * elements may be either of
-      * a local path relative to the repo root
+      * a local path relative to the folder the template.json lives in
       * a uri that starts with "http"
 
 * `x`

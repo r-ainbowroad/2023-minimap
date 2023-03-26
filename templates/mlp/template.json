@@ -7,7 +7,7 @@
 	"templates": [
 		{
 			"name": "earth pony crystal",
-			"images": ["mlp/source/ep_crystal.png"],
+			"images": ["source/ep_crystal.png"],
 			"x": 1644,
 			"y": 245,
 			"priority": 10,
@@ -16,7 +16,7 @@
 		},
 		{
 			"name": "friendship crystal",
-			"images": ["mlp/source/full_crystal.png"],
+			"images": ["source/full_crystal.png"],
 			"x": 1633,
 			"y": 228,
 			"priority": 9,
@@ -25,7 +25,7 @@
 		},
 		{
 			"name": "ponies around crystal",
-			"images": ["mlp/source/mane11.png"],
+			"images": ["source/mane11.png"],
 			"x": 1615,
 			"y": 212,
 			"priority": 8,
@@ -34,7 +34,7 @@
 		},
 		{
 			"name": "aleesa2",
-			"images": ["mlp/source/aleesa2.png"],
+			"images": ["source/aleesa2.png"],
 			"x": 1608,
 			"y": 263,
 			"priority": 3,
@@ -49,7 +49,7 @@
 		},
 		{
 			"name": "aleesa1",
-			"images": ["mlp/source/aleesa.png"],
+			"images": ["source/aleesa.png"],
 			"x": 1190,
 			"y": 745,
 			"priority": 3

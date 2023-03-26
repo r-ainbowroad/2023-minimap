@@ -6,7 +6,9 @@ This is the template assembler
 
 1. From the repo root, invoke the script and provide the path to the folder where you created `template.json`
 
-    e.g. `./.build/template_assembler/assemble_template.py ./mlp`
+    e.g.
+
+    * `./.build/template_assembler/assemble_template.py ./templates/mlp`
 
 1. The script will produce `canvas.png`, `bot.png`, `mask.png`, `endu.png` and `endu_template.json` in that folder
 

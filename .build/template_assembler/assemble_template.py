@@ -14,7 +14,7 @@ palettes = [
 canvasSize = (2000, 2000)
 palette = palettes[0]
 
-def loadTemplateEntryImage(templateEntry):
+def loadTemplateEntryImage(templateEntry, subfolder):
     for imageSource in templateEntry["images"]:
         try:
             if imageSource.startswith("http"):
@@ -25,7 +25,7 @@ def loadTemplateEntryImage(templateEntry):
                 responseObject = urllib.request.urlopen(request, timeout=5)
                 rawImage = Image.open(responseObject)
             else:
-                rawImage = Image.open(imageSource)
+                rawImage = Image.open(os.path.join(subfolder, imageSource))
             
             convertedImage = Image.new("RGBA", (rawImage.width, rawImage.height))
             convertedImage.paste(rawImage)
@@ -282,7 +282,7 @@ def main(subfolder):
     enduExtents = dict()
     for templateEntry in templates:
         print("render {0}".format(templateEntry["name"]))
-        with loadTemplateEntryImage(templateEntry) as image:
+        with loadTemplateEntryImage(templateEntry, subfolder) as image:
             copyTemplateEntryIntoCanvas(templateEntry, image, canvasImage)
             
             if ("bots" in templateEntry and bool(templateEntry["bots"])):
@@ -309,7 +309,9 @@ def main(subfolder):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Must provide the folder to run in relative to repo root")
+        print("Must provide a folder containing template.json as first arg")
+        sys.exit(1)
     if not os.path.isfile(".build/template_assembler/assemble_template.py"):
         print("Must be invoked from repo root")
+        sys.exit(1)
     main(sys.argv[1])
