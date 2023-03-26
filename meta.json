@@ -10,10 +10,11 @@
     "https://hot-potato.reddit.com/embed*",
     "https://place.equestria.dev/embed*"
   ],
-  "downloadURL": "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/d/main/minimap.user.js",
-  "updateURL": "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/d/main/minimap.user.js",
+  "downloadURL": "https://ponyplace.z19.web.core.windows.net/minimap.user.js",
+  "updateURL": "https://ponyplace.z19.web.core.windows.net/minimap.user.js",
   "connect": [
     "raw.githubusercontent.com",
-    "media.githubusercontent.com"
+    "media.githubusercontent.com",
+    "ponyplace.z19.web.core.windows.net"
   ]
 }

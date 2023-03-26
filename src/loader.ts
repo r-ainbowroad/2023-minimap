@@ -13,7 +13,7 @@
 (async function () {
   GM.xmlHttpRequest({
     method: "GET",
-    url: `weneedtofigurethisout?t=${new Date().getTime()}`,
+    url: `https://ponyplace.z19.web.core.windows.net/minimap.user.js?t=${new Date().getTime()}`,
     onload: function (res) {
       new Function('GM', res.responseText)(GM);
     },
