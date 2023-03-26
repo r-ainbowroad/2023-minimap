@@ -3,8 +3,17 @@ name: MLP blob upload
 on:
   workflow_dispatch:
   push:
-    branches: "main"
-    paths: ["templates/mlp/bot.png", "templates/mlp/canvas.png", "templates/mlp/mask.png", "templates/mlp/endu_template.json"]
+    branches:
+      - "main"
+    paths:
+      - "src/**.ts"
+      - "*.json"
+      - "rollup.config.mjs"
+      - "templates/mlp/canvas*.png"
+      - "templates/mlp/bot*.png"
+      - "templates/mlp/mask*.png"
+      - "templates/mlp/endu*.png"
+      - "templates/mlp/endu_template.json"
 
 permissions:
   contents: read
@@ -29,12 +38,11 @@ jobs:
         mkdir -p ./dist
         npm install
         npm run build
-        
     
     - name: Copy canvas files
       run: |  
         # ./dist already exists
-        cp -f ./templates/mlp/bot.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu_template.json ./dist
+        cp -f ./templates/mlp/bot.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./dist
     
     - name: Azure login
       uses: azure/login@v1

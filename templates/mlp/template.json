@@ -1,0 +1,62 @@
+{
+	"enduInfo": {
+		"contact": "https://discord.gg/bronyplace #diplomacy",
+		"source": "https://ponyplace.z19.web.core.windows.net/endu.png",
+		"name": "maneplace bronies"
+	},
+	"templates": [
+		{
+			"name": "earth pony crystal",
+			"images": ["source/ep_crystal.png"],
+			"x": 1644,
+			"y": 245,
+			"priority": 10,
+			"bots": true,
+			"pony": true
+		},
+		{
+			"name": "friendship crystal",
+			"images": ["source/full_crystal.png"],
+			"x": 1633,
+			"y": 228,
+			"priority": 9,
+			"bots": true,
+			"pony": true
+		},
+		{
+			"name": "ponies around crystal",
+			"images": ["source/mane11.png"],
+			"x": 1615,
+			"y": 212,
+			"priority": 8,
+			"bots": true,
+			"pony": true
+		},
+		{
+			"name": "aleesa2",
+			"images": ["source/aleesa2.png"],
+			"x": 1608,
+			"y": 263,
+			"priority": 3,
+			"bots": true
+		},
+		{
+			"name": "r/avali",
+			"images": ["https://cdn.discordapp.com/attachments/807528846144176129/1088344066565091419/r_avali.png"],
+			"x": 1446,
+			"y": 1260,
+			"priority": 2
+		},
+		{
+			"name": "aleesa1",
+			"images": ["source/aleesa.png"],
+			"x": 1190,
+			"y": 745,
+			"priority": 3
+		},
+		{
+			"name": "osu!",
+			"endu": "https://github.com/osuplace/templateManager/raw/main/osuplace2023.json"
+		}
+	]
+}
