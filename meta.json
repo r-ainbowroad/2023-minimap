@@ -10,8 +10,8 @@
     "https://hot-potato.reddit.com/embed*",
     "https://place.equestria.dev/embed*"
   ],
-  "downloadURL": "https://ponyplace.z19.web.core.windows.net/minimap.user.js",
-  "updateURL": "https://ponyplace.z19.web.core.windows.net/minimap.user.js",
+  "downloadURL": "https://ponyplace.z19.web.core.windows.net/loader.user.js",
+  "updateURL": "https://ponyplace.z19.web.core.windows.net/loader.user.js",
   "connect": [
     "raw.githubusercontent.com",
     "media.githubusercontent.com",
