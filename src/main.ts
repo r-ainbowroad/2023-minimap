@@ -11,8 +11,8 @@
  **/
 
 import {html} from 'uhtml';
-import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} from './minimap-components';
-import {createMinimapUI} from './minimap-ui';
+import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} from './minimap/minimap-components';
+import {createMinimapUI} from './minimap/minimap-ui';
 
 (async function () {
   const embed: MonaLisa.Embed = await new Promise((resolve) => {

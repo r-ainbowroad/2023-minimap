@@ -12,7 +12,7 @@ const plugins = [
 
 export default [
   {
-    input: 'loader.ts',
+    input: 'src/loader.ts',
     output: {
       file: 'dist/loader.user.js',
       format: 'iife',
@@ -20,7 +20,7 @@ export default [
     },
     plugins: plugins
   }, {
-    input: 'main.ts',
+    input: 'src/main.ts',
     output: {
       file: 'dist/minimap.user.js',
       format: 'iife',

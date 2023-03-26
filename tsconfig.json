@@ -9,6 +9,5 @@
     "strict": true,
     "noImplicitAny": false
   },
-  "include": ["*.d.ts"],
-  "files": ["loader.ts", "main.ts"]
+  "include": ["src/**/*"],
 }
