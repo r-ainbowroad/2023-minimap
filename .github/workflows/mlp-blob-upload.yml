@@ -26,25 +26,26 @@ jobs:
     
     - name: Build extension
       run: |
+        mkdir -p ./dist
         npm install
         npm run build
-        # emits build results to ./dist already
+        
     
     - name: Copy canvas files
-      run: |
-          mkdir ./dist
-          cp -f ./templates/mlp/bot.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu_template.json ./dist
+      run: |  
+        # ./dist already exists
+        cp -f ./templates/mlp/bot.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu_template.json ./dist
     
     - name: Azure login
       uses: azure/login@v1
       with:
-          creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
+        creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
     
     - name: Upload to blob storage
       uses: azure/CLI@v1
       with:
         inlineScript: |
-            az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
+          az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
     
     - name: Azure logout
       run: az logout
