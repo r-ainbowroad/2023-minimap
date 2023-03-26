@@ -10,6 +10,8 @@
  *
  **/
 
+import {Template} from "../template/template";
+
 const htmlBlock = `<style>
 mlpminimap {
   display: block;
@@ -80,7 +82,7 @@ display: none;
 }
 </style>
 <mlpminimap>
-  <img class="map">
+  <canvas class="map"></canvas>
   <div class="crosshair"></div>
   <div class="settings"></div>
   <div id="resizer"></div>
@@ -89,21 +91,25 @@ display: none;
 
 class MinimapUI {
   mlpMinimapBlock: HTMLElement;
-  imageBlock: HTMLImageElement;
   imageCanvas: HTMLCanvasElement;
   imageCanvasCtx: CanvasRenderingContext2D;
   crosshairBlock: HTMLDivElement;
   settingsBlock: HTMLDivElement;
 
-  constructor(mlpMinimapBlock: HTMLElement, imageBlock: HTMLImageElement,
+  constructor(mlpMinimapBlock: HTMLElement, 
               imageCanvas: HTMLCanvasElement, imageCanvasCtx: CanvasRenderingContext2D,
               crosshairBlock: HTMLDivElement, settingsBlock: HTMLDivElement) {
     this.mlpMinimapBlock = mlpMinimapBlock;
-    this.imageBlock = imageBlock;
     this.imageCanvas = imageCanvas;
     this.imageCanvasCtx = imageCanvasCtx;
     this.crosshairBlock = crosshairBlock;
     this.settingsBlock = settingsBlock;
+  }
+
+  setTemplate(template: Template) {
+    this.imageCanvas.width = template.template.getWidth();
+    this.imageCanvas.height = template.template.getHeight();
+    template.template.drawTo(this.imageCanvasCtx);
   }
 }
 
@@ -113,19 +119,11 @@ export function createMinimapUI(document: Document): MinimapUI {
   document.querySelector("body")?.appendChild(htmlObject);
 
   const mlpMinimapBlock = htmlObject.querySelector("mlpminimap")! as HTMLElement;
-  const imageBlock = mlpMinimapBlock.querySelector(".map")! as HTMLImageElement;
-  const imageCanvas = document.createElement("canvas")!;
+  const imageCanvas = mlpMinimapBlock.querySelector(".map")! as HTMLCanvasElement;
   const imageCanvasCtx = imageCanvas.getContext("2d")!;
   const crosshairBlock = mlpMinimapBlock.querySelector(".crosshair")! as HTMLDivElement;
   const settingsBlock = mlpMinimapBlock.querySelector(".settings")! as HTMLDivElement;
 
-  imageBlock.addEventListener('load', function () {
-    imageCanvas.width = this.naturalWidth;
-    imageCanvas.height = this.naturalHeight;
-    imageCanvasCtx!.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
-    imageCanvasCtx!.drawImage(this, 0, 0);
-  });
-
-  return new MinimapUI(mlpMinimapBlock, imageBlock, imageCanvas, imageCanvasCtx, crosshairBlock,
+  return new MinimapUI(mlpMinimapBlock, imageCanvas, imageCanvasCtx, crosshairBlock,
                        settingsBlock);
 }

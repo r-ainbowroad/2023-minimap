@@ -13,6 +13,7 @@
 import {html} from 'uhtml';
 import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} from './minimap/minimap-components';
 import {createMinimapUI} from './minimap/minimap-ui';
+import {ImageTemplate} from './template/template';
 
 (async function () {
   const embed: MonaLisa.Embed = await new Promise((resolve) => {
@@ -199,7 +200,6 @@ import {createMinimapUI} from './minimap/minimap-ui';
 
   const minimapUI = createMinimapUI(document);
   const mlpMinimapBlock = minimapUI.mlpMinimapBlock;
-  const imageBlock = minimapUI.imageBlock;
   const crosshairBlock = minimapUI.crosshairBlock;
   const settingsBlock = minimapUI.settingsBlock;
 
@@ -347,15 +347,17 @@ import {createMinimapUI} from './minimap/minimap-ui';
       rPlaceTemplate.botUrl !== undefined && settings.getSetting("bot").enabled
         ? rPlaceTemplate.botUrl
         : rPlaceTemplate.canvasUrl;
-    fetchTemplate(rPlaceTemplateUrl)
-      .then((array) => {
+
+    ImageTemplate.fetchTemplate(rPlaceTemplateUrl, undefined)
+      .then((imgTemplate) => {
         recalculateImagePos();
-        imageBlock.src = getPngDataUrlForBytes(array);
+        minimapUI.setTemplate(imgTemplate);
         botLock = false;
-      })
-      .catch((err) => {
+      }).catch((err) => {
         console.error("Error updating template", err);
-      });
+      });;
+
+
     // Also update mask if needed
     if (typeof rPlaceTemplate.maskUrl !== "undefined") {
       fetchTemplate(rPlaceTemplate.maskUrl)
@@ -579,18 +581,18 @@ import {createMinimapUI} from './minimap/minimap-ui';
   function recalculateImagePos() {
     const coordinatesData = posParser.pos;
     const minimapData = getMinimapSize();
-    imageBlock.style.width = `${
-      imageBlock.naturalWidth * rPlacePixelSize * coordinatesData.scale
+    minimapUI.imageCanvas.style.width = `${
+      minimapUI.imageCanvas.width * rPlacePixelSize * coordinatesData.scale
     }px`;
-    imageBlock.style.height = `${
-      imageBlock.naturalHeight * rPlacePixelSize * coordinatesData.scale
+    minimapUI.imageCanvas.style.height = `${
+      minimapUI.imageCanvas.height * rPlacePixelSize * coordinatesData.scale
     }px`;
-    imageBlock.style["margin-left"] = `${
+    minimapUI.imageCanvas.style["margin-left"] = `${
       -1 *
       ((coordinatesData.x * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
         minimapData.width / 2)
     }px`;
-    imageBlock.style["margin-top"] = `${
+    minimapUI.imageCanvas.style["margin-top"] = `${
       -1 *
       ((coordinatesData.y * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
         minimapData.height / 2)
