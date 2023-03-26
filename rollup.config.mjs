@@ -1,16 +1,24 @@
 import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 import metablock from 'rollup-plugin-userscript-metablock';
+import terser from '@rollup/plugin-terser';
 
-const plugins = [
-  nodeResolve(),
-  typescript(),
-  metablock({
+function getPlugins(CLIArgs) {
+  const plugins = [
+    nodeResolve(),
+    typescript()
+  ];
+
+  if (CLIArgs['config-prod'])
+    plugins.push(terser());
+  plugins.push(metablock({
     file: './meta.json'
-  })
-];
+  }));
 
-export default [
+  return plugins;
+}
+
+export default CLIArgs => [
   {
     input: 'src/loader.ts',
     output: {
@@ -18,7 +26,7 @@ export default [
       format: 'iife',
       sourcemap: true
     },
-    plugins: plugins
+    plugins: getPlugins(CLIArgs)
   }, {
     input: 'src/main.ts',
     output: {
@@ -26,6 +34,6 @@ export default [
       format: 'iife',
       sourcemap: true
     },
-    plugins: plugins
+    plugins: getPlugins(CLIArgs)
   }
 ];
