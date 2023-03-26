@@ -19,6 +19,17 @@ jobs:
       with:
         lfs: true
     
+    - name: Node setup for extension build
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+    
+    - name: Build extension
+      run: |
+        npm install
+        npm run build
+        # emits build results to ./dist already
+    
     - name: Copy canvas files
       run: |
           mkdir ./dist
