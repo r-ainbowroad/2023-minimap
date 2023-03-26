@@ -1,34 +1,24 @@
-// ==UserScript==
-// @name        DO NOT DIRECTLY USE THIS IMPLEMENTATION OF r/Place MLP Minimap
-// @namespace   http://tampermonkey.net/
-// @description STOP; DO NOT DIRECTLY USE THIS
-// @include     https://hot-potato.reddit.com/embed*
-// @version     0.3
-// @grant       GM.xmlHttpRequest
-// @author      Ponywka, bb010g
-// @license     Apache-2.0 OR ISC
-// @connect     raw.githubusercontent.com
-// @connect     media.githubusercontent.com
-// @require     https://unpkg.com/uhtml@2.8.1
-// ==/UserScript==
-// SPDX-FileCopyrightText: 2022 bb010g, Ember Hearth, LydianLights, octylFractal, Ponywka
-// SPDX-License-Identifier: Apache-2.0 OR ISC
+/**
+ *
+ * Part of the MLP r/place Project, under the Apache License v2.0 or ISC.
+ * SPDX-License-Identifier: Apache-2.0 OR ISC
+ * SPDX-FileCopyrightText: Copyright CONTRIBUTORS.md
+ *
+ **
+ *
+ * @file All of the minimap. This needs to be split up.
+ *
+ **/
 
-// To format: `npx prettier --print-width 100 -w minimap.impl.user.js`
-
-const mlp_GM = "GM" in this ? this.GM : arguments[0].GM;
-const mlp_uhtml = "uhtml" in this ? this.uhtml : arguments[0].uhtml;
-
-const { html, render } = mlp_uhtml;
+import {html} from 'uhtml';
+import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} from './minimap/minimap-components';
+import {createMinimapUI} from './minimap/minimap-ui';
 
 (async function () {
-  //document.querySelector("faceplate-toast")
-  //document.createElement('mona-lisa-app').isFullScreen.globalState.state = true;
-
-  const embed = await new Promise((resolve) => {
+  const embed: MonaLisa.Embed = await new Promise((resolve) => {
     let interval = setInterval(() => {
       try {
-        const embed = document.querySelector("mona-lisa-embed");
+        const embed = document.querySelector("mona-lisa-embed") as MonaLisa.Embed;
         console.log("Found embed. Good!");
         resolve(embed);
         clearInterval(interval);
@@ -36,14 +26,14 @@ const { html, render } = mlp_uhtml;
         console.error("Found embed. Trying again...");
       }
     }, 1000);
-  });
+  })!;
 
-  const rPlaceCanvas = await new Promise((resolve) => {
+  const rPlaceCanvas: HTMLCanvasElement = await new Promise((resolve) => {
     let interval = setInterval(() => {
       try {
-        const rPlaceCanvas = embed.shadowRoot
-          .querySelector("mona-lisa-share-container mona-lisa-canvas")
-          .shadowRoot.querySelector("canvas");
+        const rPlaceCanvas: HTMLCanvasElement = embed!.shadowRoot!
+          .querySelector("mona-lisa-share-container mona-lisa-canvas")!
+          .shadowRoot!.querySelector("canvas")!;
         console.log("Found canvas. Good!");
         resolve(rPlaceCanvas);
         clearInterval(interval);
@@ -51,7 +41,7 @@ const { html, render } = mlp_uhtml;
         console.error("Failed to attach to canvas. Trying again...");
       }
     }, 1000);
-  });
+  })!;
 
   // Move camera to center
   embed.camera.applyPosition({
@@ -64,14 +54,14 @@ const { html, render } = mlp_uhtml;
 
   const rPlaceTemplatesGithubLfs = true;
   const rPlaceTemplateBaseUrl = rPlaceTemplatesGithubLfs
-    ? "https://media.githubusercontent.com/media/r-ainbowroad/2022-minimap/d/main"
-    : "https://raw.githubusercontent.com/r-ainbowroad/2022-minimap/d/main";
-  const getRPlaceTemplateUrl = function (templateName, type) {
+    ? "https://media.githubusercontent.com/media/r-ainbowroad/2023-minimap/main/templates"
+    : "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/main/templates";
+  const getRPlaceTemplateUrl = function (templateName: string, type: string) {
     return `${rPlaceTemplateBaseUrl}/${templateName}/${type}.png`;
   };
-  const rPlaceTemplateNames = [];
+  const rPlaceTemplateNames: Array<string> = [];
   const rPlaceTemplates = new Map();
-  const addRPlaceTemplate = function (templateName, options) {
+  const addRPlaceTemplate = function (templateName: string, options) {
     rPlaceTemplates.set(templateName, {
       canvasUrl: getRPlaceTemplateUrl(templateName, "canvas"),
       botUrl: options.bot ? getRPlaceTemplateUrl(templateName, "bot") : undefined,
@@ -86,7 +76,7 @@ const { html, render } = mlp_uhtml;
   addRPlaceTemplate("phoenixmc", { bot: true, mask: true });
   let rPlaceTemplateName;
   let rPlaceTemplate;
-  let rPlaceMask = undefined;
+  let rPlaceMask: Array<number> | undefined;
   const setRPlaceTemplate = function (templateName) {
     const template = rPlaceTemplates.get(templateName);
     if (template === undefined) {
@@ -116,8 +106,8 @@ const { html, render } = mlp_uhtml;
       function initDrag(e) {
         startX = e.clientX;
         startY = e.clientY;
-        startWidth = parseInt(document.defaultView.getComputedStyle(elBlock).width, 10);
-        startHeight = parseInt(document.defaultView.getComputedStyle(elBlock).height, 10);
+        startWidth = parseInt(document.defaultView!.getComputedStyle(elBlock).width, 10);
+        startHeight = parseInt(document.defaultView!.getComputedStyle(elBlock).height, 10);
         document.documentElement.addEventListener("mousemove", doDrag, false);
         document.documentElement.addEventListener("mouseup", stopDrag, false);
       }
@@ -126,8 +116,9 @@ const { html, render } = mlp_uhtml;
     }
   }
 
-  class Emitter {
+  class Emitter extends EventTarget {
     constructor() {
+      super();
       var delegate = document.createDocumentFragment();
       ["addEventListener", "dispatchEvent", "removeEventListener"].forEach(
         (f) => (this[f] = (...xs) => delegate[f](...xs))
@@ -149,6 +140,9 @@ const { html, render } = mlp_uhtml;
   };
 
   class PosParser extends Emitter {
+    coordinateBlock: HTMLDivElement;
+    pos: MonaLisa.Pos;
+
     parseCoordinateBlock() {
       const parsedData = this.coordinateBlock.innerText.match(/\(([0-9]+),([0-9]+)\) ([0-9.]+)x/);
       if (parsedData) {
@@ -189,9 +183,9 @@ const { html, render } = mlp_uhtml;
   const coordinateBlock = await new Promise((resolve) => {
     let interval = setInterval(() => {
       try {
-        const coordinateBlock = embed.shadowRoot
-          .querySelector("mona-lisa-coordinates")
-          .shadowRoot.querySelector("div");
+        const coordinateBlock = embed!.shadowRoot!
+          .querySelector("mona-lisa-coordinates")!
+          .shadowRoot!.querySelector("div")!;
         console.log("Found coordinate block. Good!");
         resolve(coordinateBlock);
         clearInterval(interval);
@@ -203,346 +197,133 @@ const { html, render } = mlp_uhtml;
 
   const posParser = new PosParser(coordinateBlock);
 
-  const docBody = document.querySelector("body");
-  const htmlBlock = `<style>
-  mlpminimap {
-    display: block;
-    color: white;
-    width: 400px;
-    height: 300px;
-    position: absolute;
-    top: 0%;
-    right: 0%;
-    background-color: rgba(0,0,0,.75);
-    border: 1px solid black;
-    overflow: hidden;
-  }
+  const minimapUI = createMinimapUI(document);
+  const mlpMinimapBlock = minimapUI.mlpMinimapBlock;
+  const imageBlock = minimapUI.imageBlock;
+  const crosshairBlock = minimapUI.crosshairBlock;
+  const settingsBlock = minimapUI.settingsBlock;
 
-  mlpminimap .map {
-    position: absolute;
-    margin: 0;
-    max-width: unset;
-    display: block;
-    image-rendering: pixelated;
-    pointer-events: none;
-  }
-
-  mlpminimap .crosshair {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border: 2px solid red;
-    transform: translateX(-50%) translateY(-50%);
-  }
-
-  mlpminimap #resizer {
-    position: absolute;
-    bottom: 0%;
-    left: 0%;
-    width: 0px;
-    height: 0px;
-    border-bottom: 10px solid red;
-    border-left: 10px solid red;
-    border-top: 10px solid transparent;
-    border-right: 10px solid transparent;
-  }
-
-  mlpminimap .settings {
-    position: absolute;
-    background-color: rgba(0,0,0,.75);
-  }
-  
-  mlpminimap .settings > div{
-    display: none;
-  }
-  
-  mlpminimap .settings > .alwaysshow{
-    display: block;
-  }
-  
-  mlpminimap:hover .settings > div{
-    display: block;
-  }
-
-  mlpminimap .settings .clickable {
-    cursor: pointer;
-    user-select: none;
-  }
-  
-  mlpminimap #noSleep {
-	display: none;
-  }
-</style>
-<mlpminimap>
-  <img class="map">
-  <div class="crosshair"></div>
-  <div class="settings"></div>
-  <div id="resizer"></div>
-  <audio id="noSleep" src="https://hot-potato.reddit.com/media/interactions/select-color.mp3" playsinline></audio>
-</mlpminimap>`;
-
-  class CheckboxSetting {
-    constructor(name, enabled = false, callback = function (setting) {}) {
-      this.name = name;
-      this.enabled = enabled;
-      this.callback = callback;
-    }
-    // onchange(e) {
-    //   this.enabled = e.target.checked;
-    //   this.callback();
-    // }
-    onclick() {
-      this.enabled = !this.enabled;
-      this.callback(this);
-    }
-    htmlFor(ref, id) {
-      // NOTE(Dusk): It looks like Reddit hijacks all native checkboxes.
-      // const onchange = () => this.onchange();
-      // return html.for(ref, id)`<label data-id=${id}>
-      //   ${this.name}: <input type="checkbox" .checked=${this.enabled} onchange=${onchange} />
-      // </label>`;
-      const onclick = () => this.onclick();
-      const classes = ["clickable"];
-      this.enabled ? classes.push("alwaysshow") : null;
-      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")} onclick=${onclick}>
-        ${this.name}: <span>${this.enabled ? "Enabled" : "Disabled"}</span>
-      </div>`;
-    }
-  }
-
-  class CycleSetting {
-    constructor(
-      name,
-      values = ["Unset"],
-      valueIx = 0,
-      callback = function (setting) {},
-      alwaysShow = false
-    ) {
-      this.name = name;
-      this.values = values;
-      this.valueIx = valueIx;
-      this.callback = callback;
-      this.alwaysShow = alwaysShow;
-    }
-    get value() {
-      return this.values[this.valueIx];
-    }
-    onclick() {
-      this.valueIx = (this.valueIx + 1) % this.values.length;
-      this.callback(this);
-    }
-    htmlFor(ref, id) {
-      const onclick = () => this.onclick();
-      const classes = ["clickable"];
-      this.alwaysShow ? classes.push("alwaysshow") : null;
-      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")} onclick=${onclick}>
-        ${this.name}: <span>${this.value}</span>
-      </div>`;
-    }
-  }
-
-  class ButtonSetting {
-    constructor(name, callback = function (setting) {}, alwaysShow = false) {
-      this.name = name;
-      this.callback = callback;
-      this.alwaysShow = alwaysShow;
-    }
-    onclick() {
-      this.callback(this);
-    }
-    htmlFor(ref, id) {
-      const onclick = () => this.onclick();
-      const classes = ["clickable"];
-      this.alwaysShow ? classes.push("alwaysshow") : null;
-      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")} onclick=${onclick}>
-        ${this.name}
-      </div>`;
-    }
-  }
-
-  class DisplaySetting {
-    constructor(name, content, alwaysShow = false) {
-      this.name = name;
-      this.content = content;
-      this.alwaysShow = alwaysShow;
-    }
-    htmlFor(ref, id) {
-      const classes = [];
-      this.alwaysShow ? classes.push("alwaysshow") : null;
-      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")}>${this.name}: ${
-        this.content
-      }</div>`;
-    }
-  }
-
-  class Settings {
-    settings = [];
-    settingNames = new Map();
-    settingsByName = new Map();
-
-    constructor(settingsBlock, mlpMinimapBlock) {
-      const _root = this;
-
-      requestAnimationFrame(function measure(time) {
-        render(settingsBlock, _root.htmlFor(mlpMinimapBlock, "settings"));
-        requestAnimationFrame(measure);
-      });
-    }
-
-    htmlFor(ref, id) {
-      return html.for(ref, id)`${this.settings.map((setting) =>
-        setting.htmlFor(this, this.settingNames.get(setting))
-      )}`;
-    }
-
-    addSetting(name, setting) {
-      this.settings.push(setting);
-      this.settingNames.set(setting, name);
-      this.settingsByName.set(name, setting);
-    }
-
-    getSetting(name) {
-      return this.settingsByName.get(name);
-    }
-  }
-
-  const htmlObject = document.createElement("div");
-  htmlObject.innerHTML = htmlBlock;
-  docBody.appendChild(htmlObject);
-  const mlpMinimapBlock = htmlObject.querySelector("mlpminimap");
-
-  const imageBlock = mlpMinimapBlock.querySelector(".map");
-  const crosshairBlock = mlpMinimapBlock.querySelector(".crosshair");
-
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  const maskCanvas = document.createElement("canvas");
+  const maskCanvas = document.createElement("canvas")!;
   maskCanvas.width = rPlaceCanvas.width;
   maskCanvas.height = rPlaceCanvas.height;
-  const maskCtx = maskCanvas.getContext("2d");
-
-  imageBlock.onload = function () {
-    canvas.width = this.naturalWidth;
-    canvas.height = this.naturalHeight;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(this, 0, 0);
-  };
+  const maskCtx = maskCanvas.getContext("2d")!;
 
   let updateTemplate = function () {};
 
-  const settingsBlock = mlpMinimapBlock.querySelector(".settings");
-  const settings = new Settings(settingsBlock, mlpMinimapBlock);
-  settings.addSetting(
-    "templateName",
-    new CycleSetting(
-      "Template",
-      rPlaceTemplateNames,
-      0,
-      function (templateNameSetting) {
-        setRPlaceTemplate(templateNameSetting.value);
+  function initSettings(settings: Settings, ) {
+    settings.addSetting(
+      "templateName",
+      new CycleSetting(
+        "Template",
+        rPlaceTemplateNames,
+        0,
+        function (templateNameSetting) {
+          setRPlaceTemplate(templateNameSetting.value);
+          updateTemplate();
+        },
+        true
+      )
+    );
+    settings.addSetting(
+      "findArt",
+      new ButtonSetting("Find our art!", function () {
+        findNextArt();
+      })
+    );
+    settings.addSetting(
+      "autoColor",
+      new CheckboxSetting("Auto color picker", false, function (autoColorSetting) {
+        settings.getSetting("bot").enabled = false;
         updateTemplate();
-      },
-      true
-    )
-  );
+      })
+    );
+    settings.addSetting(
+      "bot",
+      new CheckboxSetting("Bot", false, function (botSetting) {
+        settings.getSetting("autoColor").enabled = false;
+        updateTemplate();
+      })
+    );
+    settings.addSetting(
+      "botstability",
+      new CheckboxSetting("Bot stability (🔇 Need to mute tab)", false)
+    );
+    setInterval(() => {
+      if (settings.getSetting("botstability").enabled) {
+        noSleepAudio.play();
+      }
+    }, 30000);
 
-  const noSleepAudio = mlpMinimapBlock.querySelector("#noSleep");
+    settings.addSetting(
+      "pixelDisplayProgress",
+      new DisplaySetting("Current progress", "Unknown", true)
+    );
+  
+    settings.addSetting(
+      "pythonBot",
+      new ButtonSetting("Python bot", function (pythonBotSetting) {
+        window.open("https://github.com/CloudburstSys/PonyPixel");
+      })
+    );
+
+    const newDonateSetting = function (name, url) {
+      return new ButtonSetting(`Donate (${name})`, function (donateSetting) {
+        window.open(url);
+      });
+    };
+    settings.addSetting(
+      "donatePonywka",
+      newDonateSetting(
+        "Midnight Ponywka - primary dev, MLP template",
+        "https://www.donationalerts.com/r/vovskic2002"
+      )
+    );
+    settings.addSetting(
+      "donateCloudburstSys",
+      newDonateSetting(
+        "Twi/Leah (@CloudburstSys) - primary Python dev",
+        "https://ko-fi.com/cloudburstsys"
+      )
+    );
+    settings.addSetting(
+      "donateAlchEmi",
+      newDonateSetting(
+        "Ember Hearth (@Alch-Emi) - dev (priority, progress)",
+        "https://paypal.me/alchemi336"
+      )
+    );
+    settings.addSetting(
+      "donateBb010g",
+      newDonateSetting(
+        "Dusk 💛 💜 (@bb010g) - dev (GitHub org, dev install, multi-template, UI, bot), r/ainbowroad template",
+        "https://www.tgijp.org/"
+      )
+    );
+    settings.addSetting(
+      "donateOctylFractal",
+      newDonateSetting(
+        "octylFractal - dev (bugfixes), MLP template",
+        "https://github.com/sponsors/octylFractal"
+      )
+    );
+    settings.addSetting(
+      "donateLumiereEleve",
+      newDonateSetting("Lumière Élevé - Python dev", "https://buymeacoffee.com/belkasempaiowo")
+    );
+  }
+  
+  const settings = new Settings(settingsBlock, mlpMinimapBlock);
+  initSettings(settings);
+
+  const noSleepAudio = mlpMinimapBlock!.querySelector("#noSleep")! as HTMLAudioElement;
   noSleepAudio.volume = 0.1;
-
-  setInterval(() => {
-    if (settings.getSetting("botstability").enabled) {
-      noSleepAudio.play();
-    }
-  }, 30000);
-
-  settings.addSetting(
-    "findArt",
-    new ButtonSetting("Find our art!", function () {
-      findNextArt();
-    })
-  );
-  settings.addSetting(
-    "autoColor",
-    new CheckboxSetting("Auto color picker", false, function (autoColorSetting) {
-      settings.getSetting("bot").enabled = false;
-      updateTemplate();
-    })
-  );
-  settings.addSetting(
-    "bot",
-    new CheckboxSetting("Bot", false, function (botSetting) {
-      settings.getSetting("autoColor").enabled = false;
-      updateTemplate();
-    })
-  );
-  settings.addSetting(
-    "botstability",
-    new CheckboxSetting("Bot stability (🔇 Need to mute tab)", false)
-  );
-  settings.addSetting(
-    "pixelDisplayProgress",
-    new DisplaySetting("Current progress", "Unknown", true)
-  );
-
-  settings.addSetting(
-    "pythonBot",
-    new ButtonSetting("Python bot", function (pythonBotSetting) {
-      window.open("https://github.com/CloudburstSys/PonyPixel");
-    })
-  );
-
-  const newDonateSetting = function (name, url) {
-    return new ButtonSetting(`Donate (${name})`, function (donateSetting) {
-      window.open(url);
-    });
-  };
-  settings.addSetting(
-    "donatePonywka",
-    newDonateSetting(
-      "Midnight Ponywka - primary dev, MLP template",
-      "https://www.donationalerts.com/r/vovskic2002"
-    )
-  );
-  settings.addSetting(
-    "donateCloudburstSys",
-    newDonateSetting(
-      "Twi/Leah (@CloudburstSys) - primary Python dev",
-      "https://ko-fi.com/cloudburstsys"
-    )
-  );
-  settings.addSetting(
-    "donateAlchEmi",
-    newDonateSetting(
-      "Ember Hearth (@Alch-Emi) - dev (priority, progress)",
-      "https://paypal.me/alchemi336"
-    )
-  );
-  settings.addSetting(
-    "donateBb010g",
-    newDonateSetting(
-      "Dusk 💛 💜 (@bb010g) - dev (GitHub org, dev install, multi-template, UI, bot), r/ainbowroad template",
-      "https://www.tgijp.org/"
-    )
-  );
-  settings.addSetting(
-    "donateOctylFractal",
-    newDonateSetting(
-      "octylFractal - dev (bugfixes), MLP template",
-      "https://github.com/sponsors/octylFractal"
-    )
-  );
-  settings.addSetting(
-    "donateLumiereEleve",
-    newDonateSetting("Lumière Élevé - Python dev", "https://buymeacoffee.com/belkasempaiowo")
-  );
 
   let botLock = false;
 
   // Fetch template, returns a Promise<Uint8Array>, on error returns the response object
   function fetchTemplate(url) {
     return new Promise((resolve, reject) => {
-      mlp_GM.xmlHttpRequest({
+      GM.xmlHttpRequest({
         method: "GET",
         responseType: "arraybuffer",
         url: `${url}?t=${new Date().getTime()}`,
@@ -609,11 +390,11 @@ const { html, render } = mlp_uhtml;
   }
 
   const NEXT_ART_MIN_DIST = 100; // art within this range is considered the same
-  let currentLocationIndex = null;
+  let currentLocationIndex: number | null = null;
   function findNextArt() {
-    const templateData = ctx.getImageData(0, 0, rPlaceCanvas.width, rPlaceCanvas.height).data;
+    const templateData = minimapUI.imageCanvasCtx.getImageData(0, 0, rPlaceCanvas.width, rPlaceCanvas.height).data;
 
-    const locations = [];
+    const locations: Array<{x: number, y: number}> = [];
     for (let i = 0; i < templateData.length; i += 4) {
       if (templateData[i + 3] === 0) continue;
       const x = (i / 4) % rPlaceCanvas.width;
@@ -661,7 +442,7 @@ const { html, render } = mlp_uhtml;
    * @param {number} position
    * @return {[number, number]}
    */
-  function pickFromBuckets(buckets, position) {
+  function pickFromBuckets(buckets: Map<number, [number, number][]>, position) {
     // All of the buckets, sorted in order from highest priority to lowest priority
     const orderedBuckets = [...buckets.entries()] // Convert map to array of tuples
       .sort(([ka], [kb]) => kb - ka); // Order by key (priority) DESC
@@ -676,7 +457,7 @@ const { html, render } = mlp_uhtml;
 
     // If for some reason this breaks, just return a random pixel from the largest bucket
     const value = Array.from(buckets.keys()).reduce((a, b) => Math.max(a, b), 0);
-    const bucket = buckets.get(value);
+    const bucket = buckets.get(value)!;
     return bucket[Math.floor(Math.random() * bucket.length)];
   }
 
@@ -710,7 +491,7 @@ const { html, render } = mlp_uhtml;
     for (let i = 0; i < diff.length; i++) {
       const coords = diff[i];
       const [x, y] = coords;
-      const maskValue = rPlaceMask[x + y * rPlaceCanvas.width];
+      const maskValue = rPlaceMask![x + y * rPlaceCanvas.width];
       if (maskValue === 0) {
         continue;
       }
@@ -757,17 +538,17 @@ const { html, render } = mlp_uhtml;
     };
   }
 
-  const paletteButtons = embed.shadowRoot
-    .querySelector("mona-lisa-color-picker")
-    .shadowRoot.querySelectorAll(".palette button.color");
-  const palette = [];
+  const paletteButtons = embed.shadowRoot!
+    .querySelector("mona-lisa-color-picker")!
+    .shadowRoot!.querySelectorAll(".palette button.color")! as NodeListOf<HTMLElement>;
+  const palette: number[][] = [];
   for (const paletteButton of paletteButtons) {
-    const parsedData = paletteButton.children[0].style.backgroundColor.match(
+    const parsedData = (paletteButton.children[0] as HTMLElement).style.backgroundColor.match(
       /rgb\(([0-9]{1,3}), ([0-9]{1,3}), ([0-9]{1,3})\)/
     );
-    const colorID = parseInt(paletteButton.getAttribute("data-color"));
+    const colorID = parseInt(paletteButton.getAttribute("data-color")!);
     if (parsedData) {
-      palette.push([parsedData[1], parsedData[2], parsedData[3], colorID]);
+      palette.push([+parsedData[1], +parsedData[2], +parsedData[3], colorID]);
     } else {
       palette.push([0, 0, 0, -1]);
     }
@@ -779,7 +560,7 @@ const { html, render } = mlp_uhtml;
     const r = imageData.data[0];
     const g = imageData.data[1];
     const b = imageData.data[2];
-    let diff = [];
+    let diff: number[] = [];
     for (const color of palette) {
       diff.push(Math.abs(r - color[0]) + Math.abs(g - color[1]) + Math.abs(b - color[2]));
     }
@@ -822,7 +603,7 @@ const { html, render } = mlp_uhtml;
     recalculateImagePos();
     if (settings.getSetting("autoColor").enabled) {
       try {
-        const imageData = ctx.getImageData(posParser.pos.x, posParser.pos.y, 1, 1);
+        const imageData = minimapUI.imageCanvasCtx.getImageData(posParser.pos.x, posParser.pos.y, 1, 1);
         autoColorPick(imageData);
       } catch (e) {
         console.error(e);
@@ -833,13 +614,13 @@ const { html, render } = mlp_uhtml;
   const botCanvas = document.createElement("canvas");
   botCanvas.width = rPlaceCanvas.width;
   botCanvas.height = rPlaceCanvas.height;
-  const botCtx = botCanvas.getContext("2d");
+  const botCtx = botCanvas.getContext("2d")!;
 
-  function getDiff(botCanvasWidth, botCanvasHeight, botCtx, ctx) {
+  function getDiff(botCanvasWidth, botCanvasHeight, botCtx, ctx): [number[][], number] {
     const currentData = botCtx.getImageData(0, 0, botCanvasWidth, botCanvasHeight).data;
     const templateData = ctx.getImageData(0, 0, botCanvasWidth, botCanvasHeight).data;
 
-    const diff = [];
+    const diff: number[][] = [];
     var nCisPixels = 0; // count of non-transparent pixels
 
     for (let i = 0; i < templateData.length / 4; i++) {
@@ -860,19 +641,19 @@ const { html, render } = mlp_uhtml;
   }
 
   function waitMs(ms) {
-    return new Promise((resolve) =>
+    return new Promise<void>((resolve) =>
       setTimeout(() => {
         resolve();
       }, ms)
     );
   }
 
-  function log() {
-    console.log(`[${new Date().toISOString()}]`, ...arguments);
+  function log(...args) {
+    console.log(`[${new Date().toISOString()}]`, ...args);
   }
 
-  function logError() {
-    console.error(`[${new Date().toISOString()}]`, ...arguments);
+  function logError(...args) {
+    console.error(`[${new Date().toISOString()}]`, ...args);
   }
 
   const botTimeout = 5000;
@@ -881,13 +662,13 @@ const { html, render } = mlp_uhtml;
     while (true) {
       // Update the minimap image (necessary for checking the diff)
       botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
-      botCtx.drawImage(canvas, 0, 0);
+      botCtx.drawImage(minimapUI.imageCanvas, 0, 0);
       botCtx.globalCompositeOperation = "source-in";
       botCtx.drawImage(rPlaceCanvas, 0, 0);
       botCtx.globalCompositeOperation = "source-over";
 
       // Compute the diff
-      const diffAndCisPixels = getDiff(botCanvas.width, botCanvas.height, botCtx, ctx);
+      const diffAndCisPixels = getDiff(botCanvas.width, botCanvas.height, botCtx, minimapUI.imageCanvasCtx);
       const diff = diffAndCisPixels[0];
       const nCisPixels = diffAndCisPixels[1];
 
@@ -913,16 +694,16 @@ const { html, render } = mlp_uhtml;
           });
         }
 
-        const timeOutPillBlock = embed.shadowRoot
-          .querySelector("mona-lisa-status-pill")
-          .shadowRoot.querySelector("div");
+        const timeOutPillBlock = embed.shadowRoot!
+          .querySelector("mona-lisa-status-pill")!
+          .shadowRoot!.querySelector("div")! as HTMLElement;
         log(
           `Status: ${percentage}% (${nMissingPixels}/${nCisPixels}) [${timeOutPillBlock.innerText}]`
         );
 
         if (!embed.nextTileAvailableIn && diff.length > 0) {
           const randPixel = selectRandomPixel(diff);
-          const imageDataRight = ctx.getImageData(randPixel.x, randPixel.y, 1, 1);
+          const imageDataRight = minimapUI.imageCanvasCtx.getImageData(randPixel.x, randPixel.y, 1, 1);
           autoColorPick(imageDataRight);
           embed.camera.applyPosition(randPixel);
           embed.showColorPicker = true;
@@ -943,5 +724,3 @@ const { html, render } = mlp_uhtml;
     }
   })().then((r) => {});
 })();
-
-// vim:et:sw=2

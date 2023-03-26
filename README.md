@@ -5,7 +5,7 @@
 
 ![example of the /r/mylittlepony overlay](https://i.imgur.com/gseABgb.png)
 
-![example of the /r/Spain overlay](es-img/visor.png)
+![example of the /r/Spain overlay](templates/es-img/visor.png)
 
 Thank you all for coming this year, it was a good time.
 For all who contributed here, thank you for rebasing, not merging.

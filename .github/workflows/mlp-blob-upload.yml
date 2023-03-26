@@ -6,11 +6,14 @@ on:
     branches:
       - "main"
     paths:
-      - "mlp/canvas*.png"
-      - "mlp/bot*.png"
-      - "mlp/mask*.png"
-      - "mlp/endu*.png"
-      - "mlp/endu_template.json"
+      - "*.ts"
+      - "*.json"
+      - "rollup.config.mjs"
+      - "templates/mlp/canvas*.png"
+      - "templates/mlp/bot*.png"
+      - "templates/mlp/mask*.png"
+      - "templates/mlp/endu*.png"
+      - "templates/mlp/endu_template.json"
 
 permissions:
   contents: read
@@ -25,21 +28,33 @@ jobs:
       with:
         lfs: true
     
-    - name: Copy canvas files
+    - name: Node setup for extension build
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+    
+    - name: Build extension
       run: |
-          mkdir ./dist
-          cp -f ./mlp/bot.png ./mlp/canvas.png ./mlp/mask.png mlp/endu_template.json ./dist
+        mkdir -p ./dist
+        npm install
+        npm run build
+        
+    
+    - name: Copy canvas files
+      run: |  
+        # ./dist already exists
+        cp -f ./templates/mlp/bot.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./dist
     
     - name: Azure login
       uses: azure/login@v1
       with:
-          creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
+        creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
     
     - name: Upload to blob storage
       uses: azure/CLI@v1
       with:
         inlineScript: |
-            az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
+          az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
     
     - name: Azure logout
       run: az logout
