@@ -10,8 +10,9 @@
  *
  **/
 
-import {html, render} from 'uhtml';
+import {html} from 'uhtml';
 import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} from './minimap-components';
+import {createMinimapUI} from './minimap-ui';
 
 (async function () {
   const embed: MonaLisa.Embed = await new Promise((resolve) => {
@@ -196,216 +197,126 @@ import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} 
 
   const posParser = new PosParser(coordinateBlock);
 
-  const docBody = document.querySelector("body")!;
-  const htmlBlock = `<style>
-  mlpminimap {
-    display: block;
-    color: white;
-    width: 400px;
-    height: 300px;
-    position: absolute;
-    top: 0%;
-    right: 0%;
-    background-color: rgba(0,0,0,.75);
-    border: 1px solid black;
-    overflow: hidden;
-  }
-
-  mlpminimap .map {
-    position: absolute;
-    margin: 0;
-    max-width: unset;
-    display: block;
-    image-rendering: pixelated;
-    pointer-events: none;
-  }
-
-  mlpminimap .crosshair {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border: 2px solid red;
-    transform: translateX(-50%) translateY(-50%);
-  }
-
-  mlpminimap #resizer {
-    position: absolute;
-    bottom: 0%;
-    left: 0%;
-    width: 0px;
-    height: 0px;
-    border-bottom: 10px solid red;
-    border-left: 10px solid red;
-    border-top: 10px solid transparent;
-    border-right: 10px solid transparent;
-  }
-
-  mlpminimap .settings {
-    position: absolute;
-    background-color: rgba(0,0,0,.75);
-  }
-  
-  mlpminimap .settings > div{
-    display: none;
-  }
-  
-  mlpminimap .settings > .alwaysshow{
-    display: block;
-  }
-  
-  mlpminimap:hover .settings > div{
-    display: block;
-  }
-
-  mlpminimap .settings .clickable {
-    cursor: pointer;
-    user-select: none;
-  }
-  
-  mlpminimap #noSleep {
-	display: none;
-  }
-</style>
-<mlpminimap>
-  <img class="map">
-  <div class="crosshair"></div>
-  <div class="settings"></div>
-  <div id="resizer"></div>
-  <audio id="noSleep" src="https://hot-potato.reddit.com/media/interactions/select-color.mp3" playsinline></audio>
-</mlpminimap>`;
-
-
-
-  const htmlObject = document.createElement("div");
-  htmlObject.innerHTML = htmlBlock;
-  docBody.appendChild(htmlObject);
-  const mlpMinimapBlock = htmlObject.querySelector("mlpminimap")! as HTMLElement;
-
-  const imageBlock = mlpMinimapBlock.querySelector(".map")! as HTMLImageElement;
-  const crosshairBlock = mlpMinimapBlock.querySelector(".crosshair")! as HTMLElement;
-
-  const canvas = document.createElement("canvas")!;
-  const ctx = canvas.getContext("2d")!;
+  const minimapUI = createMinimapUI(document);
+  const mlpMinimapBlock = minimapUI.mlpMinimapBlock;
+  const imageBlock = minimapUI.imageBlock;
+  const crosshairBlock = minimapUI.crosshairBlock;
+  const settingsBlock = minimapUI.settingsBlock;
 
   const maskCanvas = document.createElement("canvas")!;
   maskCanvas.width = rPlaceCanvas.width;
   maskCanvas.height = rPlaceCanvas.height;
   const maskCtx = maskCanvas.getContext("2d")!;
 
-  imageBlock.addEventListener('load', function () {
-    canvas.width = this.naturalWidth;
-    canvas.height = this.naturalHeight;
-    ctx!.clearRect(0, 0, canvas.width, canvas.height);
-    ctx!.drawImage(this, 0, 0);
-  });
-
   let updateTemplate = function () {};
 
-  const settingsBlock = mlpMinimapBlock.querySelector(".settings")!;
-  const settings = new Settings(settingsBlock, mlpMinimapBlock);
-  settings.addSetting(
-    "templateName",
-    new CycleSetting(
-      "Template",
-      rPlaceTemplateNames,
-      0,
-      function (templateNameSetting) {
-        setRPlaceTemplate(templateNameSetting.value);
+  function initSettings(settings: Settings, ) {
+    settings.addSetting(
+      "templateName",
+      new CycleSetting(
+        "Template",
+        rPlaceTemplateNames,
+        0,
+        function (templateNameSetting) {
+          setRPlaceTemplate(templateNameSetting.value);
+          updateTemplate();
+        },
+        true
+      )
+    );
+    settings.addSetting(
+      "findArt",
+      new ButtonSetting("Find our art!", function () {
+        findNextArt();
+      })
+    );
+    settings.addSetting(
+      "autoColor",
+      new CheckboxSetting("Auto color picker", false, function (autoColorSetting) {
+        settings.getSetting("bot").enabled = false;
         updateTemplate();
-      },
-      true
-    )
-  );
+      })
+    );
+    settings.addSetting(
+      "bot",
+      new CheckboxSetting("Bot", false, function (botSetting) {
+        settings.getSetting("autoColor").enabled = false;
+        updateTemplate();
+      })
+    );
+    settings.addSetting(
+      "botstability",
+      new CheckboxSetting("Bot stability (🔇 Need to mute tab)", false)
+    );
+    setInterval(() => {
+      if (settings.getSetting("botstability").enabled) {
+        noSleepAudio.play();
+      }
+    }, 30000);
+
+    settings.addSetting(
+      "pixelDisplayProgress",
+      new DisplaySetting("Current progress", "Unknown", true)
+    );
+  
+    settings.addSetting(
+      "pythonBot",
+      new ButtonSetting("Python bot", function (pythonBotSetting) {
+        window.open("https://github.com/CloudburstSys/PonyPixel");
+      })
+    );
+
+    const newDonateSetting = function (name, url) {
+      return new ButtonSetting(`Donate (${name})`, function (donateSetting) {
+        window.open(url);
+      });
+    };
+    settings.addSetting(
+      "donatePonywka",
+      newDonateSetting(
+        "Midnight Ponywka - primary dev, MLP template",
+        "https://www.donationalerts.com/r/vovskic2002"
+      )
+    );
+    settings.addSetting(
+      "donateCloudburstSys",
+      newDonateSetting(
+        "Twi/Leah (@CloudburstSys) - primary Python dev",
+        "https://ko-fi.com/cloudburstsys"
+      )
+    );
+    settings.addSetting(
+      "donateAlchEmi",
+      newDonateSetting(
+        "Ember Hearth (@Alch-Emi) - dev (priority, progress)",
+        "https://paypal.me/alchemi336"
+      )
+    );
+    settings.addSetting(
+      "donateBb010g",
+      newDonateSetting(
+        "Dusk 💛 💜 (@bb010g) - dev (GitHub org, dev install, multi-template, UI, bot), r/ainbowroad template",
+        "https://www.tgijp.org/"
+      )
+    );
+    settings.addSetting(
+      "donateOctylFractal",
+      newDonateSetting(
+        "octylFractal - dev (bugfixes), MLP template",
+        "https://github.com/sponsors/octylFractal"
+      )
+    );
+    settings.addSetting(
+      "donateLumiereEleve",
+      newDonateSetting("Lumière Élevé - Python dev", "https://buymeacoffee.com/belkasempaiowo")
+    );
+  }
+  
+  const settings = new Settings(settingsBlock, mlpMinimapBlock);
+  initSettings(settings);
 
   const noSleepAudio = mlpMinimapBlock!.querySelector("#noSleep")! as HTMLAudioElement;
   noSleepAudio.volume = 0.1;
-
-  setInterval(() => {
-    if (settings.getSetting("botstability").enabled) {
-      noSleepAudio.play();
-    }
-  }, 30000);
-
-  settings.addSetting(
-    "findArt",
-    new ButtonSetting("Find our art!", function () {
-      findNextArt();
-    })
-  );
-  settings.addSetting(
-    "autoColor",
-    new CheckboxSetting("Auto color picker", false, function (autoColorSetting) {
-      settings.getSetting("bot").enabled = false;
-      updateTemplate();
-    })
-  );
-  settings.addSetting(
-    "bot",
-    new CheckboxSetting("Bot", false, function (botSetting) {
-      settings.getSetting("autoColor").enabled = false;
-      updateTemplate();
-    })
-  );
-  settings.addSetting(
-    "botstability",
-    new CheckboxSetting("Bot stability (🔇 Need to mute tab)", false)
-  );
-  settings.addSetting(
-    "pixelDisplayProgress",
-    new DisplaySetting("Current progress", "Unknown", true)
-  );
-
-  settings.addSetting(
-    "pythonBot",
-    new ButtonSetting("Python bot", function (pythonBotSetting) {
-      window.open("https://github.com/CloudburstSys/PonyPixel");
-    })
-  );
-
-  const newDonateSetting = function (name, url) {
-    return new ButtonSetting(`Donate (${name})`, function (donateSetting) {
-      window.open(url);
-    });
-  };
-  settings.addSetting(
-    "donatePonywka",
-    newDonateSetting(
-      "Midnight Ponywka - primary dev, MLP template",
-      "https://www.donationalerts.com/r/vovskic2002"
-    )
-  );
-  settings.addSetting(
-    "donateCloudburstSys",
-    newDonateSetting(
-      "Twi/Leah (@CloudburstSys) - primary Python dev",
-      "https://ko-fi.com/cloudburstsys"
-    )
-  );
-  settings.addSetting(
-    "donateAlchEmi",
-    newDonateSetting(
-      "Ember Hearth (@Alch-Emi) - dev (priority, progress)",
-      "https://paypal.me/alchemi336"
-    )
-  );
-  settings.addSetting(
-    "donateBb010g",
-    newDonateSetting(
-      "Dusk 💛 💜 (@bb010g) - dev (GitHub org, dev install, multi-template, UI, bot), r/ainbowroad template",
-      "https://www.tgijp.org/"
-    )
-  );
-  settings.addSetting(
-    "donateOctylFractal",
-    newDonateSetting(
-      "octylFractal - dev (bugfixes), MLP template",
-      "https://github.com/sponsors/octylFractal"
-    )
-  );
-  settings.addSetting(
-    "donateLumiereEleve",
-    newDonateSetting("Lumière Élevé - Python dev", "https://buymeacoffee.com/belkasempaiowo")
-  );
 
   let botLock = false;
 
@@ -481,7 +392,7 @@ import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} 
   const NEXT_ART_MIN_DIST = 100; // art within this range is considered the same
   let currentLocationIndex: number | null = null;
   function findNextArt() {
-    const templateData = ctx.getImageData(0, 0, rPlaceCanvas.width, rPlaceCanvas.height).data;
+    const templateData = minimapUI.imageCanvasCtx.getImageData(0, 0, rPlaceCanvas.width, rPlaceCanvas.height).data;
 
     const locations: Array<{x: number, y: number}> = [];
     for (let i = 0; i < templateData.length; i += 4) {
@@ -692,7 +603,7 @@ import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} 
     recalculateImagePos();
     if (settings.getSetting("autoColor").enabled) {
       try {
-        const imageData = ctx.getImageData(posParser.pos.x, posParser.pos.y, 1, 1);
+        const imageData = minimapUI.imageCanvasCtx.getImageData(posParser.pos.x, posParser.pos.y, 1, 1);
         autoColorPick(imageData);
       } catch (e) {
         console.error(e);
@@ -751,13 +662,13 @@ import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} 
     while (true) {
       // Update the minimap image (necessary for checking the diff)
       botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
-      botCtx.drawImage(canvas, 0, 0);
+      botCtx.drawImage(minimapUI.imageCanvas, 0, 0);
       botCtx.globalCompositeOperation = "source-in";
       botCtx.drawImage(rPlaceCanvas, 0, 0);
       botCtx.globalCompositeOperation = "source-over";
 
       // Compute the diff
-      const diffAndCisPixels = getDiff(botCanvas.width, botCanvas.height, botCtx, ctx);
+      const diffAndCisPixels = getDiff(botCanvas.width, botCanvas.height, botCtx, minimapUI.imageCanvasCtx);
       const diff = diffAndCisPixels[0];
       const nCisPixels = diffAndCisPixels[1];
 
@@ -792,7 +703,7 @@ import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} 
 
         if (!embed.nextTileAvailableIn && diff.length > 0) {
           const randPixel = selectRandomPixel(diff);
-          const imageDataRight = ctx.getImageData(randPixel.x, randPixel.y, 1, 1);
+          const imageDataRight = minimapUI.imageCanvasCtx.getImageData(randPixel.x, randPixel.y, 1, 1);
           autoColorPick(imageDataRight);
           embed.camera.applyPosition(randPixel);
           embed.showColorPicker = true;
