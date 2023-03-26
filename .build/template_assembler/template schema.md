@@ -1,10 +1,31 @@
 #### schema Template
-Items in the art array are layered in the order they appear.
-Higher layers will overwrite art from lower layers.
+
+* `enduInfo`
+
+    `EnduInfo`
 
 * `templates`
 
     array of `TemplateEntry`
+    * Items in the art array are layered in the order they appear. Higher layers will overwrite art from lower layers.
+
+#### schema EnduInfo
+Information that will be put in the generated Endu-style template
+
+* `contact`
+
+    string
+    * some kind of way to get in contact with whoever owns this template e.g. discord links, emails, whatever
+
+* `source`
+
+    string
+    * the URI that the produced endu.png image will be available at
+
+* `name`
+
+    string
+    * the name that this image will have in the Endu-style template which should uniquely identify the owning faction
 
 #### abstract schema TemplateEntry
 The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwise it's a `TemplateEntryLocal`
@@ -12,7 +33,7 @@ The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwis
 * `name`
 
     string
-    * a description for humans
+    * a description for humans and/or ponies
 
 * `bots`
 
@@ -23,9 +44,9 @@ The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwis
   
 * `priority`
 
-    integer (between 0 and 25, inclusive)
+    integer (between 1 and 10, inclusive)
     * relative priority of this image for the bots
-    * optional, defaults to 0 (which effectively disables bots, so don't do this)
+    * optional, defaults to 1
     * "edge" pixels receive additional priority automatically
         * edge pixels are non-transparent pixels which are either on the boundary of the image or have a transparent pixel in the surrounding 8 pixels
 

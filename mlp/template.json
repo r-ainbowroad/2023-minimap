@@ -1,11 +1,16 @@
 {
+	"enduInfo": {
+		"contact": "https://discord.gg/bronyplace #diplomacy",
+		"source": "https://ponyplace.z19.web.core.windows.net/endu.png",
+		"name": "maneplace bronies"
+	},
 	"templates": [
 		{
 			"name": "earth pony crystal",
 			"images": ["mlp/source/ep_crystal.png"],
 			"x": 1644,
 			"y": 245,
-			"priority": 250,
+			"priority": 10,
 			"bots": true,
 			"pony": true
 		},
@@ -14,7 +19,7 @@
 			"images": ["mlp/source/full_crystal.png"],
 			"x": 1633,
 			"y": 228,
-			"priority": 240,
+			"priority": 9,
 			"bots": true,
 			"pony": true
 		},
@@ -23,7 +28,7 @@
 			"images": ["mlp/source/mane11.png"],
 			"x": 1615,
 			"y": 212,
-			"priority": 230,
+			"priority": 8,
 			"bots": true,
 			"pony": true
 		},
@@ -32,7 +37,7 @@
 			"images": ["mlp/source/aleesa2.png"],
 			"x": 1608,
 			"y": 263,
-			"priority": 100,
+			"priority": 3,
 			"bots": true
 		},
 		{
@@ -40,14 +45,14 @@
 			"images": ["https://cdn.discordapp.com/attachments/807528846144176129/1088344066565091419/r_avali.png"],
 			"x": 1446,
 			"y": 1260,
-			"priority": 100
+			"priority": 2
 		},
 		{
 			"name": "aleesa1",
 			"images": ["mlp/source/aleesa.png"],
 			"x": 1190,
 			"y": 745,
-			"priority": 100
+			"priority": 3
 		},
 		{
 			"name": "osu!",

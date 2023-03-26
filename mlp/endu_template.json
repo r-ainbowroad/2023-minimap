@@ -1,13 +1,13 @@
 {
-  "templates": [
-    {
-      "name": "r/place bronies",
-      "sources": [
-        "https://ponyplace.z19.web.core.windows.net/bot.png",
-        "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/main/mlp/bot.png"
-      ],
-      "x": 0,
-      "y": 0
-    }
-  ]
+    "contact": "https://discord.gg/bronyplace #diplomacy",
+    "templates": [
+        {
+            "name": "assembled template for maneplace bronies",
+            "sources": [
+                "https://ponyplace.z19.web.core.windows.net/endu.png"
+            ],
+            "x": 1615,
+            "y": 212
+        }
+    ]
 }
