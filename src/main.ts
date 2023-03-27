@@ -208,6 +208,26 @@ import {ImageTemplate} from './template/template';
 
   let updateTemplate = function () {};
 
+  async function downloadCanvas() {
+    // Move camera to center. The entire canvas isn't loaded unless we do this.
+    embed.camera.applyPosition({
+      x: Math.floor(rPlaceCanvas.width / 2),
+      y: Math.floor(rPlaceCanvas.height / 2),
+      zoom: 0,
+    });
+
+    // Wait for the canvas to update.
+    await waitMs(1000);
+
+    const downloadLink = document.createElement('a');
+    downloadLink.setAttribute('download', 'rplace.png');
+    rPlaceCanvas.toBlob((blob) => {
+      const url = URL.createObjectURL(blob!);
+      downloadLink.setAttribute('href', url);
+      downloadLink.click();
+    });
+  }
+
   function initSettings(settings: Settings, ) {
     settings.addSetting(
       "templateName",
@@ -255,6 +275,13 @@ import {ImageTemplate} from './template/template';
     settings.addSetting(
       "pixelDisplayProgress",
       new DisplaySetting("Current progress", "Unknown", true)
+    );
+
+    settings.addSetting(
+      "downloadCanvas",
+      new ButtonSetting("Download r/place Canvas", () => {
+        downloadCanvas();
+      })
     );
   
     settings.addSetting(
