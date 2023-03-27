@@ -17,12 +17,13 @@ declare namespace MonaLisa {
   }
 
   interface Embed extends HTMLElement {
+    _events: any;
     camera: Camera;
     selectedColor: number;
     nextTileAvailableIn: number;
     showColorPicker: boolean;
 
     wakeUp(): any;
-    onConfirmPixel(): any;
+    onConfirmPixel(...args): any;
   }
 }

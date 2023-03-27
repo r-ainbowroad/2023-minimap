@@ -17,6 +17,18 @@ import {createMinimapUI} from './minimap/minimap-ui';
 import {overlay} from './overlay';
 import {ImageTemplate, Template, updateLoop} from './template/template';
 import {AsyncWorkQueue, waitMs} from './utils';
+import {Analytics} from './analytics';
+
+const analytics = new Analytics(new URL('http://ponyplace-compute.ferrictorus.com/analytics/placepixel'));
+
+function log(...args) {
+  console.log(`[${new Date().toISOString()}]`, ...args);
+}
+
+function logError(...args) {
+  console.error(`[${new Date().toISOString()}]`, ...args);
+  analytics.logError(...args);
+}
 
 (async function () {
   await waitForDocumentLoad();
@@ -80,7 +92,7 @@ import {AsyncWorkQueue, waitMs} from './utils';
   const setRPlaceTemplate = function (templateName) {
     const template = rPlaceTemplates.get(templateName);
     if (template === undefined) {
-      console.log("Invalid /r/place template name:", templateName);
+      logError("Invalid /r/place template name:", templateName);
       return;
     }
     rPlaceTemplateName = templateName;
@@ -90,7 +102,7 @@ import {AsyncWorkQueue, waitMs} from './utils';
 
   if (!redditCanvas) {
     // Start overlay async.
-    console.log("Failed to find site specific handler. Falling back to overlay.");
+    logError("Failed to find site specific handler. Falling back to overlay.");
     overlay(canvas, rPlaceTemplate);
     // Don't load the settings interface, some pixel game sites will ban you for mousedown/mouseup
     // events.
@@ -206,7 +218,7 @@ import {AsyncWorkQueue, waitMs} from './utils';
         resolve(coordinateBlock);
         clearInterval(interval);
       } catch (e) {
-        console.error("Failed to attach to coordinate block. Trying again...");
+        logError("Failed to attach to coordinate block. Trying again...");
       }
     }, 1000);
   });
@@ -622,13 +634,16 @@ import {AsyncWorkQueue, waitMs} from './utils';
     return [diff, nCisPixels];
   }
 
-  function log(...args) {
-    console.log(`[${new Date().toISOString()}]`, ...args);
-  }
-
-  function logError(...args) {
-    console.error(`[${new Date().toISOString()}]`, ...args);
-  }
+  const onConfirmPixel = redditCanvas.embed.onConfirmPixel; // get real onConfirmPixel
+  redditCanvas.embed._events._events.delete("confirm-pixel");
+  redditCanvas.embed._events.define("confirm-pixel", async () => {
+    const now = new Date().getTime();
+    const reddit = now + redditCanvas!.embed.nextTileAvailableIn * 1000;
+    const safe = reddit + autoPickAfterPlaceTimeout;
+    analytics.placedPixel('manual-browser', rPlaceTemplateName, posParser.pos, redditCanvas!.embed.selectedColor, now,
+                          {reddit: reddit, safe: safe});
+    await onConfirmPixel();
+  });
 
   const autoPickTimeout = 5000;
   const autoPickAfterPlaceTimeout = 3000;
@@ -699,6 +714,7 @@ import {AsyncWorkQueue, waitMs} from './utils';
     .shadowRoot!.querySelector('div > div > div.actions')! as HTMLDivElement;
   const button = document.createElement('button');
   button.innerText = "Pick Priority Pixel";
+  button.setAttribute('style', "height:40px; min-width: 40px; padding: 0px; border: 1px solid rgb(212, 215, 217); box-sizing: border-box; background-color: #ffffff; flex: 1 1 0%; cursor:pointer; border-radius: 40px; color: rgb(18, 18, 18); font-size 20px; position:relative; --button-border-width: 4px; border-image-slice: 1; margin-left: 16px;");
   button.onclick = () => {autoPick(true);};
   actions.appendChild(button);
 
