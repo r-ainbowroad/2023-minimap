@@ -1,63 +1,34 @@
-# \[inactive\] /r/Place 2022 collaborative minimap userscript
-## Help [/r/MyLittlePony](https://reddit.com/r/mylittlepony) get a pony on /r/place!
-## Help [/r/ainbowroad](https://reddit.com/r/ainbowroad) build a rainbow road on /r/place!
-## Do you speak Spanish? [Read this instead.](README.es.md)
+Hablas Espanol? [Lee esto en su lugar](README.es.md)
 
-![example of the /r/mylittlepony overlay](https://i.imgur.com/gseABgb.png)
+# /r/Place 2023 collaborative minimap userscript
+Help [/r/MyLittlePony](https://reddit.com/r/mylittlepony) get a pony on /r/place!
 
-![example of the /r/Spain overlay](templates/es-img/visor.png)
+Help [/r/ainbowroad](https://reddit.com/r/ainbowroad) build a rainbow road on /r/place!
 
-Thank you all for coming this year, it was a good time.
-For all who contributed here, thank you for rebasing, not merging.
-We all have monorepo experience now! :p
+### I want to help place pixels!
 
-## Instructions
+You can install the userscript to help! You just need a browser (Chrome, Edge preferred), a Tampermonkey-like extension, and a Reddit account. [Instructions below](README.md#userscript-instructions).
 
-* Use a Chromium based browser (Google Chrome, Edge, Opera, Yandex.Browser)
+### I'm from another faction and want to diplomacy!
+
+* MLP / ManePlace: Join our discord! https://discord.gg/bronyplace #diplomacy
+
+### I'm an ally and want to add, change or get art!
+
+* MLP / ManePlace: We offer an osu!/Endu-style template containing our art, and can accept art either from osu!/Endu templates or as 1:1 images with coordinates. [Integration documentation](templates/mlp/integration.md)
+
+## Userscript instructions
+
+* Install Violentmonkey (https://violentmonkey.github.io/get-it/)
+  * Chromium based browsers (Google Chrome, Edge, Opera, Yandex.Browser) can use Tampermonkey (https://www.tampermonkey.net/)
   * Android folks can use Kiwi Browser + Tampermonkey.
-* Install "Tampermonkey" extension (https://www.tampermonkey.net/)
-* Firefox isn't working for now. 
-* Open the following page in your browser: <https://raw.githubusercontent.com/r-ainbowroad/2022-minimap/d/main/minimap.user.js>
+* Open the following page in your browser: <https://ponyplace.z19.web.core.windows.net/loader.user.js>
   * This will invite you to install the userscript.
-* Click on the canvas to get it to load.
+* Visit /r/place and click on the canvas to get it to load.
 * Cycle to your template, if necessary, by clicking on the "Template: ..." setting.
 
-## Updating the template
-
-* The latest template is automatically fetched every minute.
-* Refresh the page to fetch the latest script
-* To get the template changed:
-  * For /r/MyLittlePony: ping `@Midnight Ponywka#4625` or `@Bigcheese#3910`
-  * For /r/ainbowroad: in `#minimap`, ping `@bb010g#5294`
-
-## Joining the minimap
-
-If your subreddit wants to join the collaborative minimap, have whoever's going to be updating templates join <https://manechat.net> and, in `#rplace`'s "Tool Creation" thread, ping `@bb010g#5294` or `@Bigcheese#3910` with information.
-Please ask whoever's managing the minimap for your subreddit for changes to the minimap or template, to avoid disrupting Manechat.
+![example of the /r/mylittlepony overlay](https://i.imgur.com/gseABgb.png)
 
 ## Licensing
 
 The code in this repository is dual licensed under the Apache License 2.0 and the ISC license (SPDX license expression: `Apache-2.0 OR ISC`).
-
----
-
-# Spanish translation
-
-## Userscript para colaborar en /r/Place
-
-## Instrucciones
-
-* Abre un navegador basado en Chromium (Google Chrome, Edge, Opera, Yandex.Browser)
-  * En Android se puede usar Kiwi Browser + Tampermonkey.
-* Instalar la extensión "Tampermonkey" (https://www.tampermonkey.net/)
-* En Firefox hay que usar https://addons.mozilla.org/es/firefox/addon/violentmonkey/ (ViolentMonkey).
-* Abre la siguiente página en el navegador: https://raw.githubusercontent.com/r-ainbowroad/2022-minimap/d/main/minimap.user.js
-  * Haz click en instalar.
-* Haz click en el canvas de r/place para que carge.
-* Puedes cambiar entre las plantillas haciendo click en "Template: ...".
-
-Actualizaciones
-
-* Cada minuto se descarga la plantilla más reciente automaticamente.
-* Para actualizar el script refresca la página
-* Para actualizar la plantilla habla con cualquier moderador del discord de r/spain
