@@ -51,8 +51,6 @@ import {ImageTemplate} from './template/template';
     zoom: 0,
   });
 
-  const rPlacePixelSize = 10;
-
   const rPlaceTemplatesGithubLfs = true;
   const rPlaceTemplateBaseUrl = rPlaceTemplatesGithubLfs
     ? "https://media.githubusercontent.com/media/r-ainbowroad/2023-minimap/main/templates"
@@ -350,8 +348,8 @@ import {ImageTemplate} from './template/template';
 
     ImageTemplate.fetchTemplate(rPlaceTemplateUrl, undefined)
       .then((imgTemplate) => {
-        recalculateImagePos();
         minimapUI.setTemplate(imgTemplate);
+        minimapUI.recalculateImagePos(posParser.pos);
         botLock = false;
       }).catch((err) => {
         console.error("Error updating template", err);
@@ -531,14 +529,9 @@ import {ImageTemplate} from './template/template';
   }
 
   const resizerBlock = mlpMinimapBlock.querySelector("#resizer");
-  const resizerAction = new Resizer(resizerBlock, mlpMinimapBlock, recalculateImagePos);
-
-  function getMinimapSize() {
-    return {
-      width: mlpMinimapBlock.clientWidth,
-      height: mlpMinimapBlock.clientHeight,
-    };
-  }
+  const resizerAction = new Resizer(resizerBlock, mlpMinimapBlock, () => {
+    minimapUI.recalculateImagePos(posParser.pos);
+  });
 
   const paletteButtons = embed.shadowRoot!
     .querySelector("mona-lisa-color-picker")!
@@ -578,31 +571,8 @@ import {ImageTemplate} from './template/template';
     return ("0" + int1.toString(16)).slice(-2);
   }
 
-  function recalculateImagePos() {
-    const coordinatesData = posParser.pos;
-    const minimapData = getMinimapSize();
-    minimapUI.imageCanvas.style.width = `${
-      minimapUI.imageCanvas.width * rPlacePixelSize * coordinatesData.scale
-    }px`;
-    minimapUI.imageCanvas.style.height = `${
-      minimapUI.imageCanvas.height * rPlacePixelSize * coordinatesData.scale
-    }px`;
-    minimapUI.imageCanvas.style["margin-left"] = `${
-      -1 *
-      ((coordinatesData.x * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
-        minimapData.width / 2)
-    }px`;
-    minimapUI.imageCanvas.style["margin-top"] = `${
-      -1 *
-      ((coordinatesData.y * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
-        minimapData.height / 2)
-    }px`;
-    crosshairBlock.style.width = `${rPlacePixelSize * coordinatesData.scale}px`;
-    crosshairBlock.style.height = `${rPlacePixelSize * coordinatesData.scale}px`;
-  }
-
   posParser.addEventListener("posChanged", () => {
-    recalculateImagePos();
+    minimapUI.recalculateImagePos(posParser.pos);
     if (settings.getSetting("autoColor").enabled) {
       try {
         const imageData = minimapUI.imageCanvasCtx.getImageData(posParser.pos.x, posParser.pos.y, 1, 1);

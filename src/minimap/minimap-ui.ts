@@ -11,6 +11,7 @@
  **/
 
 import {Template} from "../template/template";
+import {constants} from "../constants";
 
 const htmlBlock = `<style>
 mlpminimap {
@@ -110,6 +111,37 @@ class MinimapUI {
     this.imageCanvas.width = template.template.getWidth();
     this.imageCanvas.height = template.template.getHeight();
     template.template.drawTo(this.imageCanvasCtx);
+  }
+
+  recalculateImagePos(pos: MonaLisa.Pos) {
+    const rPlacePixelSize = constants.rPlacePixelSize;
+    const coordinatesData = pos;
+    const minimapData = this.getMinimapSize();
+    this.imageCanvas.style.width = `${
+      this.imageCanvas.width * rPlacePixelSize * coordinatesData.scale
+    }px`;
+    this.imageCanvas.style.height = `${
+      this.imageCanvas.height * rPlacePixelSize * coordinatesData.scale
+    }px`;
+    this.imageCanvas.style["margin-left"] = `${
+      -1 *
+      ((coordinatesData.x * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
+        minimapData.width / 2)
+    }px`;
+    this.imageCanvas.style["margin-top"] = `${
+      -1 *
+      ((coordinatesData.y * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
+        minimapData.height / 2)
+    }px`;
+    this.crosshairBlock.style.width = `${rPlacePixelSize * coordinatesData.scale}px`;
+    this.crosshairBlock.style.height = `${rPlacePixelSize * coordinatesData.scale}px`;
+  }
+
+  private getMinimapSize() {
+    return {
+      width: this.mlpMinimapBlock.clientWidth,
+      height: this.mlpMinimapBlock.clientHeight,
+    };
   }
 }
 
