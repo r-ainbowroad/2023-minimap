@@ -14,6 +14,7 @@ import {html} from 'uhtml';
 import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} from './minimap/minimap-components';
 import {createMinimapUI} from './minimap/minimap-ui';
 import {ImageTemplate} from './template/template';
+import {Analytics} from './analytics';
 
 (async function () {
   const embed: MonaLisa.Embed = await new Promise((resolve) => {
@@ -673,6 +674,8 @@ import {ImageTemplate} from './template/template';
   const botTimeout = 5000;
   const botAfterPlaceTimeout = 3000;
   (async () => {
+    const analytics = new Analytics(new URL('http://example.com'));
+
     while (true) {
       // Update the minimap image (necessary for checking the diff)
       botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
@@ -727,6 +730,11 @@ import {ImageTemplate} from './template/template';
               .onConfirmPixel()
               .then(() => {
                 log(`Placed [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
+                const now = new Date().getTime();
+                const reddit = now + embed.nextTileAvailableIn * 1000;
+                const safe = reddit + botAfterPlaceTimeout;
+                analytics.placedPixel('bot-browser', randPixel, selectedColor, now,
+                                      {reddit: reddit, safe: safe});
               })
               .catch(() => {
                 logError(`FAILED! [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);

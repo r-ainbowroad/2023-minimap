@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "@types/greasemonkey": "^4.0.4",
-    "uhtml": "^3.1.0"
+    "uhtml": "^3.1.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",
