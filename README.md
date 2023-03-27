@@ -11,7 +11,7 @@ You can install the userscript to help! You just need a browser (Chrome, Edge pr
 
 ### I'm from another faction and want to diplomacy!
 
-* MLP / ManePlace: Join our discord! https://discord.gg/bronyplace #diplomacy
+* MLP / ManePlace: [Diplomatic contacts](templates/mlp/integration.md#diplomatic-contacts)
 
 ### I'm an ally and want to add, change or get art!
 
