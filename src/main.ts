@@ -674,20 +674,24 @@ import {ImageTemplate} from './template/template';
         );
 
         if (!embed.nextTileAvailableIn && diff.length > 0) {
-          const randPixel = selectRandomPixel(diff);
-          const imageDataRight = minimapUI.imageCanvasCtx.getImageData(randPixel.x, randPixel.y, 1, 1);
-          autoColorPick(imageDataRight);
-          embed.camera.applyPosition(randPixel);
-          embed.showColorPicker = true;
-          const selectedColor = embed.selectedColor;
-          embed
-            .onConfirmPixel()
-            .then(() => {
-              log(`Placed [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
-            })
-            .catch(() => {
-              logError(`FAILED! [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
-            });
+          try {
+            const randPixel = selectRandomPixel(diff);
+            const imageDataRight = minimapUI.imageCanvasCtx.getImageData(randPixel.x, randPixel.y, 1, 1);
+            autoColorPick(imageDataRight);
+            embed.camera.applyPosition(randPixel);
+            embed.showColorPicker = true;
+            const selectedColor = embed.selectedColor;
+            embed
+              .onConfirmPixel()
+              .then(() => {
+                log(`Placed [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
+              })
+              .catch(() => {
+                logError(`FAILED! [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
+              });
+          } catch(err) {
+            console.error("Error getting pixel to place", err);
+          }
           await waitMs(botAfterPlaceTimeout);
         }
       }
