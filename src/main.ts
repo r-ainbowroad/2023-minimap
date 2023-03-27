@@ -432,6 +432,20 @@ import {ImageTemplate} from './template/template';
   }
 
   /**
+   * In place Fisher–Yates shuffle.
+   * 
+   * @param array Array to be shuffled. Modified in place.
+   */
+  function shuffle<T>(array: Array<T>) {
+    for (let i: number = array.length; i > 0;) {
+      const j = Math.floor(Math.random() * i--);
+      const t = array[i];
+      array[i] = array[j];
+      array[j] = t;
+    }
+  }
+
+  /**
    * Pick a pixel from a list of buckets
    *
    * The `position` argument is the position in the virtual pool to be selected.  See the
@@ -447,12 +461,13 @@ import {ImageTemplate} from './template/template';
     const orderedBuckets = [...buckets.entries()] // Convert map to array of tuples
       .sort(([ka], [kb]) => kb - ka); // Order by key (priority) DESC
 
-    console.log("Buckets:", orderedBuckets);
-
     // Select the position'th element from the buckets
     for (const [, bucket] of orderedBuckets) {
       if (bucket.length <= position) position -= bucket.length;
-      else return bucket[position];
+      else {
+        shuffle(bucket);
+        return bucket[position];
+      }
     }
 
     // If for some reason this breaks, just return a random pixel from the largest bucket
