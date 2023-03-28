@@ -264,6 +264,19 @@ def resolveTemplateFileEntry(templateFileEntry):
     else:
         raise KeyError("template entry for {0} needs either images or endu keys".format(templateEntry["name"]))
 
+def updateVersion(subfolder):
+    filePath = os.path.join(subfolder, "version.txt")
+    templateVersion = 0
+    
+    if os.path.isfile(filePath):
+        with open(filePath, "r", encoding="utf-8") as versionFile:
+            templateVersion = int(versionFile.read())
+    
+    templateVersion += 1
+    
+    with open(filePath, "w", encoding="utf-8") as versionFile:
+        versionFile.write(str(templateVersion))
+
 def main(subfolder):
     # these are in layer order, so higher entries overwrite/take precedence over lower entries
     templateFile = loadTemplate(subfolder)
@@ -306,6 +319,8 @@ def main(subfolder):
     botImage.close()
     maskImage.close()
     enduImage.close()
+    
+    updateVersion(subfolder)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

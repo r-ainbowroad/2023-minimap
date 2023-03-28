@@ -14,6 +14,7 @@ on:
       - "templates/mlp/mask*.png"
       - "templates/mlp/endu*.png"
       - "templates/mlp/endu_template.json"
+      - "templates/mlp/version.txt"
 
 permissions:
   contents: read
@@ -42,7 +43,7 @@ jobs:
     - name: Copy canvas files
       run: |  
         # ./dist already exists
-        cp -f ./templates/mlp/bot.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./dist
+        cp -f ./templates/mlp/bot.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./templates/mlp/version.txt ./dist
     
     - name: Azure login
       uses: azure/login@v1

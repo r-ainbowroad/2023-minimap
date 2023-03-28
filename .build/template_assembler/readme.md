@@ -10,7 +10,7 @@ This is the template assembler
 
     * `./.build/template_assembler/assemble_template.py ./templates/mlp`
 
-1. The script will produce `canvas.png`, `bot.png`, `mask.png`, `endu.png` and `endu_template.json` in that folder
+1. The script will produce `canvas.png`, `bot.png`, `mask.png`, `endu.png`, `endu_template.json` and `version.txt` in that folder
 
     The names are this way for legacy/compatibility with past years' naming schemes. Due to canvas resizing, they may end up with suffixes e.g. `bot2k.png`
     
@@ -19,6 +19,7 @@ This is the template assembler
     * `mask.png`: a priority mask indicating what order bots will fix pixels in; brighter is faster
     * `endu.png`: **only** the pony art, trimmed to the extents of the art; you should consume this via...
     * `endu_template.json`: an osu!/Endu-style template for integrating our art with our allies
+    * `version.txt`: contains an integer which increases with every template update, which can be sampled to detect updates instead of reloading all the images or relying on spotty etag support
 
 1. Check in the updates to everything and push it into the repo
 
