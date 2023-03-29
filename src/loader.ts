@@ -10,12 +10,44 @@
  *
  **/
 
+import {gm_fetch, headerStringToObject} from "./utils";
+
+const url = "https://ponyplace.z19.web.core.windows.net/minimap.user.js";
+
 (async function () {
-  GM.xmlHttpRequest({
-    method: "GET",
-    url: `https://ponyplace.z19.web.core.windows.net/minimap.user.js?t=${new Date().getTime()}`,
-    onload: function (res) {
-      new Function('GM', res.responseText)(GM);
-    },
-  });
+  let etag: string | undefined;
+  try {
+    const response = await gm_fetch({
+      method: "GET",
+      url: `${url}?t=${new Date().getTime()}`
+    });
+
+    const headers = headerStringToObject(response.responseHeaders);
+    etag = headers.ETag;
+    new Function('GM', response.responseText)(GM);
+  } catch(e) {
+    console.error(`Failed to get primary script ${e}`);
+  }
+
+  if (etag) {
+    setInterval(async () => {
+      try {
+        const response = await gm_fetch({
+          method: "HEAD",
+          url: `${url}?t=${new Date().getTime()}`,
+          headers: {
+            'If-None-Match': etag!
+          }
+        });
+
+        if (response.status == 200) {
+          location.reload();
+        }
+      } catch(e) {
+        console.warn(`Failed to refersh primary script ${e}`);
+      }
+    }, 10 * 1000);
+  } else {
+    console.log("No ETag in response. Auto refresh on update disabled.");
+  }
 })();
