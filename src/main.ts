@@ -13,7 +13,8 @@
 import {html} from 'uhtml';
 import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} from './minimap/minimap-components';
 import {createMinimapUI} from './minimap/minimap-ui';
-import {ImageTemplate} from './template/template';
+import {ImageTemplate, Template} from './template/template';
+import {AsyncWorkQueue} from './utils';
 
 (async function () {
   const embed: MonaLisa.Embed = await new Promise((resolve) => {
@@ -206,7 +207,7 @@ import {ImageTemplate} from './template/template';
   maskCanvas.height = rPlaceCanvas.height;
   const maskCtx = maskCanvas.getContext("2d")!;
 
-  let updateTemplate = function () {};
+  let updateTemplate: () => Promise<void>;
 
   async function downloadCanvas() {
     // Move camera to center. The entire canvas isn't loaded unless we do this.
@@ -343,33 +344,54 @@ import {ImageTemplate} from './template/template';
   const noSleepAudio = mlpMinimapBlock!.querySelector("#noSleep")! as HTMLAudioElement;
   noSleepAudio.volume = 0.1;
 
-  let botLock = false;
+  let template: Template | undefined = undefined;
+  const templateWorkQueue = new AsyncWorkQueue();
 
-  updateTemplate = function () {
-    botLock = true;
-    const rPlaceTemplateUrl =
-      rPlaceTemplate.botUrl !== undefined && settings.getSetting("bot").enabled
-        ? rPlaceTemplate.botUrl
-        : rPlaceTemplate.canvasUrl;
+  const applyTemplate = (templ: Template) => {
+    minimapUI.setTemplate(templ);
+    minimapUI.recalculateImagePos(posParser.pos);
+    maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
+    if (templ.mask) {
+      templ.mask.drawTo(maskCtx);
+      loadMask();
+    } else {
+      rPlaceMask = undefined;
+    }
+  }
 
-    ImageTemplate.fetchTemplate(rPlaceTemplateUrl, rPlaceTemplate.maskUrl)
-      .then((imgTemplate) => {
-        minimapUI.setTemplate(imgTemplate);
-        minimapUI.recalculateImagePos(posParser.pos);
-        maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
-        if (imgTemplate.mask) {
-          imgTemplate.mask.drawTo(maskCtx);
-          loadMask();
-        } else {
-          rPlaceMask = undefined;
-        }
-        botLock = false;
-      }).catch((err) => {
-        console.error("Error updating template", err);
-      });;
+  updateTemplate = function() {
+    return templateWorkQueue.enqueue(async () => {
+      const rPlaceTemplateUrl =
+        rPlaceTemplate.botUrl !== undefined && settings.getSetting("bot").enabled
+          ? rPlaceTemplate.botUrl
+          : rPlaceTemplate.canvasUrl;
+      template = await ImageTemplate.fetchTemplate(rPlaceTemplateUrl, rPlaceTemplate.maskUrl);
+      applyTemplate(template);
+    });
   };
-  setInterval(updateTemplate, 1 * 60 * 1000);
-  updateTemplate();
+  await updateTemplate();
+
+  (async () => {
+    // We just downloaded the template, so wait before checking again.
+    await waitMs(60 * 1000);
+    while (true) {
+      try {
+        const result = await templateWorkQueue.enqueue(async () => {
+          const result = await template!.updateIfDifferent();
+          if (result.startsWith("MaybeChanged"))
+            applyTemplate(template!);
+          return result;
+        });
+        if (result == 'MaybeChangedCached' || result == 'NotChanged')
+          await waitMs(30 * 1000);
+        else if (result == 'MaybeChangedNotCached')
+          await waitMs(300 * 1000);
+      } catch(err) {
+        console.error("Error updating template", err);
+        await waitMs(60 * 1000);
+      }
+    }
+  })();
 
   function loadMask() {
     const maskData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height).data;
@@ -658,7 +680,7 @@ import {ImageTemplate} from './template/template';
         >${percentage}% (${nMissingPixels}/${nCisPixels})</span
       >`;
 
-      if (settings.getSetting("bot").enabled && !botLock) {
+      if (settings.getSetting("bot").enabled && template) {
         if (rPlaceTemplate.botUrl === undefined) {
           return;
         }

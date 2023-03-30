@@ -38,3 +38,33 @@ export function headerStringToObject(headers: string) {
     });
   }));
 }
+
+export class AsyncWorkQueue {
+  #queue: {work: (() => Promise<any>), resolve, reject}[] = [];
+  #working = false;
+
+  enqueue<T>(work: () => Promise<T>): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      this.#queue.push({work, resolve, reject});
+      if (this.#working)
+        return;
+
+      this.#working = true;
+      this.workLoop();
+    });
+  }
+
+  private async workLoop() {
+    while (this.#queue.length) {
+      const work = this.#queue.shift()!;
+      try {
+        const result = await work.work();
+        work.resolve(result);
+      } catch(e) {
+        work.reject(e);
+      }
+    }
+
+    this.#working = false;
+  }
+};

@@ -10,11 +10,15 @@
  *
  **/
 
+import {gm_fetch, headerStringToObject} from "../utils";
+
 export class TemplatePixels {
   #image: ImageData;
+  cacheKey?: string;
 
-  constructor(image: ImageData) {
+  constructor(image: ImageData, cacheKey?: string) {
     this.#image = image;
+    this.cacheKey = cacheKey;
   }
 
   getWidth(): number {
@@ -34,51 +38,101 @@ export class TemplatePixels {
   }
 }
 
+type UpdateResult = 'MaybeChangedCached' | 'MaybeChangedNotCached' | 'NotChanged';
+
+function mergeResponse(current: UpdateResult, resp: GM.Response<any>): UpdateResult {
+  const headers = headerStringToObject(resp.responseHeaders);
+  if (current == 'MaybeChangedNotCached' || !headers.ETag)
+    return 'MaybeChangedNotCached';
+  if (current == 'MaybeChangedCached' || resp.status != 304)
+    return 'MaybeChangedCached';
+  return 'NotChanged';
+}
+
 export interface Template {
   template: TemplatePixels;
   mask?: TemplatePixels;
+
+  updateIfDifferent(): Promise<UpdateResult>;
 }
 
 export class ImageTemplate implements Template {
   template: TemplatePixels;
+  templateURL: URL;
   mask?: TemplatePixels;
+  maskURL?: URL;
   width: number;
   height: number;
 
-  private constructor(width: number, height: number, template: TemplatePixels,
-                      mask?: TemplatePixels) {
+  private constructor(width: number, height: number, template: TemplatePixels, templateURL: URL,
+                      mask?: TemplatePixels, maskURL?: URL) {
     this.template = template;
+    this.templateURL = templateURL;
     this.mask = mask;
+    this.maskURL = maskURL;
     this.width = width;
     this.height = height;
   }
 
-  private static async fetchURL(URL: URL): Promise<Uint8ClampedArray> {
-    return new Promise((resolve, reject) => {
-      GM.xmlHttpRequest({
-        method: "GET",
-        responseType: "arraybuffer",
-        url: `${URL}?t=${new Date().getTime()}`,
-        onload: function (res) {
-          resolve(new Uint8ClampedArray(res.response));
-        },
-        onerror: function (res) {
-          reject(res);
-        },
-      });
+  private async update(template: TemplatePixels, url: URL) {
+    let headers = {};
+    if (template.cacheKey)
+      headers['If-None-Match'] = template.cacheKey;
+    const resp = await ImageTemplate.fetchURL(url, {
+      headers: headers
+    });
+    if (resp.status == 304)
+      return 'NotChanged';
+    if (resp.status != 200)
+      throw resp;
+    return {
+      template: await ImageTemplate.pixelsFromResponse(resp),
+      response: resp
+    };
+  }
+
+  async updateIfDifferent() {
+    let changed: UpdateResult = 'NotChanged';
+    const tr = await this.update(this.template, this.templateURL);
+    if (tr != 'NotChanged') {
+      this.template = tr.template;
+      changed = mergeResponse(changed, tr.response);
+    }
+    if (this.mask) {
+      const mr = await this.update(this.mask, this.maskURL!);
+      if (mr != 'NotChanged') {
+        this.mask = mr.template;
+        changed = mergeResponse(changed, mr.response);
+      }
+    }
+    return changed;
+  }
+
+  private static async fetchURL(url: URL, req?) {
+    return await gm_fetch({
+      ...req,
+      method: "GET",
+      responseType: "arraybuffer",
+      url: `${url}?t=${new Date().getTime()}`
     });
   }
 
-  private static async fetchTemplatePixels(URL: URL): Promise<TemplatePixels> {
-    const data = await this.fetchURL(URL);
-    const bitmap = await createImageBitmap(new Blob([data]));
+  private static async pixelsFromResponse(resp: GM.Response<any>) {
+    const bitmap = await createImageBitmap(new Blob([new Uint8ClampedArray(resp.response)]));
     const canvas = document.createElement('canvas');
     canvas.width = bitmap.width;
     canvas.height = bitmap.height;
     const context = canvas.getContext('2d')!;
     context.drawImage(bitmap, 0 , 0);
     const imgData = context.getImageData(0, 0, bitmap.width, bitmap.height);
-    return new TemplatePixels(imgData);
+    return new TemplatePixels(imgData, headerStringToObject(resp.responseHeaders).ETag);
+  }
+
+  private static async fetchTemplatePixels(URL: URL): Promise<TemplatePixels> {
+    const resp = await this.fetchURL(URL);
+    if (resp.status != 200)
+     throw resp;
+    return await this.pixelsFromResponse(resp);
   }
 
   static async fetchTemplate(templateURL: URL, maskURL?: URL) {
@@ -88,6 +142,7 @@ export class ImageTemplate implements Template {
                  (mask.getWidth() != template.getWidth()))) {
       mask = undefined;
     }
-    return new ImageTemplate(template.getWidth(), template.getHeight(), template, mask);
+    return new ImageTemplate(template.getWidth(), template.getHeight(), template, templateURL, mask,
+                             maskURL);
   }
 }
