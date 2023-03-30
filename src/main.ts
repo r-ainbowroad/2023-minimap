@@ -345,27 +345,6 @@ import {ImageTemplate} from './template/template';
 
   let botLock = false;
 
-  // Fetch template, returns a Promise<Uint8Array>, on error returns the response object
-  function fetchTemplate(url) {
-    return new Promise((resolve, reject) => {
-      GM.xmlHttpRequest({
-        method: "GET",
-        responseType: "arraybuffer",
-        url: `${url}?t=${new Date().getTime()}`,
-        onload: function (res) {
-          resolve(new Uint8Array(res.response));
-        },
-        onerror: function (res) {
-          reject(res);
-        },
-      });
-    });
-  }
-
-  function getPngDataUrlForBytes(bytes) {
-    return "data:image/png;base64," + btoa(String.fromCharCode.apply(null, bytes));
-  }
-
   updateTemplate = function () {
     botLock = true;
     const rPlaceTemplateUrl =
@@ -373,35 +352,21 @@ import {ImageTemplate} from './template/template';
         ? rPlaceTemplate.botUrl
         : rPlaceTemplate.canvasUrl;
 
-    ImageTemplate.fetchTemplate(rPlaceTemplateUrl, undefined)
+    ImageTemplate.fetchTemplate(rPlaceTemplateUrl, rPlaceTemplate.maskUrl)
       .then((imgTemplate) => {
         minimapUI.setTemplate(imgTemplate);
         minimapUI.recalculateImagePos(posParser.pos);
+        maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
+        if (imgTemplate.mask) {
+          imgTemplate.mask.drawTo(maskCtx);
+          loadMask();
+        } else {
+          rPlaceMask = undefined;
+        }
         botLock = false;
       }).catch((err) => {
         console.error("Error updating template", err);
       });;
-
-
-    // Also update mask if needed
-    if (typeof rPlaceTemplate.maskUrl !== "undefined") {
-      fetchTemplate(rPlaceTemplate.maskUrl)
-        .then((array) => {
-          const img = new Image();
-          img.src = getPngDataUrlForBytes(array);
-          img.onload = () => {
-            maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
-            maskCtx.drawImage(img, 0, 0);
-            loadMask();
-          };
-        })
-        .catch((err) => {
-          console.error("Error updating mask", err);
-        });
-    } else {
-      // Free memory if we don't need it.
-      rPlaceMask = undefined;
-    }
   };
   setInterval(updateTemplate, 1 * 60 * 1000);
   updateTemplate();
