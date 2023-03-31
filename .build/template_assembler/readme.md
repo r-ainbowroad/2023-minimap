@@ -1,6 +1,6 @@
 This is the template assembler
 
-1. Make a `template.json` in some folder which complies with the [template schema.md](template schema.md) and add the images
+1. Make a `template.json` in some folder which complies with the [template schema.md](template%20schema.md) and add the images
 
     The suggestion here would be to put the images referenced by the template in a subfolder e.g. `source`
 
