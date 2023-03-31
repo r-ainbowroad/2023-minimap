@@ -1,7 +1,7 @@
 ## Diplomatic contacts
 Please join our Discord server: https://discord.gg/bronyplace
 
-There is a diplomacy chat along with a forum for diplomats and allies.
+There is a diplomacy chat along with a forum for diplomats and allies. Ping the @Diplomat role - you should get the @Friend role as an ally and diplomatic contact.
 
 ## Template processing queue
 Check [this GitHub project](https://github.com/orgs/r-ainbowroad/projects/4) for status
