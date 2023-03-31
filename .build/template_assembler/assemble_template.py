@@ -14,6 +14,42 @@ palettes = [
 canvasSize = (2000, 2000)
 palette = palettes[0]
 
+def loadTemplate(subfolder):
+    with open(os.path.join(subfolder, "template.json"), "r", encoding="utf-8") as f:
+        template = json.loads(f.read())
+    return template
+
+
+def createImage(size, isMask):
+    alphaValue = 0
+    if isMask:
+        alphaValue = 255
+    return Image.new("RGBA", size, (0, 0, 0, alphaValue)) 
+
+def createCanvas(isMask = False):
+    return createImage(canvasSize, isMask)
+
+def copyTemplateEntryIntoCanvas(templateEntry, image, canvas):
+    if (templateEntry["x"] + image.width > canvasSize[0] or
+        templateEntry["y"] + image.height > canvasSize[1] or
+        templateEntry["x"] < 0 or
+        templateEntry["y"] < 0):
+        raise ValueError("{0} is not entirely on canvas??".format(templateEntry["name"]))
+    
+    canvas.alpha_composite(image, (templateEntry["x"], templateEntry["y"]))
+
+def eraseFromCanvas(templateEntry, maskImage, canvas, isMask = False):
+    blankImage = createImage((maskImage.width, maskImage.height), isMask)
+    canvas.paste(blankImage, (templateEntry["x"], templateEntry["y"]), maskImage)
+
+def writeCanvas(canvas, subfolder, name):
+    canvas.save(os.path.join(subfolder, name + ".png"))
+    if False:
+        canvas.save(os.path.join(subfolder, name + "_u.png"))
+        with canvas.quantize() as quantizedCanvas:
+            quantizedCanvas.save(os.path.join(subfolder, name + ".png"))
+
+
 def loadTemplateEntryImage(templateEntry, subfolder):
     for imageSource in templateEntry["images"]:
         try:
@@ -40,19 +76,52 @@ def loadTemplateEntryImage(templateEntry, subfolder):
     
     raise RuntimeError("unable to load any images for {0}".format(templateEntry["name"]))
 
-def loadTemplate(subfolder):
-    with open(os.path.join(subfolder, "template.json"), "r", encoding="utf-8") as f:
-        template = json.loads(f.read())
-    return template
+def resolveTemplateFileEntry(templateFileEntry):
+    requiredProperties = ["name", "x", "y"]
+    if "endu" in templateFileEntry:
+        target = templateFileEntry["endu"]
+        responseObject = urllib.request.urlopen(target, timeout=5)
+        enduTemplate = json.loads(responseObject.read().decode("utf-8"))
+        
+        output = []
+        for enduTemplateEntry in enduTemplate["templates"]:
+            for requiredProperty in requiredProperties:
+                if not requiredProperty in enduTemplateEntry:
+                    print("Missing required property {1} from {0}".format(templateFileEntry["name"], requiredProperty))
+                    raise KeyError()
+            
+            localName = templateFileEntry["name"] + " -> " + enduTemplateEntry["name"]
+            if not "sources" in enduTemplateEntry:
+                print("Missing sources for {0}".format(localName))
+                raise KeyError()
+            
+            if "frameRate" in enduTemplateEntry:
+                print("Ignoring animated template {0}".format(localName))
+                continue
+            
+            converted = {
+                "name": localName,
+                "images": enduTemplateEntry["sources"],
+                "x": enduTemplateEntry["x"],
+                "y": enduTemplateEntry["y"]
+            }
+            
+            for copyProperty in ["pony", "bots", "priority"]:
+                if copyProperty in templateFileEntry:
+                    converted[copyProperty] = templateFileEntry[copyProperty]
+            
+            output.append(converted)
+        return output
+    elif "images" in templateFileEntry:
+        for requiredProperty in requiredProperties:
+            if not requiredProperty in templateFileEntry:
+                # going to make a bad assumption that name is provided...
+                print("Missing required property {1} from {0}".format(templateFileEntry["name"], requiredProperty))
+                raise KeyError()
+        return [templateFileEntry]
+    else:
+        raise KeyError("template entry for {0} needs either images or endu keys".format(templateEntry["name"]))
 
-def copyTemplateEntryIntoCanvas(templateEntry, image, canvas):
-    if (templateEntry["x"] + image.width > canvasSize[0] or
-        templateEntry["y"] + image.height > canvasSize[1] or
-        templateEntry["x"] < 0 or
-        templateEntry["y"] < 0):
-        raise ValueError("{0} is not entirely on canvas??".format(templateEntry["name"]))
-    
-    canvas.alpha_composite(image, (templateEntry["x"], templateEntry["y"]))
 
 def getSurroundingPixels(xy):
     (x, y) = xy
@@ -164,6 +233,10 @@ def generatePriorityMask(templateEntry, image):
 
     return mask
 
+def generateTransparencyMask(image):
+    return image.getchannel("A").point(lambda a: 0 if a == 0 else 255)
+
+
 def generateEnduImage(enduImage, enduExtents):
     if (enduExtents["x2"] > canvasSize[0] or
         enduExtents["y2"] > canvasSize[1] or
@@ -205,64 +278,6 @@ def writeEnduTemplate(enduExtents, enduInfo, subfolder):
     with open(os.path.join(subfolder, "endu_template.json"), "w", encoding="utf-8") as f:
         f.write(json.dumps(outputObject, indent=4))
 
-def createCanvas(isMask = False):
-    alphaValue = 0
-    if isMask:
-        alphaValue = 255
-    return Image.new("RGBA", canvasSize, (0, 0, 0, alphaValue))
-
-def writeCanvas(canvas, subfolder, name):
-    canvas.save(os.path.join(subfolder, name + ".png"))
-    if False:
-        canvas.save(os.path.join(subfolder, name + "_u.png"))
-        with canvas.quantize() as quantizedCanvas:
-            quantizedCanvas.save(os.path.join(subfolder, name + ".png"))
-
-def resolveTemplateFileEntry(templateFileEntry):
-    requiredProperties = ["name", "x", "y"]
-    if "endu" in templateFileEntry:
-        target = templateFileEntry["endu"]
-        responseObject = urllib.request.urlopen(target, timeout=5)
-        enduTemplate = json.loads(responseObject.read().decode("utf-8"))
-        
-        output = []
-        for enduTemplateEntry in enduTemplate["templates"]:
-            for requiredProperty in requiredProperties:
-                if not requiredProperty in enduTemplateEntry:
-                    print("Missing required property {1} from {0}".format(templateFileEntry["name"], requiredProperty))
-                    raise KeyError()
-            
-            localName = templateFileEntry["name"] + " -> " + enduTemplateEntry["name"]
-            if not "sources" in enduTemplateEntry:
-                print("Missing sources for {0}".format(localName))
-                raise KeyError()
-            
-            if "frameRate" in enduTemplateEntry:
-                print("Ignoring animated template {0}".format(localName))
-                continue
-            
-            converted = {
-                "name": localName,
-                "images": enduTemplateEntry["sources"],
-                "x": enduTemplateEntry["x"],
-                "y": enduTemplateEntry["y"]
-            }
-            
-            for copyProperty in ["pony", "bots", "priority"]:
-                if copyProperty in templateFileEntry:
-                    converted[copyProperty] = templateFileEntry[copyProperty]
-            
-            output.append(converted)
-        return output
-    elif "images" in templateFileEntry:
-        for requiredProperty in requiredProperties:
-            if not requiredProperty in templateFileEntry:
-                # going to make a bad assumption that name is provided...
-                print("Missing required property {1} from {0}".format(templateFileEntry["name"], requiredProperty))
-                raise KeyError()
-        return [templateFileEntry]
-    else:
-        raise KeyError("template entry for {0} needs either images or endu keys".format(templateEntry["name"]))
 
 def updateVersion(subfolder):
     filePath = os.path.join(subfolder, "version.txt")
@@ -276,6 +291,7 @@ def updateVersion(subfolder):
     
     with open(filePath, "w", encoding="utf-8") as versionFile:
         versionFile.write(str(templateVersion))
+
 
 def main(subfolder):
     # these are in layer order, so higher entries overwrite/take precedence over lower entries
@@ -295,17 +311,24 @@ def main(subfolder):
     enduExtents = dict()
     for templateEntry in templates:
         print("render {0}".format(templateEntry["name"]))
-        with loadTemplateEntryImage(templateEntry, subfolder) as image:
+        with (
+        loadTemplateEntryImage(templateEntry, subfolder) as image,
+        generateTransparencyMask(image) as transparencyMaskImage):
             copyTemplateEntryIntoCanvas(templateEntry, image, canvasImage)
             
             if ("bots" in templateEntry and bool(templateEntry["bots"])):
                 copyTemplateEntryIntoCanvas(templateEntry, image, botImage)
                 with generatePriorityMask(templateEntry, image) as priorityMask:
                     copyTemplateEntryIntoCanvas(templateEntry, priorityMask, maskImage)
+            else:
+                eraseFromCanvas(templateEntry, transparencyMaskImage, botImage)
+                eraseFromCanvas(templateEntry, transparencyMaskImage, maskImage, isMask=True)
             
             if ("pony" in templateEntry and bool(templateEntry["pony"])):
                 copyTemplateEntryIntoCanvas(templateEntry, image, enduImage)
                 updateExtents(templateEntry, image, enduExtents)
+            else:
+                eraseFromCanvas(templateEntry, transparencyMaskImage, enduImage)
     
     writeCanvas(canvasImage, subfolder, "canvas")
     writeCanvas(botImage, subfolder, "bot")

@@ -33,15 +33,6 @@
 			"pony": true
 		},
 		{
-			"name": "llvm loaf in osu's template",
-			"images": ["source/llvm_loaf.png"],
-			"x": 662,
-			"y": 674,
-			"priority": 7,
-			"bots": true,
-			"pony": false
-		},
-		{
 			"name": "llvm loaf in taskbar",
 			"images": ["source/llvm_loaf.png"],
 			"x": 1270,
