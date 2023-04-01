@@ -57,6 +57,12 @@ The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwis
     * if true, marks this image as part of our faction's things for export in an Endu template for integration with other factions
     * enabling this for an Endu template means **all the things in it** are considered pony
 
+* `enabled_after`
+
+    integer
+    * optional, defaults to beginning of time
+    * if provided, determines when the unix timestamp when the template will be available for application
+
 #### schema TemplateEntryEndu inherits `TemplateEntry`
 
 * `endu`
