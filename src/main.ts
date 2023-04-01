@@ -69,8 +69,12 @@ import {AsyncWorkQueue} from './utils';
     });
     rPlaceTemplateNames.push(templateName);
   };
-  addRPlaceTemplate("mlp", { bot: true, mask: true });
-  addRPlaceTemplate("whiteout_mlp", { bot: true, mask: false });
+  rPlaceTemplates.set("mlp", {
+    canvasUrl: "https://ponyplace.z19.web.core.windows.net/canvas.png",
+    botUrl: "https://ponyplace.z19.web.core.windows.net/bot.png",
+    maskUrl: "https://ponyplace.z19.web.core.windows.net/mask.png",
+  });
+  rPlaceTemplateNames.push("mlp");
   addRPlaceTemplate("r-ainbowroad", { bot: true, mask: true });
   addRPlaceTemplate("spain", { bot: true, mask: true });
   addRPlaceTemplate("phoenixmc", { bot: true, mask: true });
