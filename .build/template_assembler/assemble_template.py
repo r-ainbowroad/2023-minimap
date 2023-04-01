@@ -3,6 +3,7 @@ import os
 import sys
 import urllib.request
 import json
+import datetime
 
 palettes = [
     [
@@ -262,6 +263,7 @@ def updateExtents(templateEntry, image, enduExtents):
 
 def writeEnduTemplate(enduExtents, enduInfo, subfolder):
     outputObject = {
+        "faction": enduInfo["name"],
         "contact": enduInfo["contact"],
         "templates": [
             {
@@ -309,7 +311,12 @@ def main(subfolder):
     enduImage = createCanvas()
     
     enduExtents = dict()
+    utcNow = int(datetime.datetime.utcnow().timestamp())
     for templateEntry in templates:
+        if ("enabled_utc" in templateEntry and int(templateEntry["enabled_utc"]) > utcNow):
+            print("skip {0} due to future animation frame ({1:.02f}h)".format(templateEntry["name"], (int(templateEntry["enabled_utc"])-utcNow)/3600.0))
+            continue
+        
         print("render {0}".format(templateEntry["name"]))
         with (
         loadTemplateEntryImage(templateEntry, subfolder) as image,

@@ -6,66 +6,91 @@
 	},
 	"templates": [
 		{
-			"name": "earth pony crystal",
-			"images": ["source/ep_crystal.png"],
-			"x": 1644,
-			"y": 245,
+			"name": "dash and book border",
+			"images": ["source/primary1_priority.png"],
+			"x": 586,
+			"y": 225,
 			"priority": 10,
 			"bots": true,
 			"pony": true
 		},
 		{
-			"name": "friendship crystal",
-			"images": ["source/full_crystal.png"],
-			"x": 1633,
-			"y": 228,
-			"priority": 9,
+			"name": "book frame 06",
+			"images": ["source/book_frame06.png"],
+			"x": 631,
+			"y": 232,
+			"priority": 8,
 			"bots": true,
-			"pony": true
+			"pony": true,
+			"enabled_utc": 1680429600
 		},
 		{
-			"name": "ponies around crystal",
-			"images": ["source/mane11.png"],
-			"x": 1615,
-			"y": 212,
+			"name": "book frame 05",
+			"images": ["source/book_frame05.png"],
+			"x": 631,
+			"y": 232,
+			"priority": 8,
+			"bots": true,
+			"pony": true,
+			"enabled_utc": 1680422400
+		},
+		{
+			"name": "book frame 04",
+			"images": ["source/book_frame04.png"],
+			"x": 631,
+			"y": 232,
+			"priority": 8,
+			"bots": true,
+			"pony": true,
+			"enabled_utc": 1680415200
+		},
+		{
+			"name": "book frame 03",
+			"images": ["source/book_frame03.png"],
+			"x": 631,
+			"y": 232,
+			"priority": 8,
+			"bots": true,
+			"pony": true,
+			"enabled_utc": 1680408000
+		},
+		{
+			"name": "book frame 02",
+			"images": ["source/book_frame02.png"],
+			"x": 631,
+			"y": 232,
+			"priority": 8,
+			"bots": true,
+			"pony": true,
+			"enabled_utc": 1680400800
+		},
+		{
+			"name": "book frame 01",
+			"images": ["source/book_frame01.png"],
+			"x": 631,
+			"y": 232,
+			"priority": 8,
+			"bots": true,
+			"pony": true,
+			"enabled_utc": 1680393600
+		},
+		{
+			"name": "book frame 00",
+			"images": ["source/book_frame00.png"],
+			"x": 631,
+			"y": 232,
 			"priority": 8,
 			"bots": true,
 			"pony": true
 		},
 		{
-			"name": "llvm loaf in taskbar",
-			"images": ["source/llvm_loaf.png"],
-			"x": 1270,
-			"y": 1971,
-			"priority": 7,
+			"name": "title bar and ponies around book",
+			"images": ["source/primary1.png"],
+			"x": 586,
+			"y": 220,
+			"priority": 9,
 			"bots": true,
 			"pony": true
-		},
-		{
-			"name": "aleesa2",
-			"images": ["source/aleesa2.png"],
-			"x": 1608,
-			"y": 263,
-			"priority": 3,
-			"bots": true
-		},
-		{
-			"name": "r/avali",
-			"images": ["https://cdn.discordapp.com/attachments/807528846144176129/1088344066565091419/r_avali.png"],
-			"x": 1446,
-			"y": 1260,
-			"priority": 2
-		},
-		{
-			"name": "aleesa1",
-			"images": ["source/aleesa.png"],
-			"x": 1190,
-			"y": 745,
-			"priority": 3
-		},
-		{
-			"name": "osu!",
-			"endu": "https://github.com/osuplace/templateManager/raw/main/osuplace2023.json"
 		}
 	]
 }

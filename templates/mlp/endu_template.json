@@ -1,4 +1,5 @@
 {
+    "faction": "maneplace bronies",
     "contact": "https://discord.gg/bronyplace #diplomacy",
     "templates": [
         {
@@ -6,8 +7,8 @@
             "sources": [
                 "https://ponyplace.z19.web.core.windows.net/endu.png"
             ],
-            "x": 1270,
-            "y": 212
+            "x": 586,
+            "y": 220
         }
     ]
 }

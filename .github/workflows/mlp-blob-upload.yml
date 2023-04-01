@@ -2,6 +2,8 @@ name: MLP blob upload
 
 on:
   workflow_dispatch:
+  schedule:
+    -cron: '0,5,10,15,20,25,30,35,40,45,50,45,50,55 * * * *'
   push:
     branches:
       - "main"
@@ -28,6 +30,18 @@ jobs:
       uses: actions/checkout@v3
       with:
         lfs: true
+        
+    - name: Python setup for template build
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+    
+    - name: Build MLP template
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f ./.build/template_assembler/requirements.txt ]; then pip install -r ./.build/template_assembler/requirements.txt; fi
+        ./.build/template_assembler/assemble_template.py ./template/mlp
     
     - name: Node setup for extension build
       uses: actions/setup-node@v3
