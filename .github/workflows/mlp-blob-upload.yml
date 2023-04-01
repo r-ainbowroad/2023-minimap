@@ -41,7 +41,7 @@ jobs:
         python3 -m pip install --upgrade pip
         pip3 install flake8 pytest
         if [ -f ./.build/template_assembler/requirements.txt ]; then pip install -r ./.build/template_assembler/requirements.txt; fi
-        python3 .build/template_assembler/assemble_template.py template/mlp
+        python3 .build/template_assembler/assemble_template.py templates/mlp
     
     - name: Node setup for extension build
       uses: actions/setup-node@v3
