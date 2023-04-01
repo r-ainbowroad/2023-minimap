@@ -4,7 +4,9 @@
   "description": "Minimap overlay and bot for r/place",
   "namespace": "https://place.equestria.dev/",
   "grant": [
-    "GM.xmlHttpRequest"
+    "GM.xmlHttpRequest",
+    "GM.getValue",
+    "GM.setValue"
   ],
   "include": [
     "https://hot-potato.reddit.com/embed*",

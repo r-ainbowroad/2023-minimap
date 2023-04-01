@@ -233,6 +233,8 @@ import {AsyncWorkQueue} from './utils';
     });
   }
 
+  const enableBotSetting = await GM.getValue('enableBot', false);
+
   function initSettings(settings: Settings, ) {
     settings.addSetting(
       "templateName",
@@ -262,7 +264,8 @@ import {AsyncWorkQueue} from './utils';
     );
     settings.addSetting(
       "bot",
-      new CheckboxSetting("Bot", false, function (botSetting) {
+      new CheckboxSetting("Bot", enableBotSetting, function (botSetting) {
+        GM.setValue('enableBot', botSetting.enabled);
         settings.getSetting("autoColor").enabled = false;
         updateTemplate();
       })
