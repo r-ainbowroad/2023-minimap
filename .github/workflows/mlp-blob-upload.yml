@@ -58,18 +58,26 @@ jobs:
       run: |  
         # ./dist already exists
         cp -f ./templates/mlp/bot.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./templates/mlp/version.txt ./dist
-    
-    - name: Azure login
-      uses: azure/login@v1
+
+    - name: Produce build artifacts
+      uses: actions/upload-artifact@v3
       with:
-        creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
-    
-    - name: Upload to blob storage
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
-    
-    - name: Azure logout
-      run: az logout
-      if: always()
+        name: dist
+        path: |
+          dist
+
+    # # creds were broken in AAD so this will no longer work
+    # - name: Azure login
+    #   uses: azure/login@v1
+    #   with:
+    #     creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
+    # 
+    # - name: Upload to blob storage
+    #   uses: azure/CLI@v1
+    #   with:
+    #     inlineScript: |
+    #       az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
+    # 
+    # - name: Azure logout
+    #   run: az logout
+    #   if: always()
