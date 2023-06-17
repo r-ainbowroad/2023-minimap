@@ -63,7 +63,7 @@ jobs:
         # cp -f ./templates/mlp/autopick.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./templates/mlp/version.txt ./dist/mlp
         for copyTemplate in $copyTemplates; do
             mkdir -p ./dist/$copyTemplate
-            for copyFile in "autopick.png canvas.png mask.png endu.png endu_template.json version.txt"; do
+            for copyFile in autopick.png canvas.png mask.png endu.png endu_template.json version.txt; do
                 if [[ -f ./templates/$copyTemplate/$copyFile ]]; then
                     cp -f ./templates/$copyTemplate/$copyFile ./dist/$copyTemplate
                 fi
