@@ -83,11 +83,9 @@ import {AsyncWorkQueue} from './utils';
   };
 
   addAzureBlobTemplate("mlp", { autoPick: true, mask: true });
-  
-  // these are allies we had in 2022 who haven't been onboarded to use the template generator or new names
-  addGithubLfsTemplate("r-ainbowroad", { autoPick: false, mask: false });
-  addGithubLfsTemplate("spain", { autoPick: false, mask: false });
-  addGithubLfsTemplate("phoenixmc", { autoPick: false, mask: false });
+  addAzureBlobTemplate("r-ainbowroad", { autoPick: false, mask: false });
+  addAzureBlobTemplate("spain", { autoPick: false, mask: false });
+  addAzureBlobTemplate("phoenixmc", { autoPick: false, mask: false });
   
   let rPlaceTemplateName;
   let rPlaceTemplate;

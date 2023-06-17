@@ -25,7 +25,7 @@ This is the template assembler
 
 1. The files will be available through several sources, in order of preference
 
-    * [MLP only] Azure blob: `https://ponyplace.z19.web.core.windows.net/mlp/canvas.png`
+    * Azure blob: `https://ponyplace.z19.web.core.windows.net/mlp/canvas.png`
     * GitHub LFS: `https://media.githubusercontent.com/media/r-ainbowroad/2023-minimap/main/template/mlp/canvas.png`
     * GitHub regular: `https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/main/template/mlp/canvas.png`
 
