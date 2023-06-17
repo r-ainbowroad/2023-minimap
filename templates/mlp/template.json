@@ -11,7 +11,7 @@
 			"x": 586,
 			"y": 225,
 			"priority": 10,
-			"bots": true,
+			"autopick": true,
 			"pony": true
 		},
 		{
@@ -20,7 +20,7 @@
 			"x": 586,
 			"y": 220,
 			"priority": 9,
-			"bots": true,
+			"autopick": true,
 			"pony": true
 		}
 	]

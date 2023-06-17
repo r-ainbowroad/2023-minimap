@@ -7,7 +7,7 @@ There is a diplomacy chat along with a forum for diplomats and allies. Ping the 
 Check [this GitHub project](https://github.com/orgs/r-ainbowroad/projects/4) for status
 
 ## Getting our art
-We offer an osu!/Endu-style template at https://ponyplace.z19.web.core.windows.net/endu_template.json which only contains art from our faction.
+We offer an osu!/Endu-style template at https://ponyplace.z19.web.core.windows.net/mlp/endu_template.json which only contains art from our faction.
 We make updates to this template alongside our internal formats as we push changes out.
 
 Please contact our diplomats if you need specific pieces of art or have a different request. You may be able to self-serve by ruffling around [in GitHub](https://github.com/r-ainbowroad/2023-minimap/tree/main/templates/mlp).

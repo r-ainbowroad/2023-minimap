@@ -52,32 +52,43 @@ import {AsyncWorkQueue} from './utils';
     zoom: 0,
   });
 
-  const rPlaceTemplatesGithubLfs = true;
-  const rPlaceTemplateBaseUrl = rPlaceTemplatesGithubLfs
-    ? "https://media.githubusercontent.com/media/r-ainbowroad/2023-minimap/main/templates"
-    : "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/main/templates";
-  const getRPlaceTemplateUrl = function (templateName: string, type: string) {
-    return `${rPlaceTemplateBaseUrl}/${templateName}/${type}.png`;
-  };
   const rPlaceTemplateNames: Array<string> = [];
   const rPlaceTemplates = new Map();
-  const addRPlaceTemplate = function (templateName: string, options) {
+
+  // const githubTemplateUrlBase = "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/main/templates";
+  const githubLfsTemplateUrlBase = "https://media.githubusercontent.com/media/r-ainbowroad/2023-minimap/main/templates";
+  const getGithubLfsTemplateUrl = function (templateName: string, type: string) {
+    return `${githubLfsTemplateUrlBase}/${templateName}/${type}.png`;
+  };
+  const addGithubLfsTemplate = function (templateName: string, options) {
     rPlaceTemplates.set(templateName, {
-      canvasUrl: getRPlaceTemplateUrl(templateName, "canvas"),
-      botUrl: options.bot ? getRPlaceTemplateUrl(templateName, "bot") : undefined,
-      maskUrl: options.mask ? getRPlaceTemplateUrl(templateName, "mask") : undefined,
+      canvasUrl: getGithubLfsTemplateUrl(templateName, "canvas"),
+      autoPickUrl: options.autoPick ? getGithubLfsTemplateUrl(templateName, "autoPick") : undefined,
+      maskUrl: options.mask ? getGithubLfsTemplateUrl(templateName, "mask") : undefined,
     });
     rPlaceTemplateNames.push(templateName);
   };
-  rPlaceTemplates.set("mlp", {
-    canvasUrl: "https://ponyplace.z19.web.core.windows.net/canvas.png",
-    botUrl: "https://ponyplace.z19.web.core.windows.net/bot.png",
-    maskUrl: "https://ponyplace.z19.web.core.windows.net/mask.png",
-  });
-  rPlaceTemplateNames.push("mlp");
-  addRPlaceTemplate("r-ainbowroad", { bot: true, mask: true });
-  addRPlaceTemplate("spain", { bot: true, mask: true });
-  addRPlaceTemplate("phoenixmc", { bot: true, mask: true });
+  
+  const azureBlobTemplateUrlBase = "https://ponyplace.z19.web.core.windows.net";
+  const getAzureBlobTemplateUrl = function (templateName: string, type: string) {
+    return `${azureBlobTemplateUrlBase}/${templateName}/${type}.png`;
+  };
+  const addAzureBlobTemplate = function (templateName: string, options) {
+    rPlaceTemplates.set(templateName, {
+      canvasUrl: getAzureBlobTemplateUrl(templateName, "canvas"),
+      autoPickUrl: options.autoPick ? getAzureBlobTemplateUrl(templateName, "autoPick") : undefined,
+      maskUrl: options.mask ? getAzureBlobTemplateUrl(templateName, "mask") : undefined,
+    });
+    rPlaceTemplateNames.push(templateName);
+  };
+
+  addAzureBlobTemplate("mlp", { autoPick: true, mask: true });
+  
+  // these are allies we had in 2022 who haven't been onboarded to use the template generator or new names
+  addGithubLfsTemplate("r-ainbowroad", { autoPick: false, mask: false });
+  addGithubLfsTemplate("spain", { autoPick: false, mask: false });
+  addGithubLfsTemplate("phoenixmc", { autoPick: false, mask: false });
+  
   let rPlaceTemplateName;
   let rPlaceTemplate;
   let rPlaceMask: Array<number> | undefined;
@@ -233,7 +244,7 @@ import {AsyncWorkQueue} from './utils';
     });
   }
 
-  const enableBotSetting = await GM.getValue('enableBot', false);
+  const enableAutoPickSetting = await GM.getValue('enableAutoPick', false);
 
   function initSettings(settings: Settings, ) {
     settings.addSetting(
@@ -258,24 +269,24 @@ import {AsyncWorkQueue} from './utils';
     settings.addSetting(
       "autoColor",
       new CheckboxSetting("Auto color picker", false, function (autoColorSetting) {
-        settings.getSetting("bot").enabled = false;
+        settings.getSetting("autoPick").enabled = false;
         updateTemplate();
       })
     );
     settings.addSetting(
-      "bot",
-      new CheckboxSetting("Bot", enableBotSetting, function (botSetting) {
-        GM.setValue('enableBot', botSetting.enabled);
+      "autoPick",
+      new CheckboxSetting("AutoPick", enableAutoPickSetting, function (autoPickSetting) {
+        GM.setValue('enableAutoPick', autoPickSetting.enabled);
         settings.getSetting("autoColor").enabled = false;
         updateTemplate();
       })
     );
     settings.addSetting(
-      "botstability",
-      new CheckboxSetting("Bot stability (🔇 Need to mute tab)", false)
+      "autoPickstability",
+      new CheckboxSetting("AutoPick stability (🔇 Need to mute tab)", false)
     );
     setInterval(() => {
-      if (settings.getSetting("botstability").enabled) {
+      if (settings.getSetting("autoPickstability").enabled) {
         noSleepAudio.play();
       }
     }, 30000);
@@ -289,13 +300,6 @@ import {AsyncWorkQueue} from './utils';
       "downloadCanvas",
       new ButtonSetting("Download r/place Canvas", () => {
         downloadCanvas();
-      })
-    );
-  
-    settings.addSetting(
-      "pythonBot",
-      new ButtonSetting("Python bot", function (pythonBotSetting) {
-        window.open("https://github.com/CloudburstSys/PonyPixel");
       })
     );
 
@@ -328,7 +332,7 @@ import {AsyncWorkQueue} from './utils';
     settings.addSetting(
       "donateBb010g",
       newDonateSetting(
-        "Dusk 💛 💜 (@bb010g) - dev (GitHub org, dev install, multi-template, UI, bot), r/ainbowroad template",
+        "Dusk 💛 💜 (@bb010g) - dev (GitHub org, dev install, multi-template, UI, autoPick), r/ainbowroad template",
         "https://www.tgijp.org/"
       )
     );
@@ -369,8 +373,8 @@ import {AsyncWorkQueue} from './utils';
   updateTemplate = function() {
     return templateWorkQueue.enqueue(async () => {
       const rPlaceTemplateUrl =
-        rPlaceTemplate.botUrl !== undefined && settings.getSetting("bot").enabled
-          ? rPlaceTemplate.botUrl
+        rPlaceTemplate.autoPickUrl !== undefined && settings.getSetting("autoPick").enabled
+          ? rPlaceTemplate.autoPickUrl
           : rPlaceTemplate.canvasUrl;
       template = await ImageTemplate.fetchTemplate(rPlaceTemplateUrl, rPlaceTemplate.maskUrl);
       applyTemplate(template);
@@ -513,9 +517,9 @@ import {AsyncWorkQueue} from './utils';
    * no delays, and ensures that the size of the selection pool is always constant.
    *
    * Another way of looking at this:
-   * - If >= 75 pixels are missing from the crystal, 100% of the bots will be working there
-   * - If 50 pixels are missing from the crystal, 67% of the bots will be working there
-   * - If 25 pixels are missing from the crystal, 33% of the bots will be working there
+   * - If >= 75 pixels are missing from the crystal, 100% of the auto picks will be there
+   * - If 50 pixels are missing from the crystal, 67% of the auto picks will be there
+   * - If 25 pixels are missing from the crystal, 33% of the auto picks will be there
    *
    * @param {[number, number][]} diff
    * @return {[number, number]}
@@ -619,14 +623,14 @@ import {AsyncWorkQueue} from './utils';
     }
   });
 
-  const botCanvas = document.createElement("canvas");
-  botCanvas.width = rPlaceCanvas.width;
-  botCanvas.height = rPlaceCanvas.height;
-  const botCtx = botCanvas.getContext("2d")!;
+  const autoPickCanvas = document.createElement("canvas");
+  autoPickCanvas.width = rPlaceCanvas.width;
+  autoPickCanvas.height = rPlaceCanvas.height;
+  const autoPickCtx = autoPickCanvas.getContext("2d")!;
 
-  function getDiff(botCanvasWidth, botCanvasHeight, botCtx, ctx): [number[][], number] {
-    const currentData = botCtx.getImageData(0, 0, botCanvasWidth, botCanvasHeight).data;
-    const templateData = ctx.getImageData(0, 0, botCanvasWidth, botCanvasHeight).data;
+  function getDiff(autoPickCanvasWidth, autoPickCanvasHeight, autoPickCtx, ctx): [number[][], number] {
+    const currentData = autoPickCtx.getImageData(0, 0, autoPickCanvasWidth, autoPickCanvasHeight).data;
+    const templateData = ctx.getImageData(0, 0, autoPickCanvasWidth, autoPickCanvasHeight).data;
 
     const diff: number[][] = [];
     var nCisPixels = 0; // count of non-transparent pixels
@@ -639,8 +643,8 @@ import {AsyncWorkQueue} from './utils';
         templateData[i * 4 + 1] !== currentData[i * 4 + 1] ||
         templateData[i * 4 + 2] !== currentData[i * 4 + 2]
       ) {
-        const x = i % botCanvasWidth;
-        const y = (i - x) / botCanvasWidth;
+        const x = i % autoPickCanvasWidth;
+        const y = (i - x) / autoPickCanvasWidth;
         diff.push([x, y]);
       }
     }
@@ -664,19 +668,19 @@ import {AsyncWorkQueue} from './utils';
     console.error(`[${new Date().toISOString()}]`, ...args);
   }
 
-  const botTimeout = 5000;
-  const botAfterPlaceTimeout = 3000;
+  const autoPickTimeout = 5000;
+  const autoPickAfterPlaceTimeout = 3000;
   (async () => {
     while (true) {
       // Update the minimap image (necessary for checking the diff)
-      botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
-      botCtx.drawImage(minimapUI.imageCanvas, 0, 0);
-      botCtx.globalCompositeOperation = "source-in";
-      botCtx.drawImage(rPlaceCanvas, 0, 0);
-      botCtx.globalCompositeOperation = "source-over";
+      autoPickCtx.clearRect(0, 0, autoPickCanvas.width, autoPickCanvas.height);
+      autoPickCtx.drawImage(minimapUI.imageCanvas, 0, 0);
+      autoPickCtx.globalCompositeOperation = "source-in";
+      autoPickCtx.drawImage(rPlaceCanvas, 0, 0);
+      autoPickCtx.globalCompositeOperation = "source-over";
 
       // Compute the diff
-      const diffAndCisPixels = getDiff(botCanvas.width, botCanvas.height, botCtx, minimapUI.imageCanvasCtx);
+      const diffAndCisPixels = getDiff(autoPickCanvas.width, autoPickCanvas.height, autoPickCtx, minimapUI.imageCanvasCtx);
       const diff = diffAndCisPixels[0];
       const nCisPixels = diffAndCisPixels[1];
 
@@ -687,13 +691,13 @@ import {AsyncWorkQueue} from './utils';
         >${percentage}% (${nMissingPixels}/${nCisPixels})</span
       >`;
 
-      if (settings.getSetting("bot").enabled && template) {
-        if (rPlaceTemplate.botUrl === undefined) {
+      if (settings.getSetting("autoPick").enabled && template) {
+        if (rPlaceTemplate.autoPickUrl === undefined) {
           return;
         }
         embed.wakeUp();
 
-        if (settings.getSetting("botstability").enabled) {
+        if (settings.getSetting("autoPickstability").enabled) {
           // Move camera to center
           embed.camera.applyPosition({
             x: Math.floor(rPlaceCanvas.width / 2),
@@ -717,22 +721,15 @@ import {AsyncWorkQueue} from './utils';
             embed.camera.applyPosition(randPixel);
             embed.showColorPicker = true;
             const selectedColor = embed.selectedColor;
-            embed
-              .onConfirmPixel()
-              .then(() => {
-                log(`Placed [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
-              })
-              .catch(() => {
-                logError(`FAILED! [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
-              });
+            log(`Ready to place pixel [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
           } catch(err) {
             console.error("Error getting pixel to place", err);
           }
-          await waitMs(botAfterPlaceTimeout);
+          await waitMs(autoPickAfterPlaceTimeout);
         }
       }
 
-      await waitMs(botTimeout);
+      await waitMs(autoPickTimeout);
     }
   })().then((r) => {});
 })();

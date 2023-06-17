@@ -35,17 +35,17 @@ The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwis
     string
     * a description for humans and/or ponies
 
-* `bots`
+* `autopick`
 
     boolean (or something that parses to a bool)
     * optional, defaults to false
-    * if true, causes the image to be put on the bot canvas along with generating a priority mask to put on the mask canvas
-    * enabling this for an Endu template means **all the things in it** are bot-enabled
+    * if true, causes the image to be put on the autopick canvas along with generating a priority mask to put on the mask canvas
+    * enabling this for an Endu template means **all the things in it** are autopick-enabled
   
 * `priority`
 
     integer (between 1 and 10, inclusive)
-    * relative priority of this image for the bots
+    * relative priority of this image for the autopicker
     * optional, defaults to 1
     * "edge" pixels receive additional priority automatically
         * edge pixels are non-transparent pixels which are either on the boundary of the image or have a transparent pixel in the surrounding 8 pixels

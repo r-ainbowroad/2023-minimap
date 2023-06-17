@@ -107,7 +107,7 @@ def resolveTemplateFileEntry(templateFileEntry):
                 "y": enduTemplateEntry["y"]
             }
             
-            for copyProperty in ["pony", "bots", "priority"]:
+            for copyProperty in ["pony", "autopick", "priority"]:
                 if copyProperty in templateFileEntry:
                     converted[copyProperty] = templateFileEntry[copyProperty]
             
@@ -306,7 +306,7 @@ def main(subfolder):
         templates.extend(resolveTemplateFileEntry(templateFileEntry))
     
     canvasImage = createCanvas()
-    botImage = createCanvas()
+    autoPickImage = createCanvas()
     maskImage = createCanvas(isMask=True)
     enduImage = createCanvas()
     
@@ -323,12 +323,12 @@ def main(subfolder):
         generateTransparencyMask(image) as transparencyMaskImage):
             copyTemplateEntryIntoCanvas(templateEntry, image, canvasImage)
             
-            if ("bots" in templateEntry and bool(templateEntry["bots"])):
-                copyTemplateEntryIntoCanvas(templateEntry, image, botImage)
+            if ("autopick" in templateEntry and bool(templateEntry["autopick"])):
+                copyTemplateEntryIntoCanvas(templateEntry, image, autoPickImage)
                 with generatePriorityMask(templateEntry, image) as priorityMask:
                     copyTemplateEntryIntoCanvas(templateEntry, priorityMask, maskImage)
             else:
-                eraseFromCanvas(templateEntry, transparencyMaskImage, botImage)
+                eraseFromCanvas(templateEntry, transparencyMaskImage, autoPickImage)
                 eraseFromCanvas(templateEntry, transparencyMaskImage, maskImage, isMask=True)
             
             if ("pony" in templateEntry and bool(templateEntry["pony"])):
@@ -338,7 +338,7 @@ def main(subfolder):
                 eraseFromCanvas(templateEntry, transparencyMaskImage, enduImage)
     
     writeCanvas(canvasImage, subfolder, "canvas")
-    writeCanvas(botImage, subfolder, "bot")
+    writeCanvas(autoPickImage, subfolder, "autopick")
     writeCanvas(maskImage, subfolder, "mask")
     
     with generateEnduImage(enduImage, enduExtents) as enduCrop:
@@ -346,7 +346,7 @@ def main(subfolder):
         writeEnduTemplate(enduExtents, templateFile["enduInfo"], subfolder)
     
     canvasImage.close()
-    botImage.close()
+    autoPickImage.close()
     maskImage.close()
     enduImage.close()
     

@@ -11,12 +11,13 @@ on:
       - "src/**.ts"
       - "*.json"
       - "rollup.config.mjs"
-      - "templates/mlp/canvas*.png"
-      - "templates/mlp/bot*.png"
-      - "templates/mlp/mask*.png"
-      - "templates/mlp/endu*.png"
-      - "templates/mlp/endu_template.json"
-      - "templates/mlp/version.txt"
+      - "templates/*/autopick*.png"
+      - "templates/*/canvas*.png"
+      - "templates/*/endu*.png"
+      - "templates/*/endu_template.json"
+      - "templates/*/mask*.png"
+      - "templates/*/template.json"
+      - "templates/*/version.txt"
 
 permissions:
   contents: read
@@ -39,7 +40,6 @@ jobs:
     - name: Build MLP template
       run: |
         python3 -m pip install --upgrade pip
-        pip3 install flake8 pytest
         if [ -f ./.build/template_assembler/requirements.txt ]; then pip install -r ./.build/template_assembler/requirements.txt; fi
         python3 .build/template_assembler/assemble_template.py templates/mlp
     
@@ -56,8 +56,8 @@ jobs:
     
     - name: Copy canvas files
       run: |  
-        # ./dist already exists
-        cp -f ./templates/mlp/bot.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./templates/mlp/version.txt ./dist
+        mkdir -m ./dist/mlp
+        cp -f ./templates/mlp/autopick.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./templates/mlp/version.txt ./dist/mlp
 
     - name: Produce build artifacts
       uses: actions/upload-artifact@v3
@@ -66,18 +66,18 @@ jobs:
         path: |
           dist
 
-    # # creds were broken in AAD so this will no longer work
-    # - name: Azure login
-    #   uses: azure/login@v1
-    #   with:
-    #     creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
-    # 
-    # - name: Upload to blob storage
-    #   uses: azure/CLI@v1
-    #   with:
-    #     inlineScript: |
-    #       az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
-    # 
-    # - name: Azure logout
-    #   run: az logout
-    #   if: always()
+    # creds will expire around 2024-06-16
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
+    
+    - name: Upload to blob storage
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
+    
+    - name: Azure logout
+      run: az logout
+      if: always()
