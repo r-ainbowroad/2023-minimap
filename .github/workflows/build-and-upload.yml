@@ -56,7 +56,7 @@ jobs:
     
     - name: Copy canvas files
       run: |  
-        mkdir -m ./dist/mlp
+        mkdir -p ./dist/mlp
         cp -f ./templates/mlp/autopick.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./templates/mlp/version.txt ./dist/mlp
 
     - name: Produce build artifacts
