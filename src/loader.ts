@@ -12,7 +12,7 @@
 
 import {gm_fetch, headerStringToObject} from "./utils";
 
-const url = "https://ponyplace.z19.web.core.windows.net/minimap.user.js";
+const url = "http://ponyplace-cdn.ferrictorus.com/minimap.user.js";
 
 (async function () {
   let etag: string | undefined;

@@ -1,7 +1,7 @@
 {
   "name": "r/place MLP Minimap",
   "author": "r/place MLP Minimap Authors",
-  "description": "Minimap overlay and bot for r/place",
+  "description": "Minimap overlay and automatic selection of pixel + color for r/place",
   "namespace": "https://place.equestria.dev/",
   "grant": [
     "GM.xmlHttpRequest",
@@ -12,11 +12,12 @@
     "https://hot-potato.reddit.com/embed*",
     "https://place.equestria.dev/embed*"
   ],
-  "downloadURL": "https://ponyplace.z19.web.core.windows.net/loader.user.js",
-  "updateURL": "https://ponyplace.z19.web.core.windows.net/loader.user.js",
+  "downloadURL": "http://ponyplace-cdn.ferrictorus.com/loader.user.js",
+  "updateURL": "http://ponyplace-cdn.ferrictorus.com/loader.user.js",
   "connect": [
     "raw.githubusercontent.com",
     "media.githubusercontent.com",
-    "ponyplace.z19.web.core.windows.net"
+    "ponyplace.z19.web.core.windows.net",
+    "ponyplace-cdn.ferrictorus.com"
   ]
 }
