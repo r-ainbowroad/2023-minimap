@@ -2,14 +2,14 @@
 	"enduInfo": {
 		"contact": "https://discord.gg/bronyplace #diplomacy",
 		"source": "https://ponyplace.z19.web.core.windows.net/mlp/endu.png",
-		"name": "maneplace bronies"
+		"name": "PonyPlace / ManePlace bronies"
 	},
 	"templates": [
 		{
 			"name": "dash and book border",
 			"images": ["source/primary1_priority.png"],
-			"x": 586,
-			"y": 225,
+			"x": 516,
+			"y": 680,
 			"priority": 10,
 			"autopick": true,
 			"pony": true
@@ -17,8 +17,8 @@
 		{
 			"name": "title bar and ponies around book",
 			"images": ["source/primary1.png"],
-			"x": 586,
-			"y": 220,
+			"x": 516,
+			"y": 675,
 			"priority": 9,
 			"autopick": true,
 			"pony": true

@@ -12,7 +12,7 @@ palettes = [
     ],
 ]
 
-canvasSize = (2000, 2000)
+canvasSize = (1000, 1000)
 palette = palettes[0]
 
 def loadTemplate(subfolder):
@@ -185,7 +185,7 @@ def generatePriorityMask(templateEntry, image):
     priority = 1
     if "priority" in templateEntry:
         priority = int(templateEntry["priority"])
-        if priority < 1 or priority > 25:
+        if priority < 1 or priority > 10:
             raise ValueError("{0} priority out of acceptable range".format(templateEntry["name"]))
         
     priority *= 23

@@ -1,14 +1,14 @@
 {
-    "faction": "maneplace bronies",
+    "faction": "PonyPlace / ManePlace bronies",
     "contact": "https://discord.gg/bronyplace #diplomacy",
     "templates": [
         {
-            "name": "assembled template for maneplace bronies",
+            "name": "assembled template for PonyPlace / ManePlace bronies",
             "sources": [
-                "https://ponyplace.z19.web.core.windows.net/endu.png"
+                "https://ponyplace.z19.web.core.windows.net/mlp/endu.png"
             ],
-            "x": 586,
-            "y": 220
+            "x": 516,
+            "y": 675
         }
     ]
 }

@@ -55,19 +55,19 @@ import {AsyncWorkQueue} from './utils';
   const rPlaceTemplateNames: Array<string> = [];
   const rPlaceTemplates = new Map();
 
-  // const githubTemplateUrlBase = "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/main/templates";
-  const githubLfsTemplateUrlBase = "https://media.githubusercontent.com/media/r-ainbowroad/2023-minimap/main/templates";
-  const getGithubLfsTemplateUrl = function (templateName: string, type: string) {
-    return `${githubLfsTemplateUrlBase}/${templateName}/${type}.png`;
-  };
-  const addGithubLfsTemplate = function (templateName: string, options) {
-    rPlaceTemplates.set(templateName, {
-      canvasUrl: getGithubLfsTemplateUrl(templateName, "canvas"),
-      autoPickUrl: options.autoPick ? getGithubLfsTemplateUrl(templateName, "autoPick") : undefined,
-      maskUrl: options.mask ? getGithubLfsTemplateUrl(templateName, "mask") : undefined,
-    });
-    rPlaceTemplateNames.push(templateName);
-  };
+  // // const githubTemplateUrlBase = "https://raw.githubusercontent.com/r-ainbowroad/2023-minimap/main/templates";
+  // const githubLfsTemplateUrlBase = "https://media.githubusercontent.com/media/r-ainbowroad/2023-minimap/main/templates";
+  // const getGithubLfsTemplateUrl = function (templateName: string, type: string) {
+  //   return `${githubLfsTemplateUrlBase}/${templateName}/${type}.png`;
+  // };
+  // const addGithubLfsTemplate = function (templateName: string, options) {
+  //   rPlaceTemplates.set(templateName, {
+  //     canvasUrl: getGithubLfsTemplateUrl(templateName, "canvas"),
+  //     autoPickUrl: options.autoPick ? getGithubLfsTemplateUrl(templateName, "autoPick") : undefined,
+  //     maskUrl: options.mask ? getGithubLfsTemplateUrl(templateName, "mask") : undefined,
+  //   });
+  //   rPlaceTemplateNames.push(templateName);
+  // };
   
   const azureBlobTemplateUrlBase = "https://ponyplace.z19.web.core.windows.net";
   const getAzureBlobTemplateUrl = function (templateName: string, type: string) {
@@ -83,9 +83,11 @@ import {AsyncWorkQueue} from './utils';
   };
 
   addAzureBlobTemplate("mlp", { autoPick: true, mask: true });
-  addAzureBlobTemplate("r-ainbowroad", { autoPick: false, mask: false });
-  addAzureBlobTemplate("spain", { autoPick: false, mask: false });
-  addAzureBlobTemplate("phoenixmc", { autoPick: false, mask: false });
+  
+  // allies that haven't updated their canvas to support 2023
+  // addAzureBlobTemplate("r-ainbowroad", { autoPick: false, mask: false });
+  // addAzureBlobTemplate("spain", { autoPick: false, mask: false });
+  // addAzureBlobTemplate("phoenixmc", { autoPick: false, mask: false });
   
   let rPlaceTemplateName;
   let rPlaceTemplate;
