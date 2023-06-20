@@ -10,7 +10,7 @@
  *
  **/
 
-import {gm_fetch, headerStringToObject} from "../utils";
+import {AsyncWorkQueue, gm_fetch, headerStringToObject, waitMs} from "../utils";
 
 export class TemplatePixels {
   #image: ImageData;
@@ -35,6 +35,18 @@ export class TemplatePixels {
 
   drawTo(canvas: CanvasRenderingContext2D) {
     canvas.putImageData(this.#image, 0, 0);
+  }
+
+  getDithered3x(): ImageData {
+    const ret = new ImageData(this.#image.width * 3, this.#image.height * 3);
+    for (let y = 0; y < this.#image.height; ++y)
+      for (let x = 0; x < this.#image.width; ++x) {
+        const sourceLoc = (y * this.#image.width + x) * 4;
+        const destLoc = ((y * 3 + 1) * ret.width + (x * 3 + 1)) * 4;
+        for (let i = 0; i < 4; ++i)
+          ret.data[destLoc + i] = this.#image.data[sourceLoc + i];
+      }
+    return ret;
   }
 }
 
@@ -144,5 +156,26 @@ export class ImageTemplate implements Template {
     }
     return new ImageTemplate(template.getWidth(), template.getHeight(), template, templateURL, mask,
                              maskURL);
+  }
+}
+
+export async function updateLoop(workQueue: AsyncWorkQueue, getTemplate: () => Template,
+                                 applyTemplate: () => void) {
+  while (true) {
+    try {
+      const result = await workQueue.enqueue(async () => {
+        const result = await getTemplate().updateIfDifferent();
+        if (result.startsWith("MaybeChanged"))
+          applyTemplate();
+        return result;
+      });
+      if (result == 'MaybeChangedCached' || result == 'NotChanged')
+        await waitMs(30 * 1000);
+      else if (result == 'MaybeChangedNotCached')
+        await waitMs(300 * 1000);
+    } catch(err) {
+      console.error("Error updating template", err);
+      await waitMs(60 * 1000);
+    }
   }
 }

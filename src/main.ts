@@ -11,46 +11,31 @@
  **/
 
 import {html} from 'uhtml';
+import {waitForDocumentLoad, getMostLikelyCanvas, RedditCanvas, getRedditCanvas} from './canvas';
 import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} from './minimap/minimap-components';
 import {createMinimapUI} from './minimap/minimap-ui';
-import {ImageTemplate, Template} from './template/template';
-import {AsyncWorkQueue} from './utils';
+import {overlay} from './overlay';
+import {ImageTemplate, Template, updateLoop} from './template/template';
+import {AsyncWorkQueue, waitMs} from './utils';
 
 (async function () {
-  const embed: MonaLisa.Embed = await new Promise((resolve) => {
-    let interval = setInterval(() => {
-      try {
-        const embed = document.querySelector("mona-lisa-embed") as MonaLisa.Embed;
-        console.log("Found embed. Good!");
-        resolve(embed);
-        clearInterval(interval);
-      } catch (e) {
-        console.error("Found embed. Trying again...");
-      }
-    }, 1000);
-  })!;
+  await waitForDocumentLoad();
+  await waitMs(1000);
+  let canvas = getMostLikelyCanvas();
+  if (!canvas) {
+    logError("Could not find a canvas, shutting down overlay.")
+    return;
+  }
+  log("Found canvas: ", canvas);
 
-  const rPlaceCanvas: HTMLCanvasElement = await new Promise((resolve) => {
-    let interval = setInterval(() => {
-      try {
-        const rPlaceCanvas: HTMLCanvasElement = embed!.shadowRoot!
-          .querySelector("mona-lisa-share-container mona-lisa-canvas")!
-          .shadowRoot!.querySelector("canvas")!;
-        console.log("Found canvas. Good!");
-        resolve(rPlaceCanvas);
-        clearInterval(interval);
-      } catch (e) {
-        console.error("Failed to attach to canvas. Trying again...");
-      }
-    }, 1000);
-  })!;
-
-  // Move camera to center
-  embed.camera.applyPosition({
-    x: Math.floor(rPlaceCanvas.width / 2),
-    y: Math.floor(rPlaceCanvas.height / 2),
-    zoom: 0,
-  });
+  var redditCanvas: RedditCanvas | null = null;
+  const origin = new URL(window.location.href).origin;
+  if (origin.endsWith('reddit.com') || origin.endsWith('place.equestria.dev')) {
+    try {
+      redditCanvas = await getRedditCanvas();
+      canvas = redditCanvas.canvas;
+    } finally {}
+  }
 
   const rPlaceTemplateNames: Array<string> = [];
   const rPlaceTemplates = new Map();
@@ -102,6 +87,21 @@ import {AsyncWorkQueue} from './utils';
     rPlaceTemplate = template;
   };
   setRPlaceTemplate(rPlaceTemplateNames[0]);
+
+  if (!redditCanvas) {
+    // Start overlay async.
+    overlay(canvas, rPlaceTemplate);
+    // Don't load the settings interface, some pixel game sites will ban you for mousedown/mouseup
+    // events.
+    return;
+  }
+
+  // Move camera to center
+  redditCanvas.embed.camera.applyPosition({
+    x: Math.floor(canvas.width / 2),
+    y: Math.floor(canvas.height / 2),
+    zoom: 0,
+  });
 
   class Resizer {
     constructor(elResizer, elBlock, callback = () => {}) {
@@ -198,7 +198,7 @@ import {AsyncWorkQueue} from './utils';
   const coordinateBlock = await new Promise((resolve) => {
     let interval = setInterval(() => {
       try {
-        const coordinateBlock = embed!.shadowRoot!
+        const coordinateBlock = redditCanvas!.embed!.shadowRoot!
           .querySelector("mona-lisa-coordinates")!
           .shadowRoot!.querySelector("div")!;
         console.log("Found coordinate block. Good!");
@@ -218,17 +218,17 @@ import {AsyncWorkQueue} from './utils';
   const settingsBlock = minimapUI.settingsBlock;
 
   const maskCanvas = document.createElement("canvas")!;
-  maskCanvas.width = rPlaceCanvas.width;
-  maskCanvas.height = rPlaceCanvas.height;
+  maskCanvas.width = canvas.width;
+  maskCanvas.height = canvas.height;
   const maskCtx = maskCanvas.getContext("2d")!;
 
   let updateTemplate: () => Promise<void>;
 
   async function downloadCanvas() {
     // Move camera to center. The entire canvas isn't loaded unless we do this.
-    embed.camera.applyPosition({
-      x: Math.floor(rPlaceCanvas.width / 2),
-      y: Math.floor(rPlaceCanvas.height / 2),
+    redditCanvas!.embed.camera.applyPosition({
+      x: Math.floor(canvas!.width / 2),
+      y: Math.floor(canvas!.height / 2),
       zoom: 0,
     });
 
@@ -237,7 +237,7 @@ import {AsyncWorkQueue} from './utils';
 
     const downloadLink = document.createElement('a');
     downloadLink.setAttribute('download', 'rplace.png');
-    rPlaceCanvas.toBlob((blob) => {
+    canvas!.toBlob((blob) => {
       const url = URL.createObjectURL(blob!);
       downloadLink.setAttribute('href', url);
       downloadLink.click();
@@ -381,28 +381,13 @@ import {AsyncWorkQueue} from './utils';
     });
   };
   await updateTemplate();
-
-  (async () => {
-    // We just downloaded the template, so wait before checking again.
-    await waitMs(60 * 1000);
-    while (true) {
-      try {
-        const result = await templateWorkQueue.enqueue(async () => {
-          const result = await template!.updateIfDifferent();
-          if (result.startsWith("MaybeChanged"))
-            applyTemplate(template!);
-          return result;
-        });
-        if (result == 'MaybeChangedCached' || result == 'NotChanged')
-          await waitMs(30 * 1000);
-        else if (result == 'MaybeChangedNotCached')
-          await waitMs(300 * 1000);
-      } catch(err) {
-        console.error("Error updating template", err);
-        await waitMs(60 * 1000);
-      }
-    }
-  })();
+  // We just downloaded the template, so wait before checking again.
+  await waitMs(60 * 1000);
+  updateLoop(templateWorkQueue, () => {
+    return template!;
+  }, () => {
+    applyTemplate(template!);
+  });
 
   function loadMask() {
     const maskData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height).data;
@@ -417,13 +402,13 @@ import {AsyncWorkQueue} from './utils';
   const NEXT_ART_MIN_DIST = 100; // art within this range is considered the same
   let currentLocationIndex: number | null = null;
   function findNextArt() {
-    const templateData = minimapUI.imageCanvasCtx.getImageData(0, 0, rPlaceCanvas.width, rPlaceCanvas.height).data;
+    const templateData = minimapUI.imageCanvasCtx.getImageData(0, 0, canvas!.width, canvas!.height).data;
 
     const locations: Array<{x: number, y: number}> = [];
     for (let i = 0; i < templateData.length; i += 4) {
       if (templateData[i + 3] === 0) continue;
-      const x = (i / 4) % rPlaceCanvas.width;
-      const y = Math.floor(i / 4 / rPlaceCanvas.width);
+      const x = (i / 4) % canvas!.width;
+      const y = Math.floor(i / 4 / canvas!.width);
 
       const isNearOtherArt = !!locations.find(
         (loc) => Math.abs(x - loc.x) < NEXT_ART_MIN_DIST && Math.abs(y - loc.y) < NEXT_ART_MIN_DIST
@@ -452,7 +437,7 @@ import {AsyncWorkQueue} from './utils';
       }
       const nextLocation = sortedLocations[currentLocationIndex];
       console.log(`Moving to art at: [x: ${nextLocation.x}, y: ${nextLocation.y}]`);
-      embed.camera.applyPosition(nextLocation);
+      redditCanvas!.embed.camera.applyPosition(nextLocation);
     }
   }
 
@@ -531,7 +516,7 @@ import {AsyncWorkQueue} from './utils';
     for (let i = 0; i < diff.length; i++) {
       const coords = diff[i];
       const [x, y] = coords;
-      const maskValue = rPlaceMask![x + y * rPlaceCanvas.width];
+      const maskValue = rPlaceMask![x + y * canvas!.width];
       if (maskValue === 0) {
         continue;
       }
@@ -573,7 +558,7 @@ import {AsyncWorkQueue} from './utils';
     minimapUI.recalculateImagePos(posParser.pos);
   });
 
-  const paletteButtons = embed.shadowRoot!
+  const paletteButtons = redditCanvas.embed.shadowRoot!
     .querySelector("mona-lisa-color-picker")!
     .shadowRoot!.querySelectorAll(".palette button.color")! as NodeListOf<HTMLElement>;
   const palette: number[][] = [];
@@ -604,7 +589,7 @@ import {AsyncWorkQueue} from './utils';
       if (diff[correctColorID] > diff[i]) correctColorID = i;
     }
 
-    embed.selectedColor = palette[correctColorID][3];
+    redditCanvas!.embed.selectedColor = palette[correctColorID][3];
   }
 
   function intToHex(int1) {
@@ -624,8 +609,8 @@ import {AsyncWorkQueue} from './utils';
   });
 
   const autoPickCanvas = document.createElement("canvas");
-  autoPickCanvas.width = rPlaceCanvas.width;
-  autoPickCanvas.height = rPlaceCanvas.height;
+  autoPickCanvas.width = canvas.width;
+  autoPickCanvas.height = canvas.height;
   const autoPickCtx = autoPickCanvas.getContext("2d")!;
 
   function getDiff(autoPickCanvasWidth, autoPickCanvasHeight, autoPickCtx, ctx): [number[][], number] {
@@ -652,14 +637,6 @@ import {AsyncWorkQueue} from './utils';
     return [diff, nCisPixels];
   }
 
-  function waitMs(ms) {
-    return new Promise<void>((resolve) =>
-      setTimeout(() => {
-        resolve();
-      }, ms)
-    );
-  }
-
   function log(...args) {
     console.log(`[${new Date().toISOString()}]`, ...args);
   }
@@ -676,7 +653,7 @@ import {AsyncWorkQueue} from './utils';
       autoPickCtx.clearRect(0, 0, autoPickCanvas.width, autoPickCanvas.height);
       autoPickCtx.drawImage(minimapUI.imageCanvas, 0, 0);
       autoPickCtx.globalCompositeOperation = "source-in";
-      autoPickCtx.drawImage(rPlaceCanvas, 0, 0);
+      autoPickCtx.drawImage(canvas, 0, 0);
       autoPickCtx.globalCompositeOperation = "source-over";
 
       // Compute the diff
@@ -695,32 +672,32 @@ import {AsyncWorkQueue} from './utils';
         if (rPlaceTemplate.autoPickUrl === undefined) {
           return;
         }
-        embed.wakeUp();
+        redditCanvas!.embed.wakeUp();
 
         if (settings.getSetting("autoPickstability").enabled) {
           // Move camera to center
-          embed.camera.applyPosition({
-            x: Math.floor(rPlaceCanvas.width / 2),
-            y: Math.floor(rPlaceCanvas.height / 2),
+          redditCanvas!.embed.camera.applyPosition({
+            x: Math.floor(canvas.width / 2),
+            y: Math.floor(canvas.height / 2),
             zoom: 0,
           });
         }
 
-        const timeOutPillBlock = embed.shadowRoot!
+        const timeOutPillBlock = redditCanvas!.embed.shadowRoot!
           .querySelector("mona-lisa-status-pill")!
           .shadowRoot!.querySelector("div")! as HTMLElement;
         log(
           `Status: ${percentage}% (${nMissingPixels}/${nCisPixels}) [${timeOutPillBlock.innerText}]`
         );
 
-        if (!embed.nextTileAvailableIn && diff.length > 0) {
+        if (!redditCanvas!.embed.nextTileAvailableIn && diff.length > 0) {
           try {
             const randPixel = selectRandomPixel(diff);
             const imageDataRight = minimapUI.imageCanvasCtx.getImageData(randPixel.x, randPixel.y, 1, 1);
             autoColorPick(imageDataRight);
-            embed.camera.applyPosition(randPixel);
-            embed.showColorPicker = true;
-            const selectedColor = embed.selectedColor;
+            redditCanvas!.embed.camera.applyPosition(randPixel);
+            redditCanvas!.embed.showColorPicker = true;
+            const selectedColor = redditCanvas!.embed.selectedColor;
             log(`Ready to place pixel [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
           } catch(err) {
             console.error("Error getting pixel to place", err);

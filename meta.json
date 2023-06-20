@@ -10,7 +10,10 @@
   ],
   "include": [
     "https://hot-potato.reddit.com/embed*",
-    "https://place.equestria.dev/embed*"
+    "https://garlic-bread.reddit.com/embed*",
+    "https://place.equestria.dev/embed*",
+    "https://pxls.space/*",
+    "https://rplace.tk/*"
   ],
   "downloadURL": "http://ponyplace-cdn.ferrictorus.com/loader.user.js",
   "updateURL": "http://ponyplace-cdn.ferrictorus.com/loader.user.js",
