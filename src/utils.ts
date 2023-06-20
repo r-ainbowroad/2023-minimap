@@ -68,3 +68,11 @@ export class AsyncWorkQueue {
     this.#working = false;
   }
 };
+
+export function waitMs(ms) {
+  return new Promise<void>((resolve) =>
+    setTimeout(() => {
+      resolve();
+    }, ms)
+  );
+}
