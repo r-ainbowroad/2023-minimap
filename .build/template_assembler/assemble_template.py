@@ -276,7 +276,8 @@ def writeEnduInfos(enduGroups, enduInfo, subfolder):
         "templates": []
     }
     
-    for (groupName, (enduImage, enduExtents)) in enduGroups.items():
+    # groups are in reverse order due to how we render
+    for (groupName, (enduImage, enduExtents)) in reversed(enduGroups.items()):
         escapedName = urllib.parse.quote_plus(groupName)
         imageName = "endu_" + escapedName
         
