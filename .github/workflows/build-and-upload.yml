@@ -70,9 +70,9 @@ jobs:
                 fi
             done
             for copyFile in `ls -1 ./templates/$copyTemplate/endu*`; do
-                echo "Checking ./templates/$copyTemplate/$copyFile"
-                if [[ -f ./templates/$copyTemplate/$copyFile ]]; then
-                    cp -f ./templates/$copyTemplate/$copyFile ./dist/$copyTemplate
+                echo "Checking $copyFile"
+                if [[ -f $copyFile ]]; then
+                    cp -f $copyFile ./dist/$copyTemplate
                 fi
             done
         done
