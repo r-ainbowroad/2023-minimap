@@ -61,7 +61,7 @@ import {AsyncWorkQueue, waitMs} from './utils';
   const addAzureBlobTemplate = function (templateName: string, options) {
     rPlaceTemplates.set(templateName, {
       canvasUrl: getAzureBlobTemplateUrl(templateName, "canvas"),
-      autoPickUrl: options.autoPick ? getAzureBlobTemplateUrl(templateName, "autoPick") : undefined,
+      autoPickUrl: options.autoPick ? getAzureBlobTemplateUrl(templateName, "autopick") : undefined,
       maskUrl: options.mask ? getAzureBlobTemplateUrl(templateName, "mask") : undefined,
     });
     rPlaceTemplateNames.push(templateName);
