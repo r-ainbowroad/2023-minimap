@@ -12,8 +12,7 @@
     "https://hot-potato.reddit.com/embed*",
     "https://garlic-bread.reddit.com/embed*",
     "https://place.equestria.dev/embed*",
-    "https://pxls.space/*",
-    "https://rplace.tk/*"
+    "https://pxls.space/*"
   ],
   "downloadURL": "http://ponyplace-cdn.ferrictorus.com/loader.user.js",
   "updateURL": "http://ponyplace-cdn.ferrictorus.com/loader.user.js",
