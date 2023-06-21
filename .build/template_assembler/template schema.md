@@ -17,10 +17,10 @@ Information that will be put in the generated Endu-style template
     string
     * some kind of way to get in contact with whoever owns this template e.g. discord links, emails, whatever
 
-* `source`
+* `source_root`
 
     string
-    * the URI that the produced endu.png image will be available at
+    * the URI (ending with a slash) that the produced endu images will be available under
 
 * `name`
 
@@ -50,14 +50,15 @@ The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwis
     * "edge" pixels receive additional priority automatically
         * edge pixels are non-transparent pixels which are either on the boundary of the image or have a transparent pixel in the surrounding 8 pixels
 
-* `pony`
+* `export_group`
 
-    boolean (or something that parses to a bool)
-    * optional, defaults to false
-    * if true, marks this image as part of our faction's things for export in an Endu template for integration with other factions
-    * enabling this for an Endu template means **all the things in it** are considered pony
+    string (should be ~8 characters long)
+    * optional, defaults to empty string
+    * if not empty string, marks this template entry as part of our faction's things for export in an Endu template for integration with other factions
+        * templates with the same value are grouped together into one image - all templates with the same tag should be close to each other
+        * enabling this for a referenced Endu template means **all the things in it** are exported
 
-* `enabled_after`
+* `enabled_utc`
 
     integer
     * optional, defaults to beginning of time

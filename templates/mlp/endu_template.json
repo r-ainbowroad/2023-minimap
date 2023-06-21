@@ -3,12 +3,12 @@
     "contact": "https://discord.gg/bronyplace #diplomacy",
     "templates": [
         {
-            "name": "assembled template for PonyPlace / ManePlace bronies",
+            "name": "PonyPlace / ManePlace bronies - starter",
             "sources": [
-                "https://ponyplace.z19.web.core.windows.net/mlp/endu.png"
+                "https://ponyplace.z19.web.core.windows.net/mlp/endu_starter.png"
             ],
-            "x": 516,
-            "y": 675
+            "x": 405,
+            "y": 700
         }
     ]
 }

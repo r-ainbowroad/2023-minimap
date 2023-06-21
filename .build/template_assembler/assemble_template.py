@@ -2,6 +2,7 @@ from PIL import Image, ImageDraw
 import os
 import sys
 import urllib.request
+import urllib.parse
 import json
 import datetime
 
@@ -238,6 +239,13 @@ def generateTransparencyMask(image):
     return image.getchannel("A").point(lambda a: 0 if a == 0 else 255)
 
 
+def getEnduGroup(enduGroups, enduTag):
+    if not enduTag in enduGroups:
+        enduImage = createCanvas()
+        enduExtents = dict()
+        enduGroups[enduTag] = (enduImage, enduExtents)
+    return enduGroups[enduTag]
+
 def generateEnduImage(enduImage, enduExtents):
     if (enduExtents["x2"] > canvasSize[0] or
         enduExtents["y2"] > canvasSize[1] or
@@ -261,21 +269,31 @@ def updateExtents(templateEntry, image, enduExtents):
         enduExtents["x2"] = max(enduExtents["x2"], templateEntry["x"] + image.width)
         enduExtents["y2"] = max(enduExtents["y2"], templateEntry["y"] + image.height)
 
-def writeEnduTemplate(enduExtents, enduInfo, subfolder):
+def writeEnduInfos(enduGroups, enduInfo, subfolder):
     outputObject = {
         "faction": enduInfo["name"],
         "contact": enduInfo["contact"],
-        "templates": [
-            {
-                "name": "assembled template for " + enduInfo["name"],
-                "sources": [
-                    enduInfo["source"]
-                ],
-                "x": enduExtents["x1"],
-                "y": enduExtents["y1"]
-            }
-        ]
+        "templates": []
     }
+    
+    for (groupName, (enduImage, enduExtents)) in enduGroups.items():
+        escapedName = urllib.parse.quote_plus(groupName)
+        imageName = "endu_" + escapedName
+        
+        with generateEnduImage(enduImage, enduExtents) as enduCrop:
+            writeCanvas(enduCrop, subfolder, imageName)
+        enduImage.close()
+        
+        groupInfo = {
+            "name": enduInfo["name"] + " - " + groupName,
+            "sources": [
+                enduInfo["source_root"] + imageName + ".png"
+            ],
+            "x": enduExtents["x1"],
+            "y": enduExtents["y1"]
+        }
+        
+        outputObject["templates"].append(groupInfo)
     
     with open(os.path.join(subfolder, "endu_template.json"), "w", encoding="utf-8") as f:
         f.write(json.dumps(outputObject, indent=4))
@@ -308,9 +326,9 @@ def main(subfolder):
     canvasImage = createCanvas()
     autoPickImage = createCanvas()
     maskImage = createCanvas(isMask=True)
-    enduImage = createCanvas()
     
-    enduExtents = dict()
+    enduGroups = dict()
+    
     utcNow = int(datetime.datetime.utcnow().timestamp())
     for templateEntry in templates:
         if ("enabled_utc" in templateEntry and int(templateEntry["enabled_utc"]) > utcNow):
@@ -331,24 +349,23 @@ def main(subfolder):
                 eraseFromCanvas(templateEntry, transparencyMaskImage, autoPickImage)
                 eraseFromCanvas(templateEntry, transparencyMaskImage, maskImage, isMask=True)
             
-            if ("pony" in templateEntry and bool(templateEntry["pony"])):
+            if ("export_group" in templateEntry and str(templateEntry["export_group"]) != ""):
+                (enduImage, enduExtents) = getEnduGroup(enduGroups, str(templateEntry["export_group"]))
                 copyTemplateEntryIntoCanvas(templateEntry, image, enduImage)
                 updateExtents(templateEntry, image, enduExtents)
             else:
-                eraseFromCanvas(templateEntry, transparencyMaskImage, enduImage)
+                for (groupName, (enduImage, enduExtents)) in enduGroups.items():
+                    eraseFromCanvas(templateEntry, transparencyMaskImage, enduImage)
     
     writeCanvas(canvasImage, subfolder, "canvas")
     writeCanvas(autoPickImage, subfolder, "autopick")
     writeCanvas(maskImage, subfolder, "mask")
     
-    with generateEnduImage(enduImage, enduExtents) as enduCrop:
-        writeCanvas(enduCrop, subfolder, "endu")
-        writeEnduTemplate(enduExtents, templateFile["enduInfo"], subfolder)
+    writeEnduInfos(enduGroups, templateFile["enduInfo"], subfolder)
     
     canvasImage.close()
     autoPickImage.close()
     maskImage.close()
-    enduImage.close()
     
     updateVersion(subfolder)
 
