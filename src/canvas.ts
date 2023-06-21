@@ -10,6 +10,9 @@
  *
  **/
 
+import {constants} from "./constants";
+import {waitMs} from "./utils";
+
 export function waitForDocumentLoad() {
   return new Promise<void>((resolve) => {
     if (document.readyState == 'complete')
@@ -66,33 +69,27 @@ export class RedditCanvas {
 };
 
 export async function getRedditCanvas() {
-  const embed: MonaLisa.Embed = await new Promise((resolve) => {
-    let interval = setInterval(() => {
-      try {
-        const embed = document.querySelector("mona-lisa-embed") as MonaLisa.Embed;
-        console.log("Found embed. Good!");
-        resolve(embed);
-        clearInterval(interval);
-      } catch (e) {
-        console.error("Could not find `mona-lisa-embed`. Trying again...");
+  for (let tries = constants.MaxSiteSpecificDetectAttempts; tries != 0; --tries) {
+    try {
+      const embed = document.querySelector("mona-lisa-embed") as MonaLisa.Embed;
+      if (!embed) {
+        console.log("Failed to find `mona-lisa-embed`");
+        continue;
       }
-    }, 1000);
-  })!;
-
-  const rPlaceCanvas: HTMLCanvasElement = await new Promise((resolve) => {
-    let interval = setInterval(() => {
-      try {
-        const rPlaceCanvas: HTMLCanvasElement = embed!.shadowRoot!
-          .querySelector("mona-lisa-share-container mona-lisa-canvas")!
-          .shadowRoot!.querySelector("canvas")!;
-        console.log("Found canvas. Good!");
-        resolve(rPlaceCanvas);
-        clearInterval(interval);
-      } catch (e) {
-        console.error("Failed to attach to canvas. Trying again...");
+      const rPlaceCanvas: HTMLCanvasElement = embed!.shadowRoot!
+        .querySelector("mona-lisa-share-container mona-lisa-canvas")!
+        .shadowRoot!.querySelector("canvas")!;
+      if (!rPlaceCanvas) {
+        console.log("Failed to find `mona-lisa-canvas`");
+        continue;
       }
-    }, 1000);
-  })!;
-
-  return new RedditCanvas(rPlaceCanvas, embed);
+      return new RedditCanvas(rPlaceCanvas, embed);
+    } catch(error) {
+      console.log("Failed to get the reddit canvas: ", error);
+    } finally {
+      console.log(`Retries left: ${tries}`);
+      await waitMs(constants.SiteSpecificDetectRetryDelayMs);
+    }
+  }
+  return null;
 }

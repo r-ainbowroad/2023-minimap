@@ -31,10 +31,10 @@ import {AsyncWorkQueue, waitMs} from './utils';
   var redditCanvas: RedditCanvas | null = null;
   const origin = new URL(window.location.href).origin;
   if (origin.endsWith('reddit.com') || origin.endsWith('place.equestria.dev')) {
-    try {
-      redditCanvas = await getRedditCanvas();
+    console.log("Known site detected. Attempting to load site specific handler.");
+    redditCanvas = await getRedditCanvas();
+    if (redditCanvas)
       canvas = redditCanvas.canvas;
-    } finally {}
   }
 
   const rPlaceTemplateNames: Array<string> = [];
@@ -90,6 +90,7 @@ import {AsyncWorkQueue, waitMs} from './utils';
 
   if (!redditCanvas) {
     // Start overlay async.
+    console.log("Failed to find site specific handler. Falling back to overlay.");
     overlay(canvas, rPlaceTemplate);
     // Don't load the settings interface, some pixel game sites will ban you for mousedown/mouseup
     // events.
