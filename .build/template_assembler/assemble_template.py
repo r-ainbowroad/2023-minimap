@@ -362,7 +362,7 @@ def main(subfolder):
     writeCanvas(autoPickImage, subfolder, "autopick")
     writeCanvas(maskImage, subfolder, "mask")
     
-    writeEnduInfos(enduGroups, templateFile["enduInfo"], subfolder)
+    writeEnduInfos(enduGroups, templateFile["endu_info"], subfolder)
     
     canvasImage.close()
     autoPickImage.close()

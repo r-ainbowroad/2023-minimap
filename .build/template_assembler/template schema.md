@@ -1,6 +1,6 @@
 #### schema Template
 
-* `enduInfo`
+* `endu_info`
 
     `EnduInfo`
 
