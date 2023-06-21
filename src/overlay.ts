@@ -91,8 +91,6 @@ export async function overlay(canvas: HTMLCanvasElement, templateDict) {
   overlay.updateOverlayStyle();
   
   const queue = new AsyncWorkQueue();
-
-  await waitMs(60 * 1000);
   // Start the update loop, runs in the background.
   updateLoop(queue, () => {return overlay.template;}, () => {overlay.applyTemplate();});
 }

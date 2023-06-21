@@ -381,8 +381,6 @@ import {AsyncWorkQueue, waitMs} from './utils';
     });
   };
   await updateTemplate();
-  // We just downloaded the template, so wait before checking again.
-  await waitMs(60 * 1000);
   updateLoop(templateWorkQueue, () => {
     return template!;
   }, () => {
