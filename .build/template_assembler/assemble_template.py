@@ -115,7 +115,7 @@ def normalizeImage(convertedImage):
             fixedPixels += 1
             wrongPixels.add((pixel, newColor))
             convertedImage.putpixel(xy, newColor)
-    print("\tfixed " + str(fixedPixels) + " incorrect pixels)
+    print("\tfixed " + str(fixedPixels) + " incorrect pixels")
     for pixel in wrongPixels:
         print("\t\t" + str(pixel))
 
