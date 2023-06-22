@@ -5,12 +5,45 @@ import urllib.request
 import urllib.parse
 import json
 import datetime
+import math
 
 palettes = [
-    [
-        (255, 255, 255),
-        (0, 0, 0),
-    ],
+    set([ # 2k x 2k palette from 2022
+        (180,  74, 192, 255),
+        (0,   163, 104, 255),
+        (54,  144, 234, 255),
+        (109,   0,  26, 255),
+        (156, 105,  38, 255),
+        (73,   58, 193, 255),
+        (255,  56, 129, 255),
+        (137, 141, 144, 255),
+        (255, 180, 112, 255),
+        (126, 237,  86, 255),
+        (109,  72,  47, 255),
+        (222,  16, 127, 255),
+        (0,     0,   0, 255),
+        (148, 179, 255, 255),
+        (0,   204, 120, 255),
+        (0,   117, 111, 255),
+        (255, 248, 184, 255),
+        (0,   158, 170, 255),
+        (228, 171, 255, 255),
+        (255, 153, 170, 255),
+        (129,  30, 159, 255),
+        (255, 255, 255, 255),
+        (0,   204, 192, 255),
+        (137, 141, 144, 255),
+        (212, 215, 217, 255),
+        (255,  69,   0, 255),
+        (81,  233, 244, 255),
+        (81,   82,  82, 255),
+        (190,   0,  57, 255),
+        (106,  92, 255, 255),
+        (255, 214,  53, 255),
+        (255, 168,   0, 255),
+        (255, 255, 255, 255),
+        (36,   80, 164, 255),
+    ]),
 ]
 
 canvasSize = (1000, 1000)
@@ -51,6 +84,40 @@ def writeCanvas(canvas, subfolder, name):
         with canvas.quantize() as quantizedCanvas:
             quantizedCanvas.save(os.path.join(subfolder, name + ".png"))
 
+def colorDistance(color, pixel):
+    elementDeltaSquares = [(colorElement - pixelElement) ** 2 for colorElement, pixelElement in zip(color, pixel)]
+    return math.sqrt(sum(elementDeltaSquares))
+
+def normalizeImage(convertedImage):
+    fixedPixels = 0
+    wrongPixels = set()
+    
+    for y in range(0, convertedImage.height):
+        for x in range(0, convertedImage.width):
+            xy = (x, y)
+            pixel = convertedImage.getpixel(xy)
+            
+            if isTransparent(pixel):
+                convertedImage.putpixel(xy, (0, 0, 0, 0))
+                continue
+            
+            if pixel in palette:
+                continue
+            
+            newDelta = 99999999
+            newColor = None
+            for color in palette:
+                colorDelta = colorDistance(color, pixel)
+                if colorDelta < newDelta:
+                    newColor = color
+                    newDelta = colorDelta
+            
+            fixedPixels += 1
+            wrongPixels.add((pixel, newColor))
+            convertedImage.putpixel(xy, newColor)
+    print("\tfixed " + str(fixedPixels) + " incorrect pixels)
+    for pixel in wrongPixels:
+        print("\t\t" + str(pixel))
 
 def loadTemplateEntryImage(templateEntry, subfolder):
     for imageSource in templateEntry["images"]:
@@ -69,8 +136,8 @@ def loadTemplateEntryImage(templateEntry, subfolder):
             convertedImage.paste(rawImage)
 
             rawImage.close()
-
-            # validate image only contains palette colors?
+            
+            normalizeImage(convertedImage)
             
             return convertedImage
         except Exception as e:
@@ -209,7 +276,6 @@ def generatePriorityMask(templateEntry, image):
                 maskDraw.point(xy, (0, 0, 0, 0))
                 continue
             
-            # maskDraw.point(xy, (priority, priority, priority, 255))
             if isFilledPixelOnEdge(image, knownTransparent, xy):
                 edgePixels.add(xy)
             else:
