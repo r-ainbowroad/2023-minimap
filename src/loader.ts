@@ -10,6 +10,7 @@
  *
  **/
 
+import {constants} from "./constants";
 import {gm_fetch, headerStringToObject} from "./utils";
 
 const url = "http://ponyplace-cdn.ferrictorus.com/minimap.user.js";
@@ -46,7 +47,7 @@ const url = "http://ponyplace-cdn.ferrictorus.com/minimap.user.js";
       } catch(e) {
         console.warn(`Failed to refersh primary script ${e}`);
       }
-    }, 10 * 1000);
+    }, constants.ScriptReloadCheckPeriodMs);
   } else {
     console.log("No ETag in response. Auto refresh on update disabled.");
   }
