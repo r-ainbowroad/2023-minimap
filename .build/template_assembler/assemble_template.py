@@ -104,9 +104,7 @@ def normalizeImage(convertedImage):
             
             if pixel in palette:
                 continue
-            
 
-            
             newDelta = 99999999
             newColor = None
             for color in palette:
@@ -195,6 +193,7 @@ def resolveTemplateFileEntry(templateFileEntry):
             if "frameRate" in enduTemplateEntry:
                 print("Forcing exclusion of animated template {0}".format(localName))
                 converted["autopick"] = False
+                converted["__exclude"] = True
                 converted["forcewidth"] = enduTemplateEntry["frameWidth"]
                 converted["forceheight"] = enduTemplateEntry["frameHeight"]
             
@@ -425,7 +424,10 @@ def main(subfolder):
         with (
         loadTemplateEntryImage(templateEntry, subfolder) as image,
         generateTransparencyMask(image) as transparencyMaskImage):
-            copyTemplateEntryIntoCanvas(templateEntry, image, canvasImage)
+            if ("__exclude" in templateEntry and bool(templateEntry["__exclude"])):
+                eraseFromCanvas(templateEntry, transparencyMaskImage, canvasImage)
+            else:
+                copyTemplateEntryIntoCanvas(templateEntry, image, canvasImage)
             
             if ("autopick" in templateEntry and bool(templateEntry["autopick"])):
                 copyTemplateEntryIntoCanvas(templateEntry, image, autoPickImage)
