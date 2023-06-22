@@ -69,7 +69,7 @@ def copyTemplateEntryIntoCanvas(templateEntry, image, canvas):
         templateEntry["y"] + image.height > canvasSize[1] or
         templateEntry["x"] < 0 or
         templateEntry["y"] < 0):
-        raise ValueError("{0} is not entirely on canvas??".format(templateEntry["name"]))
+        raise ValueError("{0} is not entirely on canvas?? {1}".format(templateEntry["name"], templateEntry))
     
     canvas.alpha_composite(image, (templateEntry["x"], templateEntry["y"]))
 
@@ -85,11 +85,12 @@ def writeCanvas(canvas, subfolder, name):
             quantizedCanvas.save(os.path.join(subfolder, name + ".png"))
 
 def colorDistance(color, pixel):
-    elementDeltaSquares = [(colorElement - pixelElement) ** 2 for colorElement, pixelElement in zip(color, pixel)]
+    elementDeltaSquares = [(colorElement - pixelElement) ** 2 for colorElement, pixelElement in zip(color[0:2], pixel[0:2])]
     return math.sqrt(sum(elementDeltaSquares))
 
 def normalizeImage(convertedImage):
     fixedPixels = 0
+    alphaProblems = 0
     wrongPixels = set()
     
     for y in range(0, convertedImage.height):
@@ -104,6 +105,8 @@ def normalizeImage(convertedImage):
             if pixel in palette:
                 continue
             
+
+            
             newDelta = 99999999
             newColor = None
             for color in palette:
@@ -112,14 +115,23 @@ def normalizeImage(convertedImage):
                     newColor = color
                     newDelta = colorDelta
             
-            fixedPixels += 1
-            wrongPixels.add((pixel, newColor))
+            if pixel[0:2] == newColor[0:2]:
+                alphaProblems += 1
+            else:
+                fixedPixels += 1
+                wrongPixels.add((pixel, newColor))
             convertedImage.putpixel(xy, newColor)
-    print("\tfixed " + str(fixedPixels) + " incorrect pixels")
-    for pixel in wrongPixels:
-        print("\t\t" + str(pixel))
+    
+    if fixedPixels != 0 or alphaProblems != 0:
+        print("\tfixed {0} incorrect pixels and {1} semi-transparent pixels".format(fixedPixels, alphaProblems))
+        for pixel in wrongPixels:
+            print("\t\t" + str(pixel))
 
 def loadTemplateEntryImage(templateEntry, subfolder):
+    # used to erase animations from all shipped images. render a fully opaque mask
+    if "forcewidth" in templateEntry:
+        return createImage((templateEntry["forcewidth"], templateEntry["forceheight"]), isMask = True)
+
     for imageSource in templateEntry["images"]:
         try:
             if imageSource.startswith("http"):
@@ -164,10 +176,6 @@ def resolveTemplateFileEntry(templateFileEntry):
                 print("Missing sources for {0}".format(localName))
                 raise KeyError()
             
-            if "frameRate" in enduTemplateEntry:
-                print("Ignoring animated template {0}".format(localName))
-                continue
-            
             converted = {
                 "name": localName,
                 "images": enduTemplateEntry["sources"],
@@ -175,9 +183,20 @@ def resolveTemplateFileEntry(templateFileEntry):
                 "y": enduTemplateEntry["y"]
             }
             
-            for copyProperty in ["pony", "autopick", "priority"]:
+            for copyProperty in ["export_group", "autopick", "priority"]:
                 if copyProperty in templateFileEntry:
                     converted[copyProperty] = templateFileEntry[copyProperty]
+            
+            if converted["x"] < 0 or converted["y"] < 0:
+                print("Forcing Endu template {0} with negative coordinates to positive".format(localName))
+                converted["x"] = abs(converted["x"])
+                converted["y"] = abs(converted["y"])
+            
+            if "frameRate" in enduTemplateEntry:
+                print("Forcing exclusion of animated template {0}".format(localName))
+                converted["autopick"] = False
+                converted["forcewidth"] = enduTemplateEntry["frameWidth"]
+                converted["forceheight"] = enduTemplateEntry["frameHeight"]
             
             output.append(converted)
         return output
