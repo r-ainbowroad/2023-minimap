@@ -601,13 +601,14 @@ import {AsyncWorkQueue, waitMs} from './utils';
 
   const autoPickTimeout = 5000;
   const autoPickAfterPlaceTimeout = 3000;
-  (async () => {
-    while (true) {
+
+  function autoPick(override: boolean) {
+    templateWorkQueue.enqueue(async () => {
       // Update the minimap image (necessary for checking the diff)
       autoPickCtx.clearRect(0, 0, autoPickCanvas.width, autoPickCanvas.height);
       autoPickCtx.drawImage(minimapUI.imageCanvas, 0, 0);
       autoPickCtx.globalCompositeOperation = "source-in";
-      autoPickCtx.drawImage(canvas, 0, 0);
+      autoPickCtx.drawImage(canvas!, 0, 0);
       autoPickCtx.globalCompositeOperation = "source-over";
 
       // Compute the diff
@@ -622,7 +623,7 @@ import {AsyncWorkQueue, waitMs} from './utils';
         >${percentage}% (${nMissingPixels}/${nCisPixels})</span
       >`;
 
-      if (settings.getSetting("autoPick").enabled && template) {
+      if ((settings.getSetting("autoPick").enabled || override) && template) {
         if (rPlaceTemplate.autoPickUrl === undefined) {
           return;
         }
@@ -631,8 +632,8 @@ import {AsyncWorkQueue, waitMs} from './utils';
         if (settings.getSetting("autoPickstability").enabled) {
           // Move camera to center
           redditCanvas!.embed.camera.applyPosition({
-            x: Math.floor(canvas.width / 2),
-            y: Math.floor(canvas.height / 2),
+            x: Math.floor(canvas!.width / 2),
+            y: Math.floor(canvas!.height / 2),
             zoom: 0,
           });
         }
@@ -644,23 +645,36 @@ import {AsyncWorkQueue, waitMs} from './utils';
           `Status: ${percentage}% (${nMissingPixels}/${nCisPixels}) [${timeOutPillBlock.innerText}]`
         );
 
-        if (!redditCanvas!.embed.nextTileAvailableIn && diff.length > 0) {
+        if ((!redditCanvas!.embed.nextTileAvailableIn || override) && diff.length > 0) {
           try {
             const randPixel = selectRandomPixel(diff);
             const imageDataRight = minimapUI.imageCanvasCtx.getImageData(randPixel.x, randPixel.y, 1, 1);
+            const currentColor = autoPickCtx.getImageData(randPixel.x, randPixel.y, 1, 1);
             autoColorPick(imageDataRight);
             redditCanvas!.embed.camera.applyPosition(randPixel);
             redditCanvas!.embed.showColorPicker = true;
             const selectedColor = redditCanvas!.embed.selectedColor;
-            log(`Ready to place pixel [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}]`);
+            log(`Ready to place pixel [x: ${randPixel.x}, y: ${randPixel.y}, color: ${selectedColor}, current-color: ${currentColor.data}, new-color: ${imageDataRight.data}]`);
           } catch(err) {
             console.error("Error getting pixel to place", err);
           }
-          await waitMs(autoPickAfterPlaceTimeout);
         }
       }
+    });
+  }
 
+  const actions = redditCanvas.embed.shadowRoot!
+    .querySelector("mona-lisa-color-picker")!
+    .shadowRoot!.querySelector('div > div > div.actions')! as HTMLDivElement;
+  const button = document.createElement('button');
+  button.innerText = "Pick Priority Pixel";
+  button.onclick = () => {autoPick(true);};
+  actions.appendChild(button);
+
+  (async () => {
+    while (true) {
       await waitMs(autoPickTimeout);
+      autoPick(false);
     }
-  })().then((r) => {});
+  })();
 })();
