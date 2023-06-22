@@ -311,10 +311,67 @@ import {AsyncWorkQueue, waitMs} from './utils';
   const noSleepAudio = mlpMinimapBlock!.querySelector("#noSleep")! as HTMLAudioElement;
   noSleepAudio.volume = 0.1;
 
+  const paletteButtons = redditCanvas.embed.shadowRoot!
+    .querySelector("mona-lisa-color-picker")!
+    .shadowRoot!.querySelectorAll(".palette button.color")! as NodeListOf<HTMLElement>;
+  const palette: number[][] = [];
+  for (const paletteButton of paletteButtons) {
+    const parsedData = (paletteButton.children[0] as HTMLElement).style.backgroundColor.match(
+      /rgb\(([0-9]{1,3}), ([0-9]{1,3}), ([0-9]{1,3})\)/
+    );
+    const colorID = parseInt(paletteButton.getAttribute("data-color")!);
+    if (parsedData) {
+      palette.push([+parsedData[1], +parsedData[2], +parsedData[3], colorID]);
+    } else {
+      palette.push([0, 0, 0, -1]);
+    }
+  }
+
   let template: Template | undefined = undefined;
   const templateWorkQueue = new AsyncWorkQueue();
 
+  function loadMask() {
+    const maskData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height).data;
+
+    rPlaceMask = new Array(maskCanvas.width * maskCanvas.height);
+    for (let i = 0; i < rPlaceMask.length; i++) {
+      // Grayscale, pick green channel!
+      rPlaceMask[i] = maskData[i * 4 + 1];
+    }
+  }
+
+  function getClosestPalletColor(rgb) {
+    let bestColor;
+    let bestDiff = 255;
+    for (const color of palette) {
+      const diff = Math.abs(rgb[0] - color[0]) + Math.abs(rgb[1] - color[1]) + Math.abs(rgb[2] - color[2]);
+      if (diff === 0)
+        return color;
+      if (diff < bestDiff) {
+        bestDiff = diff;
+        bestColor = color;
+      }
+    }
+    return bestColor;
+  }
+
+  function palettizeTemplate(templ: Template) {
+    const data = templ.template.getImageData();
+    const width = templ.template.getWidth();
+    const height = templ.template.getHeight();
+    for (let i = 0; i < data.length / 4; i++) {
+      const base = i * 4;
+      const currentColor = data.slice(base, base + 3);
+      if (currentColor[0] + currentColor[1] + currentColor[2] === 0) continue;
+      const newColor = getClosestPalletColor(currentColor);
+      data[base] = newColor[0];
+      data[base + 1] = newColor[1];
+      data[base + 2] = newColor[2];
+    }
+  }
+
   const applyTemplate = (templ: Template) => {
+    palettizeTemplate(templ);
     minimapUI.setTemplate(templ);
     minimapUI.recalculateImagePos(posParser.pos);
     maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
@@ -342,16 +399,6 @@ import {AsyncWorkQueue, waitMs} from './utils';
   }, () => {
     applyTemplate(template!);
   });
-
-  function loadMask() {
-    const maskData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height).data;
-
-    rPlaceMask = new Array(maskCanvas.width * maskCanvas.height);
-    for (let i = 0; i < rPlaceMask.length; i++) {
-      // Grayscale, pick green channel!
-      rPlaceMask[i] = maskData[i * 4 + 1];
-    }
-  }
 
   const NEXT_ART_MIN_DIST = 100; // art within this range is considered the same
   let currentLocationIndex: number | null = null;
@@ -511,22 +558,6 @@ import {AsyncWorkQueue, waitMs} from './utils';
   const resizerAction = new Resizer(resizerBlock, mlpMinimapBlock, () => {
     minimapUI.recalculateImagePos(posParser.pos);
   });
-
-  const paletteButtons = redditCanvas.embed.shadowRoot!
-    .querySelector("mona-lisa-color-picker")!
-    .shadowRoot!.querySelectorAll(".palette button.color")! as NodeListOf<HTMLElement>;
-  const palette: number[][] = [];
-  for (const paletteButton of paletteButtons) {
-    const parsedData = (paletteButton.children[0] as HTMLElement).style.backgroundColor.match(
-      /rgb\(([0-9]{1,3}), ([0-9]{1,3}), ([0-9]{1,3})\)/
-    );
-    const colorID = parseInt(paletteButton.getAttribute("data-color")!);
-    if (parsedData) {
-      palette.push([+parsedData[1], +parsedData[2], +parsedData[3], colorID]);
-    } else {
-      palette.push([0, 0, 0, -1]);
-    }
-  }
 
   function autoColorPick(imageData) {
     if (imageData.data[3] !== 255) return;
