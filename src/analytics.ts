@@ -35,6 +35,17 @@ export class Analytics {
     this.#uuid = uuidv4();
   }
 
+  private send(data) {
+    GM.xmlHttpRequest({
+      url: this.#endpoint.toString(),
+      method: 'POST',
+      data: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+  }
+
   async placedPixel(type: string, template: string, pos: {x: number, y: number}, color: number, timestamp: number,
                     nextPixelPlace: {reddit: number, safe: number}) {
     const data = {
@@ -51,14 +62,7 @@ export class Analytics {
       nextPixelPlace: nextPixelPlace
     };
 
-    GM.xmlHttpRequest({
-      url: this.#endpoint.toString(),
-      method: 'POST',
-      data: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
+    this.send(data);
   }
 
   async logError(...args) {
@@ -69,13 +73,19 @@ export class Analytics {
       message: formatLog(...args)
     };
 
-    GM.xmlHttpRequest({
-      url: this.#endpoint.toString(),
-      method: 'POST',
-      data: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
+    this.send(data);
+  }
+
+  async statusUpdate(template: string, correctPixels: number, totalPixels: number) {
+    const data = {
+      id: this.#uuid,
+      event: 'status',
+      timestamp: new Date().getTime() / 1000,
+      template: template,
+      correctPixels: correctPixels,
+      totalPixels: totalPixels
+    };
+
+    this.send(data);
   }
 }

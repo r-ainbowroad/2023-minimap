@@ -662,6 +662,10 @@ function logError(...args) {
       const diff = diffAndCisPixels[0];
       const nCisPixels = diffAndCisPixels[1];
 
+      if (override && Math.random() < 0.01) {
+        analytics.statusUpdate(rPlaceTemplateName, nCisPixels, diff.length);
+      }
+
       // Update the display with current stats
       const nMissingPixels = nCisPixels - diff.length;
       const percentage = ((100 * nMissingPixels) / nCisPixels).toPrecision(3);
