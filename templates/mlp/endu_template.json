@@ -1,9 +1,9 @@
 {
-    "faction": "PonyPlace / ManePlace bronies",
+    "faction": "r/place bronies",
     "contact": "https://discord.gg/bronyplace #diplomacy",
     "templates": [
         {
-            "name": "PonyPlace / ManePlace bronies - starter",
+            "name": "r/place bronies - starter",
             "sources": [
                 "https://ponyplace.z19.web.core.windows.net/mlp/endu_starter.png"
             ],

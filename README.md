@@ -1,19 +1,19 @@
 Hablas Espanol? [Lee esto en su lugar](README.es.md)
 
-# /r/Place 2023 collaborative minimap userscript
+# /r/place 2023 collaborative minimap userscript
 Help [/r/MyLittlePony](https://reddit.com/r/mylittlepony) get a pony on /r/place!
 
 ### I want to help place pixels!
 
-You can install the userscript to help! You just need a browser (Chrome, Edge preferred), a Tampermonkey-like extension, and a Reddit account. [Instructions below](README.md#userscript-instructions).
+You can install the userscript to help! You just need a browser (Chrome or Edge preferred), a Tampermonkey-like extension, and a Reddit account. [Instructions below](README.md#userscript-instructions).
 
 ### I'm from another faction and want to diplomacy!
 
-* MLP / PonyPlace / ManePlace: [Diplomatic contacts](templates/mlp/integration.md#diplomatic-contacts)
+* r/place Bronies: [Diplomatic contacts](templates/mlp/integration.md#diplomatic-contacts)
 
 ### I'm an ally and want to add, change or get art!
 
-* MLP / PonyPlace / ManePlace: We offer an osu!/Endu-style template containing our art, and can accept art either from osu!/Endu templates or as 1:1 images with coordinates. [Integration documentation](templates/mlp/integration.md)
+* r/place Bronies: We offer an osu!/Endu-style template containing our art, and can accept art either from osu!/Endu templates or as 1:1 images with coordinates. [Integration documentation](templates/mlp/integration.md)
 
 ## Userscript instructions
 
