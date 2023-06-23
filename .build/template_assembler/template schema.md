@@ -4,6 +4,14 @@
 
     `EnduInfo`
 
+* `alliance_csv_import`
+
+    string
+    * optional, defaults to empty string
+    * a link to a CSV with names of allied names, endu template links and a column where any value excludes it
+        * each row is converted to an Endu template reference with priority 1 and autopick enabled
+        * all templates imported this way are appended to the templates list
+
 * `templates`
 
     array of `TemplateEntry`

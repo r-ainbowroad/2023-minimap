@@ -222,6 +222,7 @@ def resolveTemplateFileEntry(templateFileEntry):
             return output
         except Exception as e:
             print("Failed to load Endu template for {0}: {1}".format(templateFileEntry["name"], e))
+            return []
     elif "images" in templateFileEntry:
         for requiredProperty in requiredProperties:
             if not requiredProperty in templateFileEntry:
@@ -421,15 +422,59 @@ def updateVersion(subfolder):
         versionFile.write(str(templateVersion))
 
 
-def main(subfolder):
+def loadAllianceTemplatesFromCsv(csvLink, selfSourceRoot):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    }
+    request = urllib.request.Request(csvLink, headers = headers, method = "GET")
+    responseObject = urllib.request.urlopen(request, timeout=5)
+    csvText = responseObject.read().decode("utf-8")
+    
+    outputTemplates = []
+    for line in csvText.split("\n"):
+        chunks = line.strip().split(",")
+        if len(chunks) != 3:
+            print("malformed row")
+            continue
+        
+        (name, enduLink, blacklisted) = chunks
+        if blacklisted != "":
+            print("skipping blacklisted template {0}".format(name))
+            continue
+        
+        if selfSourceRoot in enduLink:
+            print("skipping self {0}".format(name))
+        
+        print("import template {0}".format(name))
+        outputTemplate = {
+            "name": name,
+            "endu": enduLink,
+            "priority": 1,
+            "autopick": True
+        }
+        
+        outputTemplates.append(outputTemplate)
+    return outputTemplates
+
+def getTemplates(templateFile):
+    selfSourceRoot = templateFile["endu_info"]["source_root"]
+    
     # these are in layer order, so higher entries overwrite/take precedence over lower entries
-    templateFile = loadTemplate(subfolder)
+    inputTemplates = templateFile["templates"]
+    if "alliance_csv_import" in templateFile:
+        inputTemplates.extend(loadAllianceTemplatesFromCsv(templateFile["alliance_csv_import"], selfSourceRoot))
     
     # these will be in draw order, so later entries will overwrite earlier entries
     templates = []
-    for templateFileEntry in reversed(templateFile["templates"]):
+    for templateFileEntry in reversed(inputTemplates):
         # endu templates can have multiple entries in them, and they are listed in draw order
         templates.extend(resolveTemplateFileEntry(templateFileEntry))
+    return templates
+
+def main(subfolder):
+    templateFile = loadTemplate(subfolder)
+    templates = getTemplates(templateFile)
     
     canvasImage = createCanvas()
     autoPickImage = createCanvas()

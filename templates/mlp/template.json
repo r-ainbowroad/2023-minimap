@@ -4,6 +4,7 @@
 		"source_root": "https://ponyplace.z19.web.core.windows.net/mlp/",
 		"name": "r/place bronies"
 	},
+	"alliance_csv_import": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRheHSPpggBRGq-qkpJMJsRPYySrz331sNqIRoIO3PEbIwxlENf8uhjJVnE2VLKieruvOH1LjYrw0Cd/pub?output=csv",
 	"templates": [
 		{
 			"name": "dash",
@@ -60,16 +61,6 @@
 			"priority": 3,
 			"autopick": false,
 			"export_group": "ponydev"
-		},
-		{"name": "osu!", "endu": "https://rentry.org/osuplace2023/raw", "priority": 5, "autopick": true},
-		{"name": "r/starwars_place", "endu": "https://rentry.org/starwars_place/raw", "priority": 5, "autopick": true},
-		{"name": "r/PlacePride", "endu": "https://pride.place/template.json", "priority": 5, "autopick": true},
-		{"name": "Trans Place", "endu": "https://trans.gg/template.json", "priority": 5, "autopick": true},
-		{"name": "Taiwan", "endu": "https://rentry.org/placeTW/raw", "priority": 5, "autopick": true},
-		{"name": "r/touhou", "endu": "https://rentry.org/touhouplace2023/raw", "priority": 5, "autopick": true},
-		{"name": "GirlsFrontline + Va11", "endu": "https://rentry.org/PlaceFrontline/raw", "priority": 5, "autopick": true},
-		{"name": "April Knights", "endu": "https://rentry.co/AprilKnights/raw", "priority": 5, "autopick": true},
-		{"name": "pxls.space", "endu": "https://charity.pxls.space/template", "priority": 5, "autopick": true},
-		{"name": "hatsune", "endu": "https://rentry.co/hatsune2023/raw", "priority": 5, "autopick": true}
+		}
 	]
 }
