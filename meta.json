@@ -19,6 +19,7 @@
     "raw.githubusercontent.com",
     "media.githubusercontent.com",
     "ponyplace.z19.web.core.windows.net",
-    "ponyplace-cdn.ferrictorus.com"
+    "ponyplace-cdn.ferrictorus.com",
+    "ponyplace-compute.ferrictorus.com"
   ]
 }
