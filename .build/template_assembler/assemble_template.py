@@ -9,40 +9,38 @@ import math
 
 palettes = [
     set([ # 2k x 2k palette from 2022
-        (180,  74, 192, 255),
-        (0,   163, 104, 255),
-        (54,  144, 234, 255),
-        (109,   0,  26, 255),
-        (156, 105,  38, 255),
-        (73,   58, 193, 255),
-        (255,  56, 129, 255),
-        (137, 141, 144, 255),
-        (255, 180, 112, 255),
-        (126, 237,  86, 255),
-        (109,  72,  47, 255),
-        (222,  16, 127, 255),
         (0,     0,   0, 255),
-        (148, 179, 255, 255),
-        (0,   204, 120, 255),
         (0,   117, 111, 255),
-        (255, 248, 184, 255),
         (0,   158, 170, 255),
-        (228, 171, 255, 255),
-        (255, 153, 170, 255),
-        (129,  30, 159, 255),
-        (255, 255, 255, 255),
+        (0,   163, 104, 255),
+        (0,   204, 120, 255),
         (0,   204, 192, 255),
-        (137, 141, 144, 255),
-        (212, 215, 217, 255),
-        (255,  69,   0, 255),
-        (81,  233, 244, 255),
-        (81,   82,  82, 255),
-        (190,   0,  57, 255),
         (106,  92, 255, 255),
-        (255, 214,  53, 255),
+        (109,   0,  26, 255),
+        (109,  72,  47, 255),
+        (126, 237,  86, 255),
+        (129,  30, 159, 255),
+        (137, 141, 144, 255),
+        (148, 179, 255, 255),
+        (156, 105,  38, 255),
+        (180,  74, 192, 255),
+        (190,   0,  57, 255),
+        (212, 215, 217, 255),
+        (222,  16, 127, 255),
+        (228, 171, 255, 255),
+        (255,  56, 129, 255),
+        (255,  69,   0, 255),
+        (255, 153, 170, 255),
         (255, 168,   0, 255),
+        (255, 180, 112, 255),
+        (255, 214,  53, 255),
+        (255, 248, 184, 255),
         (255, 255, 255, 255),
         (36,   80, 164, 255),
+        (54,  144, 234, 255),
+        (73,   58, 193, 255),
+        (81,   82,  82, 255),
+        (81,  233, 244, 255),
     ]),
 ]
 
@@ -84,9 +82,16 @@ def writeCanvas(canvas, subfolder, name):
         with canvas.quantize() as quantizedCanvas:
             quantizedCanvas.save(os.path.join(subfolder, name + ".png"))
 
-def colorDistance(color, pixel):
+def colorDistanceRawEuclidean(color, pixel):
     elementDeltaSquares = [(colorElement - pixelElement) ** 2 for colorElement, pixelElement in zip(color[0:2], pixel[0:2])]
     return math.sqrt(sum(elementDeltaSquares))
+
+def colorDistancePerceptualEuclidean(color, pixel):
+    weights = [0.3, 0.59, 0.11]
+    elementDelta = [(colorElement - pixelElement) for colorElement, pixelElement in zip(color[0:2], pixel[0:2])]
+    weightedDelta = [weightElement * deltaElement for weightElement, deltaElement in zip(weights, elementDelta)]
+    weightedDeltaSquares = [deltaElement ** 2 for deltaElement in weightedDelta]
+    return math.sqrt(sum(weightedDeltaSquares))
 
 def normalizeImage(convertedImage):
     fixedPixels = 0
@@ -108,7 +113,7 @@ def normalizeImage(convertedImage):
             newDelta = 99999999
             newColor = None
             for color in palette:
-                colorDelta = colorDistance(color, pixel)
+                colorDelta = colorDistancePerceptualEuclidean(color, pixel)
                 if colorDelta < newDelta:
                     newColor = color
                     newDelta = colorDelta
@@ -117,13 +122,20 @@ def normalizeImage(convertedImage):
                 alphaProblems += 1
             else:
                 fixedPixels += 1
-                wrongPixels.add((pixel, newColor))
+                wrongPixels.add((pixel, newColor, newDelta))
             convertedImage.putpixel(xy, newColor)
     
     if fixedPixels != 0 or alphaProblems != 0:
         print("\tfixed {0} incorrect pixels and {1} semi-transparent pixels".format(fixedPixels, alphaProblems))
-        for pixel in wrongPixels:
-            print("\t\t" + str(pixel))
+        maxOops = 0
+        for (original, new, difference) in wrongPixels:
+            maxOops = max(maxOops, difference)
+            print("\t\t{0} -> {1} (delta = {2})".format(original, new, difference))
+        
+        if (maxOops > 5):
+            print("\ttoo broken with max = {0}, excluding from autopick".format(maxOops))
+            return False
+    return True
 
 def loadTemplateEntryImage(templateEntry, subfolder):
     # used to erase animations from all shipped images. render a fully opaque mask
@@ -134,7 +146,8 @@ def loadTemplateEntryImage(templateEntry, subfolder):
         try:
             if imageSource.startswith("http"):
                 headers = {
-                    "User-Agent": "test script (http://www.example.com, 0)",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
                 }
                 request = urllib.request.Request(imageSource, headers = headers, method = "GET")
                 responseObject = urllib.request.urlopen(request, timeout=5)
@@ -147,7 +160,9 @@ def loadTemplateEntryImage(templateEntry, subfolder):
 
             rawImage.close()
             
-            normalizeImage(convertedImage)
+            isClean = normalizeImage(convertedImage)
+            if not isClean:
+                templateEntry["__noauto"] = True
             
             return convertedImage
         except Exception as e:
@@ -158,47 +173,55 @@ def loadTemplateEntryImage(templateEntry, subfolder):
 def resolveTemplateFileEntry(templateFileEntry):
     requiredProperties = ["name", "x", "y"]
     if "endu" in templateFileEntry:
-        target = templateFileEntry["endu"]
-        responseObject = urllib.request.urlopen(target, timeout=5)
-        enduTemplate = json.loads(responseObject.read().decode("utf-8"))
-        
-        output = []
-        for enduTemplateEntry in enduTemplate["templates"]:
-            for requiredProperty in requiredProperties:
-                if not requiredProperty in enduTemplateEntry:
-                    print("Missing required property {1} from {0}".format(templateFileEntry["name"], requiredProperty))
-                    raise KeyError()
-            
-            localName = templateFileEntry["name"] + " -> " + enduTemplateEntry["name"]
-            if not "sources" in enduTemplateEntry:
-                print("Missing sources for {0}".format(localName))
-                raise KeyError()
-            
-            converted = {
-                "name": localName,
-                "images": enduTemplateEntry["sources"],
-                "x": enduTemplateEntry["x"],
-                "y": enduTemplateEntry["y"]
+        try:
+            target = templateFileEntry["endu"]
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
             }
+            request = urllib.request.Request(target, headers = headers, method = "GET")
+            responseObject = urllib.request.urlopen(request, timeout=5)
+            enduTemplate = json.loads(responseObject.read().decode("utf-8"))
             
-            for copyProperty in ["export_group", "autopick", "priority"]:
-                if copyProperty in templateFileEntry:
-                    converted[copyProperty] = templateFileEntry[copyProperty]
-            
-            if converted["x"] < 0 or converted["y"] < 0:
-                print("Forcing Endu template {0} with negative coordinates to positive".format(localName))
-                converted["x"] = abs(converted["x"])
-                converted["y"] = abs(converted["y"])
-            
-            if "frameRate" in enduTemplateEntry:
-                print("Forcing exclusion of animated template {0}".format(localName))
-                converted["autopick"] = False
-                converted["__exclude"] = True
-                converted["forcewidth"] = enduTemplateEntry["frameWidth"]
-                converted["forceheight"] = enduTemplateEntry["frameHeight"]
-            
-            output.append(converted)
-        return output
+            output = []
+            for enduTemplateEntry in enduTemplate["templates"]:
+                for requiredProperty in requiredProperties:
+                    if not requiredProperty in enduTemplateEntry:
+                        print("Missing required property {1} from {0}".format(templateFileEntry["name"], requiredProperty))
+                        raise KeyError()
+                
+                localName = templateFileEntry["name"] + " -> " + enduTemplateEntry["name"]
+                if not "sources" in enduTemplateEntry:
+                    print("Missing sources for {0}".format(localName))
+                    raise KeyError()
+                
+                converted = {
+                    "name": localName,
+                    "images": enduTemplateEntry["sources"],
+                    "x": enduTemplateEntry["x"],
+                    "y": enduTemplateEntry["y"]
+                }
+                
+                for copyProperty in ["export_group", "autopick", "priority"]:
+                    if copyProperty in templateFileEntry:
+                        converted[copyProperty] = templateFileEntry[copyProperty]
+                
+                if converted["x"] < 0 or converted["y"] < 0:
+                    print("Forcing Endu template {0} with negative coordinates to positive".format(localName))
+                    converted["x"] = abs(converted["x"])
+                    converted["y"] = abs(converted["y"])
+                
+                if "frameRate" in enduTemplateEntry:
+                    print("Forcing exclusion of animated template {0}".format(localName))
+                    converted["autopick"] = False
+                    converted["__exclude"] = True
+                    converted["forcewidth"] = enduTemplateEntry["frameWidth"]
+                    converted["forceheight"] = enduTemplateEntry["frameHeight"]
+                
+                output.append(converted)
+            return output
+        except Exception as e:
+            print("Failed to load Endu template for {0}: {1}".format(templateFileEntry["name"], e))
     elif "images" in templateFileEntry:
         for requiredProperty in requiredProperties:
             if not requiredProperty in templateFileEntry:
@@ -424,12 +447,12 @@ def main(subfolder):
         with (
         loadTemplateEntryImage(templateEntry, subfolder) as image,
         generateTransparencyMask(image) as transparencyMaskImage):
-            if ("__exclude" in templateEntry and bool(templateEntry["__exclude"])):
+            if ("__exclude" in templateEntry):
                 eraseFromCanvas(templateEntry, transparencyMaskImage, canvasImage)
             else:
                 copyTemplateEntryIntoCanvas(templateEntry, image, canvasImage)
             
-            if ("autopick" in templateEntry and bool(templateEntry["autopick"])):
+            if ("autopick" in templateEntry and bool(templateEntry["autopick"]) and not "__noauto" in templateEntry):
                 copyTemplateEntryIntoCanvas(templateEntry, image, autoPickImage)
                 with generatePriorityMask(templateEntry, image) as priorityMask:
                     copyTemplateEntryIntoCanvas(templateEntry, priorityMask, maskImage)
