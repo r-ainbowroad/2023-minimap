@@ -61,6 +61,42 @@
 			"priority": 3,
 			"autopick": false,
 			"export_group": "ponydev"
+		},
+		{
+			"name": "crystal earth pony",
+			"images": ["source/crystal_earth.png"],
+			"x": 771,
+			"y": 487,
+			"priority": 9,
+			"autopick": true,
+			"export_group": "maneplace"
+		},
+		{
+			"name": "crystal pegasus pony",
+			"images": ["source/crystal_pegasus.png"],
+			"x": 760,
+			"y": 476,
+			"priority": 8,
+			"autopick": true,
+			"export_group": "maneplace"
+		},
+		{
+			"name": "crystal unicorn pony",
+			"images": ["source/crystal_unicorn.png"],
+			"x": 773,
+			"y": 470,
+			"priority": 8,
+			"autopick": true,
+			"export_group": "maneplace"
+		},
+		{
+			"name": "crystal pony faces",
+			"images": ["source/crystal_faces.png"],
+			"x": 741,
+			"y": 454,
+			"priority": 7,
+			"autopick": true,
+			"export_group": "maneplace"
 		}
 	]
 }
