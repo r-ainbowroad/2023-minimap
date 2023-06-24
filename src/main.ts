@@ -80,6 +80,7 @@ function logError(...args) {
   };
 
   addAzureBlobTemplate("mlp", { autoPick: true, mask: true });
+  addAzureBlobTemplate("mlp_alliance", { autoPick: true, mask: true });
   
   // allies that haven't updated their canvas to support 2023
   // addAzureBlobTemplate("r-ainbowroad", { autoPick: false, mask: false });
@@ -662,7 +663,7 @@ function logError(...args) {
       const diff = diffAndCisPixels[0];
       const nCisPixels = diffAndCisPixels[1];
 
-      if (override && Math.random() < 0.01) {
+      if ((override && Math.random() < 0.5) || Math.random() < 0.01) {
         analytics.statusUpdate(rPlaceTemplateName, nCisPixels, diff.length);
       }
 
