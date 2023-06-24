@@ -92,7 +92,7 @@
 		{
 			"name": "crystal pony faces",
 			"images": ["source/crystal_faces.png"],
-			"x": 741,
+			"x": 740,
 			"y": 454,
 			"priority": 7,
 			"autopick": true,
