@@ -298,7 +298,7 @@ function logError(...args) {
     );
     settings.addSetting(
         "overlay",
-        new CheckboxSetting("Pixel overlay", enableOverlay, function (overlaySetting) {
+        new CheckboxSetting("Fullscreen overlay", enableOverlay, function (overlaySetting) {
           GM.setValue('enableOverlay', overlaySetting.enabled);
           if(overlaySetting.enabled){
             overlay?.show();
