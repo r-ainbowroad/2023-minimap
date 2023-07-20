@@ -173,19 +173,10 @@ function logError(...args) {
     pos: MonaLisa.Pos;
 
     parseCoordinateBlock() {
-      const coorStr = this.coordinateBlock.innerHTML.replace(/\<\!\-\-[^\-\>]{0,100}\-\-\>/g, "")
-      const parsedData = coorStr.match(/\(([0-9\-]+),([0-9\-]+)\) ([0-9.]+)X/);
-      if (parsedData) {
-        return {
-          x: parseInt(parsedData[1])+500,
-          y: parseInt(parsedData[2])+500,
-          scale: parseFloat(parsedData[3]),
-        };
-      }
       return {
-        x: 0,
-        y: 0,
-        scale: 0,
+        scale: Math.ceil(redditCanvas!.embed.camera.zoom),
+        x: Math.ceil(redditCanvas!.embed.camera.cx),
+        y: Math.ceil(redditCanvas!.embed.camera.cy),
       };
     }
 
