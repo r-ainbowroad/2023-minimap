@@ -214,8 +214,8 @@ function logError(...args) {
     let interval = setInterval(() => {
       try {
         const coordinateBlock = redditCanvas!.embed!.shadowRoot!
-          .querySelector("mona-lisa-coordinates")!
-          .shadowRoot!.querySelector("div")!;
+          .querySelector("garlic-bread-status-pill")!.shadowRoot!
+          .querySelector("garlic-bread-coordinates")!.shadowRoot!;
         console.log("Found coordinate block. Good!");
         resolve(coordinateBlock);
         clearInterval(interval);
