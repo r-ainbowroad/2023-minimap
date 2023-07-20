@@ -173,10 +173,17 @@ function logError(...args) {
     pos: MonaLisa.Pos;
 
     parseCoordinateBlock() {
+      if (redditCanvas!.embed.camera) {
+        return {
+          scale: Math.ceil(redditCanvas!.embed.camera.zoom),
+          x: Math.ceil(redditCanvas!.embed.camera.cx),
+          y: Math.ceil(redditCanvas!.embed.camera.cy),
+        };
+      }
       return {
-        scale: Math.ceil(redditCanvas!.embed.camera.zoom),
-        x: Math.ceil(redditCanvas!.embed.camera.cx),
-        y: Math.ceil(redditCanvas!.embed.camera.cy),
+        scale: 0,
+        x: 0,
+        y: 0,
       };
     }
 
@@ -627,7 +634,7 @@ function logError(...args) {
     return [diff, nCisPixels];
   }
 
-  const onConfirmPixel = redditCanvas.embed.onConfirmPixel; // get real onConfirmPixel
+  /*const onConfirmPixel = redditCanvas.embed.onConfirmPixel; // get real onConfirmPixel
   redditCanvas.embed._events._events.delete("confirm-pixel");
   redditCanvas.embed._events.define("confirm-pixel", async () => {
     const now = new Date().getTime();
@@ -636,7 +643,7 @@ function logError(...args) {
     analytics.placedPixel('manual-browser', rPlaceTemplateName, posParser.pos, redditCanvas!.embed.selectedColor, now,
                           {reddit: reddit, safe: safe});
     await onConfirmPixel();
-  });
+  });*/
 
   const autoPickTimeout = 5000;
   const autoPickAfterPlaceTimeout = 3000;
@@ -670,7 +677,7 @@ function logError(...args) {
         if (rPlaceTemplate.autoPickUrl === undefined) {
           return;
         }
-        redditCanvas!.embed.wakeUp();
+        //redditCanvas!.embed.wakeUp();
 
         if (settings.getSetting("autoPickstability").enabled) {
           // Move camera to center
