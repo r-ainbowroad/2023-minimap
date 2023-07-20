@@ -108,6 +108,14 @@
 			"y": 743,
 			"priority": 1,
 			"autopick": true
+		},
+		{
+			"name": "Madoka",
+			"images": ["source/Madoka.png"],
+			"x": 504,
+			"y": 640,
+			"priority": 1,
+			"autopick": true
 		}
 	]
 }
