@@ -177,8 +177,8 @@ function logError(...args) {
       if (redditCanvas!.embed.camera) {
         return {
           scale: Math.ceil(redditCanvas!.embed.camera.zoom),
-          x: Math.ceil(redditCanvas!.embed.camera.cx),
-          y: Math.ceil(redditCanvas!.embed.camera.cy),
+          x: Math.ceil(redditCanvas!.embed.camera.cx - 0.5),
+          y: Math.ceil(redditCanvas!.embed.camera.cy - 0.5),
         };
       }
       return {
