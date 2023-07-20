@@ -1,0 +1,14 @@
+{
+    "faction": "r/place bronies",
+    "contact": "https://discord.gg/bronyplace #diplomacy",
+    "templates": [
+        {
+            "name": "r/place bronies - starter",
+            "sources": [
+                "https://ponyplace.z19.web.core.windows.net/mlp/endu_starter.png"
+            ],
+            "x": 405,
+            "y": 700
+        }
+    ]
+}

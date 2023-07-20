@@ -422,7 +422,7 @@ def updateVersion(subfolder):
         versionFile.write(str(templateVersion))
 
 
-def loadAllianceTemplatesFromCsv(csvLink, selfSourceRoot):
+def loadAllianceTemplatesFromCsv(csvLink, selfSourceRoot, honorAlliance):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
@@ -443,7 +443,7 @@ def loadAllianceTemplatesFromCsv(csvLink, selfSourceRoot):
             print("skipping blacklisted template {0}".format(name))
             continue
         
-        if allianceMember.lower() != "true":
+        if allianceMember.lower() != "true" and honorAlliance:
             print("skipping non-alliance template {0}".format(name))
             continue
         
@@ -467,7 +467,10 @@ def getTemplates(templateFile):
     # these are in layer order, so higher entries overwrite/take precedence over lower entries
     inputTemplates = templateFile["templates"]
     if "alliance_csv_import" in templateFile:
-        inputTemplates.extend(loadAllianceTemplatesFromCsv(templateFile["alliance_csv_import"], selfSourceRoot))
+        inputTemplates.extend(loadAllianceTemplatesFromCsv(templateFile["alliance_csv_import"], selfSourceRoot, honorAlliance=True))
+    
+    if "world_csv_import" in templateFile:
+        inputTemplates.extend(loadAllianceTemplatesFromCsv(templateFile["world_csv_import"], selfSourceRoot, honorAlliance=False))
     
     # these will be in draw order, so later entries will overwrite earlier entries
     templates = []

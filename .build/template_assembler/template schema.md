@@ -8,9 +8,15 @@
 
     string
     * optional, defaults to empty string
-    * a link to a CSV with names of allied names, endu template links and a column where any value excludes it
+    * a link to a CSV with names of allied names, endu template links, a column where any value excludes that endu template, and a column where any value other than case-insensitive "true" excludes it
         * each row is converted to an Endu template reference with priority 1 and autopick enabled
         * all templates imported this way are appended to the templates list
+
+* `world_csv_import`
+
+    string
+    * optional, defaults to empty string
+    * same purpose as alliance_csv_import, but ignores the 4th column's value
 
 * `templates`
 

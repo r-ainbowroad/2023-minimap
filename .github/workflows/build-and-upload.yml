@@ -41,7 +41,7 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         if [ -f ./.build/template_assembler/requirements.txt ]; then pip install -r ./.build/template_assembler/requirements.txt; fi
-        buildTemplates="mlp mlp_alliance" # "mlp r-ainbowroad spain"
+        buildTemplates="mlp mlp_alliance mlp_world" # "mlp r-ainbowroad spain"
         for buildTemplate in $buildTemplates; do
             python3 .build/template_assembler/assemble_template.py templates/$buildTemplate
         done
@@ -59,7 +59,7 @@ jobs:
     
     - name: Copy canvas files
       run: |
-        copyTemplates="mlp mlp_alliance r-ainbowroad spain phoenixmc"
+        copyTemplates="mlp mlp_alliance mlp_world r-ainbowroad spain phoenixmc"
         # cp -f ./templates/mlp/autopick.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./templates/mlp/version.txt ./dist/mlp
         for copyTemplate in $copyTemplates; do
             mkdir -p ./dist/$copyTemplate
