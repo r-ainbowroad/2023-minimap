@@ -24,7 +24,7 @@ Updates to your art will get picked up automatically several times an hour. We a
 ### Images
 Be aware that if you take this option, you are joining the herd and/or being adopted by the herd. The images are integrated directly into our system and updates need to go through our template processing queue.
 
-We are also capable of accepting 1:1 / "one pixel per pixel" .png images with transparency and the appropriate coordinates of the upper left corner of the image.
+We are capable of accepting 1:1 / "one pixel per pixel" .png images with transparency and the appropriate coordinates of the upper left corner of the image.
 
 **NOTE** We do not accept images that are not 1:1, or are not transparent. We ask that your images only contain colors that the canvas currently supports.
 
