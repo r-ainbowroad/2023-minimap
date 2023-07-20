@@ -17,8 +17,7 @@ You can install the userscript to help! You just need a browser (Chrome or Edge 
 
 ## Userscript instructions
 
-* Install Violentmonkey (https://violentmonkey.github.io/get-it/)
-  * Chromium based browsers (Google Chrome, Edge, Opera, Yandex.Browser) can use Tampermonkey (https://www.tampermonkey.net/)
+* Install Tampermonkey (https://www.tampermonkey.net/)
   * Android folks can use Kiwi Browser + Tampermonkey.
 * Open the following page in your browser: <http://ponyplace-cdn.ferrictorus.com/loader.user.js>
   * This will invite you to install the userscript.
