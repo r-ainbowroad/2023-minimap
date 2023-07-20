@@ -389,8 +389,13 @@ function logError(...args) {
   const applyTemplate = (templ: ImageTemplate) => {
     palettizeTemplate(templ);
     minimapUI.setTemplate(templ);
-    overlay?.applyTemplate(templ);
     minimapUI.recalculateImagePos(posParser.pos);
+    if(overlay instanceof Overlay){
+      overlay.applyTemplate(templ);
+    } else {
+      overlay = new Overlay(canvas!, null, templ);
+      if (!settings.getSetting("overlay").enabled) overlay.hide();
+    }
     maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
     if (templ.mask) {
       templ.mask.drawTo(maskCtx);
@@ -407,10 +412,6 @@ function logError(...args) {
           ? rPlaceTemplate.autoPickUrl
           : rPlaceTemplate.canvasUrl;
       template = await ImageTemplate.fetchTemplate(rPlaceTemplateUrl, rPlaceTemplate.maskUrl);
-      if(typeof overlay === "undefined"){
-        overlay = new Overlay(canvas!, null, template);
-        if (!enableOverlay) overlay.hide();
-      }
       applyTemplate(template);
     });
   };
