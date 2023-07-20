@@ -238,7 +238,7 @@ def resolveTemplateFileEntry(templateFileEntry):
                 output.append(converted)
             return output
         except Exception as e:
-            print("Failed to load Endu template for {0}: {1}".format(templateFileEntry["name"], e))
+            print("Failed to load Endu template for {0}: {1}\n{2}".format(templateFileEntry["name"], templateFileEntry["endu"], traceback.format_exc()))
             return []
     elif "images" in templateFileEntry:
         for requiredProperty in requiredProperties:
@@ -454,7 +454,8 @@ def loadAllianceTemplatesFromCsv(csvLink, selfSourceRoot, honorAlliance):
         if len(chunks) < 4:
             print("malformed row")
             continue
-        
+
+        chunks = [v.strip('"') for v in chunks]
         (name, enduLink, blacklisted, allianceMember) = chunks
         if blacklisted != "":
             print("skipping blacklisted template {0}".format(name))
@@ -513,29 +514,32 @@ def main(subfolder):
             continue
         
         print("render {0}".format(templateEntry["name"]))
-        with (
-        loadTemplateEntryImage(templateEntry, subfolder) as image,
-        generateTransparencyMask(image) as transparencyMaskImage):
-            if ("__exclude" in templateEntry):
-                eraseFromCanvas(templateEntry, transparencyMaskImage, canvasImage)
-            else:
-                copyTemplateEntryIntoCanvas(templateEntry, image, canvasImage)
-            
-            if ("autopick" in templateEntry and bool(templateEntry["autopick"]) and not "__noauto" in templateEntry):
-                copyTemplateEntryIntoCanvas(templateEntry, image, autoPickImage)
-                with generatePriorityMask(templateEntry, image) as priorityMask:
-                    copyTemplateEntryIntoCanvas(templateEntry, priorityMask, maskImage)
-            else:
-                eraseFromCanvas(templateEntry, transparencyMaskImage, autoPickImage)
-                eraseFromCanvas(templateEntry, transparencyMaskImage, maskImage, isMask=True)
-            
-            if ("export_group" in templateEntry and str(templateEntry["export_group"]) != ""):
-                (enduImage, enduExtents) = getEnduGroup(enduGroups, str(templateEntry["export_group"]))
-                copyTemplateEntryIntoCanvas(templateEntry, image, enduImage)
-                updateExtents(templateEntry, image, enduExtents)
-            else:
-                for (groupName, (enduImage, enduExtents)) in enduGroups.items():
-                    eraseFromCanvas(templateEntry, transparencyMaskImage, enduImage)
+        try:
+            with (
+            loadTemplateEntryImage(templateEntry, subfolder) as image,
+            generateTransparencyMask(image) as transparencyMaskImage):
+                if ("__exclude" in templateEntry):
+                    eraseFromCanvas(templateEntry, transparencyMaskImage, canvasImage)
+                else:
+                    copyTemplateEntryIntoCanvas(templateEntry, image, canvasImage)
+                
+                if ("autopick" in templateEntry and bool(templateEntry["autopick"]) and not "__noauto" in templateEntry):
+                    copyTemplateEntryIntoCanvas(templateEntry, image, autoPickImage)
+                    with generatePriorityMask(templateEntry, image) as priorityMask:
+                        copyTemplateEntryIntoCanvas(templateEntry, priorityMask, maskImage)
+                else:
+                    eraseFromCanvas(templateEntry, transparencyMaskImage, autoPickImage)
+                    eraseFromCanvas(templateEntry, transparencyMaskImage, maskImage, isMask=True)
+                
+                if ("export_group" in templateEntry and str(templateEntry["export_group"]) != ""):
+                    (enduImage, enduExtents) = getEnduGroup(enduGroups, str(templateEntry["export_group"]))
+                    copyTemplateEntryIntoCanvas(templateEntry, image, enduImage)
+                    updateExtents(templateEntry, image, enduExtents)
+                else:
+                    for (groupName, (enduImage, enduExtents)) in enduGroups.items():
+                        eraseFromCanvas(templateEntry, transparencyMaskImage, enduImage)
+        except:
+            print(f"Failed to load {templateEntry['name']}")
     
     writeCanvas(canvasImage, subfolder, "canvas")
     writeCanvas(autoPickImage, subfolder, "autopick")

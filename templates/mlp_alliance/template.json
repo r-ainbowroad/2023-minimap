@@ -4,7 +4,7 @@
 		"source_root": "https://ponyplace.z19.web.core.windows.net/mlp/",
 		"name": "r/place bronies"
 	},
-	"alliance_csv_import": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRheHSPpggBRGq-qkpJMJsRPYySrz331sNqIRoIO3PEbIwxlENf8uhjJVnE2VLKieruvOH1LjYrw0Cd/pub?output=csv",
+	"alliance_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
 	"templates": [
 		{
 			"name": "dash",
