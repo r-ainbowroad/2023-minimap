@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "npx rollup -c ./rollup.config.mjs --config-prod",
-    "build:dev": "npx rollup -c ./rollup.config.mjs"
+    "build:dev": "npx rollup -c ./rollup.config.mjs",
+    "build:watch": "npx rollup -c ./rollup.config.mjs --watch"
   },
   "dependencies": {
     "@types/greasemonkey": "^4.0.4",
