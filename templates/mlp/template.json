@@ -60,6 +60,38 @@
 			"priority": 3,
 			"autopick": false,
 			"export_group": "ponydev"
+		},
+		{
+			"name": "korea",
+			"images": ["source/korea.png"],
+			"x": 405,
+			"y": 640,
+			"priority": 1,
+			"autopick": true
+		},
+		{
+			"name": "birb",
+			"images": ["source/birb.png"],
+			"x": 446,
+			"y": 675,
+			"priority": 1,
+			"autopick": true
+		},
+		{
+			"name": "TFH",
+			"images": ["source/TFH.png"],
+			"x": 529,
+			"y": 714,
+			"priority": 1,
+			"autopick": true
+		},
+		{
+			"name": "FoE",
+			"images": ["source/FoE.png"],
+			"x": 554,
+			"y": 652,
+			"priority": 1,
+			"autopick": true
 		}
 	]
 }
