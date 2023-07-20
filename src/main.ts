@@ -174,11 +174,12 @@ function logError(...args) {
     pos: MonaLisa.Pos;
 
     parseCoordinateBlock() {
-      const parsedData = this.coordinateBlock.innerText.match(/\(([0-9]+),([0-9]+)\) ([0-9.]+)x/);
+      const coorStr = this.coordinateBlock.innerHTML.replace(/\<\!\-\-[^\-\>]{0,100}\-\-\>/g, "")
+      const parsedData = coorStr.match(/\(([0-9\-]+),([0-9\-]+)\) ([0-9.]+)X/);
       if (parsedData) {
         return {
-          x: parseInt(parsedData[1]),
-          y: parseInt(parsedData[2]),
+          x: parseInt(parsedData[1])+500,
+          y: parseInt(parsedData[2])+500,
           scale: parseFloat(parsedData[3]),
         };
       }
