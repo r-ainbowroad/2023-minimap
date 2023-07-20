@@ -71,16 +71,16 @@ export class RedditCanvas {
 export async function getRedditCanvas() {
   for (let tries = constants.MaxSiteSpecificDetectAttempts; tries != 0; --tries) {
     try {
-      const embed = document.querySelector("mona-lisa-embed") as MonaLisa.Embed;
+      const embed = document.querySelector("garlic-bread-embed") as MonaLisa.Embed;
       if (!embed) {
-        console.log("Failed to find `mona-lisa-embed`");
+        console.log("Failed to find `garlic-bread-embed`");
         continue;
       }
       const rPlaceCanvas: HTMLCanvasElement = embed!.shadowRoot!
-        .querySelector("mona-lisa-share-container mona-lisa-canvas")!
+        .querySelector("div > garlic-bread-share-container > garlic-bread-camera > garlic-bread-canvas")!
         .shadowRoot!.querySelector("canvas")!;
       if (!rPlaceCanvas) {
-        console.log("Failed to find `mona-lisa-canvas`");
+        console.log("Failed to find `garlic-bread-canvas`");
         continue;
       }
       return new RedditCanvas(rPlaceCanvas, embed);

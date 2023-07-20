@@ -326,7 +326,7 @@ function logError(...args) {
   noSleepAudio.volume = 0.1;
 
   const paletteButtons = redditCanvas.embed.shadowRoot!
-    .querySelector("mona-lisa-color-picker")!
+    .querySelector("garlic-bread-color-picker")!
     .shadowRoot!.querySelectorAll(".palette button.color")! as NodeListOf<HTMLElement>;
   const palette: number[][] = [];
   for (const paletteButton of paletteButtons) {
@@ -691,7 +691,7 @@ function logError(...args) {
         }
 
         const timeOutPillBlock = redditCanvas!.embed.shadowRoot!
-          .querySelector("mona-lisa-status-pill")!
+          .querySelector("garlic-bread-status-pill")!
           .shadowRoot!.querySelector("div")! as HTMLElement;
         log(
           `Status: ${percentage}% (${nMissingPixels}/${nCisPixels}) [${timeOutPillBlock.innerText}]`
@@ -716,7 +716,7 @@ function logError(...args) {
   }
 
   const actions = redditCanvas.embed.shadowRoot!
-    .querySelector("mona-lisa-color-picker")!
+    .querySelector("garlic-bread-color-picker")!
     .shadowRoot!.querySelector('div > div > div.actions')! as HTMLDivElement;
   const button = document.createElement('button');
   button.innerText = "Pick Priority Pixel";
