@@ -11,7 +11,7 @@
  **/
 
 export namespace constants {
-  export const rPlacePixelSize = 10;
+  export const rPlacePixelSize = 2;
   export const MaxSiteSpecificDetectAttempts = 3;
   export const SiteSpecificDetectRetryDelayMs = 1000;
 
