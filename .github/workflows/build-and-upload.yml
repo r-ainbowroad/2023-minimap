@@ -2,8 +2,8 @@ name: Build and upload to blob
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0,10,20,30,40,50,50 * * * *'
+  schedule:
+    - cron: '0,10,20,30,40,50,50 * * * *'
   push:
     branches:
       - "main"
