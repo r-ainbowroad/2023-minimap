@@ -92,6 +92,22 @@
 			"y": 652,
 			"priority": 1,
 			"autopick": true
+		},
+		{
+			"name": "TinyTardis",
+			"images": ["source/TinyTardis.png"],
+			"x": 470,
+			"y": 739,
+			"priority": 1,
+			"autopick": true
+		},
+		{
+			"name": "WaddleDee",
+			"images": ["source/WaddleDee.png"],
+			"x": 476,
+			"y": 743,
+			"priority": 1,
+			"autopick": true
 		}
 	]
 }
