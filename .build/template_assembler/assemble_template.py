@@ -434,13 +434,17 @@ def loadAllianceTemplatesFromCsv(csvLink, selfSourceRoot):
     outputTemplates = []
     for line in csvText.split("\n"):
         chunks = line.strip().split(",")
-        if len(chunks) != 3:
+        if len(chunks) < 4:
             print("malformed row")
             continue
         
-        (name, enduLink, blacklisted) = chunks
+        (name, enduLink, blacklisted, allianceMember) = chunks
         if blacklisted != "":
             print("skipping blacklisted template {0}".format(name))
+            continue
+        
+        if allianceMember.lower() != "true":
+            print("skipping non-alliance template {0}".format(name))
             continue
         
         if selfSourceRoot in enduLink:
