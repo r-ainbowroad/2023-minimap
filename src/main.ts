@@ -635,16 +635,14 @@ function logError(...args) {
     return [diff, nCisPixels];
   }
 
-  const onConfirmPixel = redditCanvas.embed.onConfirmPixel; // get real onConfirmPixel
-  redditCanvas.embed._events._events.delete("confirm-pixel");
-  redditCanvas.embed._events.define("confirm-pixel", async () => {
+  function sendAnalytics() {
     const now = new Date().getTime();
     const reddit = now + redditCanvas!.embed.nextTileAvailableIn * 1000;
     const safe = reddit + autoPickAfterPlaceTimeout;
     analytics.placedPixel('manual-browser', rPlaceTemplateName, posParser.pos, redditCanvas!.embed.selectedColor, now,
                           {reddit: reddit, safe: safe});
-    await onConfirmPixel();
-  });
+  }
+  redditCanvas.embed._events._getEventTarget().addEventListener("confirm-pixel", sendAnalytics);
 
   const autoPickTimeout = 5000;
   const autoPickAfterPlaceTimeout = 3000;
