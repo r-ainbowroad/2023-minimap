@@ -626,7 +626,7 @@ function logError(...args) {
   }
 
   function sendAnalytics() {
-    const now = new Date().getTime();
+    const now = Date.now();
     const reddit = now + redditCanvas!.embed.nextTileAvailableIn * 1000;
     const safe = reddit + autoPickAfterPlaceTimeout;
     analytics.placedPixel('manual-browser', rPlaceTemplateName, posParser.pos, redditCanvas!.embed.selectedColor, now,

@@ -69,7 +69,7 @@ export class Analytics {
     const data = {
       id: this.#uuid,
       event: 'error',
-      timestamp: new Date().getTime() / 1000,
+      timestamp: Date.now() / 1000,
       message: formatLog(...args)
     };
 
