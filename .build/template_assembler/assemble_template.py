@@ -64,11 +64,16 @@ def createCanvas(isMask = False):
     return createImage(canvasSize, isMask)
 
 def copyTemplateEntryIntoCanvas(templateEntry, image, canvas):
+    if (templateEntry["x"] < 0 or
+        templateEntry["y"] < 0):
+        templateEntry["x"] += 500
+        templateEntry["y"] += 500
+
     if (templateEntry["x"] + image.width > canvasSize[0] or
         templateEntry["y"] + image.height > canvasSize[1] or
         templateEntry["x"] < 0 or
         templateEntry["y"] < 0):
-        raise ValueError("{0} is not entirely on canvas?? {1}".format(templateEntry["name"], templateEntry))
+        print("{0} is not entirely on canvas?? {1}".format(templateEntry["name"], templateEntry))
     
     canvas.alpha_composite(image, (templateEntry["x"], templateEntry["y"]))
 
@@ -140,8 +145,11 @@ def normalizeImage(convertedImage):
 
 def loadTemplateEntryImage(templateEntry, subfolder):
     # used to erase animations from all shipped images. render a fully opaque mask
-    if "forcewidth" in templateEntry:
-        return createImage((templateEntry["forcewidth"], templateEntry["forceheight"]), isMask = True)
+    try:
+        if "forcewidth" in templateEntry:
+            return createImage((templateEntry["forcewidth"], templateEntry["forceheight"]), isMask = True)
+    except Exception as e:
+        print("Eat exception {0}".format(e))
 
     for imageSource in templateEntry["images"]:
         try:
