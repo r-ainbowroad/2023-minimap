@@ -7,6 +7,7 @@ import urllib.parse
 import json
 import datetime
 import math
+import traceback
 
 palettes = [
     set([ # 2k x 2k palette from 2022
@@ -103,6 +104,7 @@ def normalizeImage(convertedImage):
     fixedPixels = 0
     alphaProblems = 0
     wrongPixels = set()
+    collorCorrections = dict()
     
     for y in range(0, convertedImage.height):
         for x in range(0, convertedImage.width):
@@ -116,13 +118,19 @@ def normalizeImage(convertedImage):
             if pixel in palette:
                 continue
 
-            newDelta = 99999999
-            newColor = None
-            for color in palette:
-                colorDelta = deltaE(color[0:3], pixel[0:3], input_space="sRGB255")
-                if colorDelta < newDelta:
-                    newColor = color
-                    newDelta = colorDelta
+            if pixel[0:3] in collorCorrections:
+                v = collorCorrections[pixel[0:3]]
+                newColor = (v[0], v[1], v[2])
+                newDelta = v[3]
+            else:
+                newDelta = 99999999
+                newColor = None
+                for color in palette:
+                    colorDelta = deltaE(color[0:3], pixel[0:3], input_space="sRGB255")
+                    if colorDelta < newDelta:
+                        newColor = color
+                        newDelta = colorDelta
+                collorCorrections[pixel[0:3]] = [*newColor[0:3], newDelta]
             
             if pixel[0:3] == newColor[0:3]:
                 alphaProblems += 1
@@ -175,7 +183,7 @@ def loadTemplateEntryImage(templateEntry, subfolder):
             
             return convertedImage
         except Exception as e:
-            print("Eat exception {0}".format(e))
+            print("Eat exception {0}".format(traceback.format_exc()))
     
     raise RuntimeError("unable to load any images for {0}".format(templateEntry["name"]))
 
