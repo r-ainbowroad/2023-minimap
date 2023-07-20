@@ -283,28 +283,18 @@ function logError(...args) {
     settings.addSetting(
       "autoColor",
       new CheckboxSetting("Auto color picker", false, function (autoColorSetting) {
-        settings.getSetting("autoPick").enabled = false;
+        // settings.getSetting("autoPick").enabled = false;
         updateTemplate();
       })
     );
     settings.addSetting(
       "autoPick",
-      new CheckboxSetting("AutoPick", enableAutoPickSetting, function (autoPickSetting) {
+      new CheckboxSetting("Use the priority-based template", enableAutoPickSetting, function (autoPickSetting) {
         GM.setValue('enableAutoPick', autoPickSetting.enabled);
-        settings.getSetting("autoColor").enabled = false;
+        // settings.getSetting("autoColor").enabled = false;
         updateTemplate();
       })
     );
-    settings.addSetting(
-      "autoPickstability",
-      new CheckboxSetting("AutoPick stability (🔇 Need to mute tab)", false)
-    );
-    setInterval(() => {
-      if (settings.getSetting("autoPickstability").enabled) {
-        noSleepAudio.play();
-      }
-    }, 30000);
-
     settings.addSetting(
       "pixelDisplayProgress",
       new DisplaySetting("Current progress", "Unknown", true)
@@ -647,7 +637,7 @@ function logError(...args) {
   const autoPickTimeout = 5000;
   const autoPickAfterPlaceTimeout = 3000;
 
-  function autoPick(override: boolean) {
+  function autoPick(isClickedManually: boolean = false) {
     templateWorkQueue.enqueue(async () => {
       // Update the minimap image (necessary for checking the diff)
       autoPickCtx.clearRect(0, 0, autoPickCanvas.width, autoPickCanvas.height);
@@ -676,19 +666,9 @@ function logError(...args) {
         >${percentage}% (${nMissingPixels}/${nCisPixels})</span
       >`;
 
-      if ((settings.getSetting("autoPick").enabled || override) && template) {
+      if (isClickedManually && template) {
         if (rPlaceTemplate.autoPickUrl === undefined) {
           return;
-        }
-        //redditCanvas!.embed.wakeUp();
-
-        if (settings.getSetting("autoPickstability").enabled) {
-          // Move camera to center
-          redditCanvas!.embed.camera.applyPosition({
-            x: Math.floor(canvas!.width / 2),
-            y: Math.floor(canvas!.height / 2),
-            zoom: 0,
-          });
         }
 
         const timeOutPillBlock = redditCanvas!.embed.shadowRoot!
@@ -698,7 +678,7 @@ function logError(...args) {
           `Status: ${percentage}% (${nMissingPixels}/${nCisPixels}) [${timeOutPillBlock.innerText}]`
         );
 
-        if ((!redditCanvas!.embed.nextTileAvailableIn || override) && diff.length > 0) {
+        if ((!redditCanvas!.embed.nextTileAvailableIn || isClickedManually) && diff.length > 0) {
           try {
             const randPixel = selectRandomPixel(diff);
             const imageDataRight = minimapUI.imageCanvasCtx.getImageData(randPixel.x, randPixel.y, 1, 1);
