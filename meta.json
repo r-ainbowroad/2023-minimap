@@ -13,6 +13,7 @@
     "https://garlic-bread.reddit.com/embed*",
     "https://place.equestria.dev/embed*"
   ],
+  "inject-into": "content",
   "downloadURL": "http://ponyplace-cdn.ferrictorus.com/loader.user.js",
   "updateURL": "http://ponyplace-cdn.ferrictorus.com/loader.user.js",
   "connect": [
