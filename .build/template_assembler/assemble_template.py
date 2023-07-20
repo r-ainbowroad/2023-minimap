@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw
+from colorspacious import deltaE
 import os
 import sys
 import urllib.request
@@ -83,12 +84,12 @@ def writeCanvas(canvas, subfolder, name):
             quantizedCanvas.save(os.path.join(subfolder, name + ".png"))
 
 def colorDistanceRawEuclidean(color, pixel):
-    elementDeltaSquares = [(colorElement - pixelElement) ** 2 for colorElement, pixelElement in zip(color[0:2], pixel[0:2])]
+    elementDeltaSquares = [(colorElement - pixelElement) ** 2 for colorElement, pixelElement in zip(color[0:3], pixel[0:3])]
     return math.sqrt(sum(elementDeltaSquares))
 
 def colorDistancePerceptualEuclidean(color, pixel):
     weights = [0.3, 0.59, 0.11]
-    elementDelta = [(colorElement - pixelElement) for colorElement, pixelElement in zip(color[0:2], pixel[0:2])]
+    elementDelta = [(colorElement - pixelElement) for colorElement, pixelElement in zip(color[0:3], pixel[0:3])]
     weightedDelta = [weightElement * deltaElement for weightElement, deltaElement in zip(weights, elementDelta)]
     weightedDeltaSquares = [deltaElement ** 2 for deltaElement in weightedDelta]
     return math.sqrt(sum(weightedDeltaSquares))
@@ -113,12 +114,12 @@ def normalizeImage(convertedImage):
             newDelta = 99999999
             newColor = None
             for color in palette:
-                colorDelta = colorDistancePerceptualEuclidean(color, pixel)
+                colorDelta = deltaE(color[0:3], pixel[0:3], input_space="sRGB255")
                 if colorDelta < newDelta:
                     newColor = color
                     newDelta = colorDelta
             
-            if pixel[0:2] == newColor[0:2]:
+            if pixel[0:3] == newColor[0:3]:
                 alphaProblems += 1
             else:
                 fixedPixels += 1
@@ -132,7 +133,7 @@ def normalizeImage(convertedImage):
             maxOops = max(maxOops, difference)
             print("\t\t{0} -> {1} (delta = {2})".format(original, new, difference))
         
-        if (maxOops > 5):
+        if (maxOops > 20):
             print("\ttoo broken with max = {0}, excluding from autopick".format(maxOops))
             return False
     return True
