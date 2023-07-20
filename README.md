@@ -25,7 +25,7 @@ You can install the userscript to help! You just need a browser (Chrome or Edge 
 * Visit /r/place and click on the canvas to get it to load.
 * Cycle to your template, if necessary, by clicking on the "Template: ..." setting.
 
-![example of the /r/mylittlepony overlay](https://i.imgur.com/gseABgb.png)
+![example of the /r/mylittlepony overlay](./screenshot.png)
 
 ## Licensing
 
