@@ -718,7 +718,7 @@ function logError(...args) {
     .shadowRoot!.querySelector('div > div > div.actions')! as HTMLDivElement;
   const button = document.createElement('button');
   button.innerText = "Pick Priority Pixel";
-  button.setAttribute('style', "height:40px; min-width: 40px; padding: 0px; border: 1px solid rgb(212, 215, 217); box-sizing: border-box; background-color: #ffffff; flex: 1 1 0%; cursor:pointer; border-radius: 40px; color: rgb(18, 18, 18); font-size 20px; position:relative; --button-border-width: 4px; border-image-slice: 1; margin-left: 16px;");
+  button.setAttribute('style', "height:44px; min-width: 44px; padding: 0px; border: var(--pixel-border); box-sizing: border-box; background-color: #ffffff; flex: 1 1 0%; cursor:pointer;  color: rgb(18, 18, 18); font-size 20px; position:relative; --button-border-width: 4px; border-image-slice: 1; margin-left: 16px;");
   button.onclick = () => {autoPick(true);};
   actions.appendChild(button);
 
