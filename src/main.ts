@@ -104,6 +104,7 @@ function logError(...args) {
   if (!redditCanvas) {
     // Start overlay async.
     logError("Failed to find site specific handler. Falling back to overlay.");
+    setRPlaceTemplate(rPlaceTemplateNames[1]);
     overlay(canvas, rPlaceTemplate);
     // Don't load the settings interface, some pixel game sites will ban you for mousedown/mouseup
     // events.
