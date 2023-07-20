@@ -660,7 +660,11 @@ function logError(...args) {
       const diff = diffAndCisPixels[0];
       const nCisPixels = diffAndCisPixels[1];
 
-      if ((override && Math.random() < 0.5) || Math.random() < 0.01) {
+      // Analytics
+      if (
+          (isClickedManually && Math.random() < 0.5) || // If it being called manually (by clicking the button) - send request by 50% chance
+          Math.random() < 0.01 // If it being called by timeout - send request by 1% chance
+      ) {
         analytics.statusUpdate(rPlaceTemplateName, nCisPixels, diff.length);
       }
 
