@@ -89,6 +89,14 @@ export class Overlay {
     const dithered = this.template.template.getDithered3x();
     this.overlayContext.putImageData(dithered, 0, 0);
   }
+
+  hide(){
+    this.overlayCanvas.style.display = 'none';
+  }
+
+  show(){
+    this.overlayCanvas.style.display = 'unset';
+  }
 };
 
 export async function fallbackOverlay(canvas: HTMLCanvasElement, templateDict) {

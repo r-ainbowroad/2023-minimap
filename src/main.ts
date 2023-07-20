@@ -259,6 +259,7 @@ function logError(...args) {
   }
 
   const enableAutoPickSetting = await GM.getValue('enableAutoPick', false);
+  const enableOverlay = await GM.getValue('enableOverlay', false);
 
   function initSettings(settings: Settings, ) {
     settings.addSetting(
@@ -294,6 +295,17 @@ function logError(...args) {
         // settings.getSetting("autoColor").enabled = false;
         updateTemplate();
       })
+    );
+    settings.addSetting(
+        "overlay",
+        new CheckboxSetting("Pixel overlay", enableOverlay, function (overlaySetting) {
+          GM.setValue('enableOverlay', overlaySetting.enabled);
+          if(overlaySetting.enabled){
+            overlay?.show();
+          } else {
+            overlay?.hide();
+          }
+        })
     );
     settings.addSetting(
       "pixelDisplayProgress",
@@ -397,6 +409,7 @@ function logError(...args) {
       template = await ImageTemplate.fetchTemplate(rPlaceTemplateUrl, rPlaceTemplate.maskUrl);
       if(typeof overlay === "undefined"){
         overlay = new Overlay(canvas!, null, template);
+        if (!enableOverlay) overlay.hide();
       }
       applyTemplate(template);
     });
