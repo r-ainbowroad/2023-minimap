@@ -14,7 +14,7 @@ import {html} from 'uhtml';
 import {waitForDocumentLoad, getMostLikelyCanvas, RedditCanvas, getRedditCanvas} from './canvas';
 import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} from './minimap/minimap-components';
 import {createMinimapUI} from './minimap/minimap-ui';
-import {overlay} from './overlay';
+import {Overlay, fallbackOverlay} from './overlay';
 import {ImageTemplate, Template, updateLoop} from './template/template';
 import {AsyncWorkQueue, waitMs} from './utils';
 import {Analytics} from './analytics';
@@ -105,7 +105,7 @@ function logError(...args) {
     // Start overlay async.
     logError("Failed to find site specific handler. Falling back to overlay.");
     setRPlaceTemplate(rPlaceTemplateNames[1]);
-    overlay(canvas, rPlaceTemplate);
+    fallbackOverlay(canvas, rPlaceTemplate);
     // Don't load the settings interface, some pixel game sites will ban you for mousedown/mouseup
     // events.
     return;
@@ -330,8 +330,9 @@ function logError(...args) {
     }
   }
 
-  let template: Template | undefined = undefined;
+  let template: ImageTemplate | undefined = undefined;
   const templateWorkQueue = new AsyncWorkQueue();
+  let overlay: Overlay | undefined = undefined;
 
   function loadMask() {
     const maskData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height).data;
@@ -373,9 +374,10 @@ function logError(...args) {
     }
   }
 
-  const applyTemplate = (templ: Template) => {
+  const applyTemplate = (templ: ImageTemplate) => {
     palettizeTemplate(templ);
     minimapUI.setTemplate(templ);
+    overlay?.applyTemplate(templ);
     minimapUI.recalculateImagePos(posParser.pos);
     maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
     if (templ.mask) {
@@ -393,6 +395,9 @@ function logError(...args) {
           ? rPlaceTemplate.autoPickUrl
           : rPlaceTemplate.canvasUrl;
       template = await ImageTemplate.fetchTemplate(rPlaceTemplateUrl, rPlaceTemplate.maskUrl);
+      if(typeof overlay === "undefined"){
+        overlay = new Overlay(canvas!, null, template);
+      }
       applyTemplate(template);
     });
   };
