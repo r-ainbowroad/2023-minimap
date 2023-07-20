@@ -14,6 +14,9 @@ declare namespace MonaLisa {
 
   interface Camera {
     applyPosition(point: Coordinate): any;
+    cx: number;
+    cy: number;
+    zoom: number;
   }
 
   interface Embed extends HTMLElement {
