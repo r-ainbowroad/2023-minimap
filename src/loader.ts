@@ -20,7 +20,7 @@ const url = "http://ponyplace-cdn.ferrictorus.com/minimap.user.js";
   try {
     const response = await gm_fetch({
       method: "GET",
-      url: `${url}?t=${new Date().getTime()}`
+      url: `${url}?t=${Date.now()}`
     });
 
     const headers = headerStringToObject(response.responseHeaders);
@@ -35,7 +35,7 @@ const url = "http://ponyplace-cdn.ferrictorus.com/minimap.user.js";
       try {
         const response = await gm_fetch({
           method: "HEAD",
-          url: `${url}?t=${new Date().getTime()}`,
+          url: `${url}?t=${Date.now()}`,
           headers: {
             'If-None-Match': etag!
           }
