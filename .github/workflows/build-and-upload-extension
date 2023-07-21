@@ -1,0 +1,58 @@
+name: Build extension and upload to blob
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "src/**.ts"
+      - "*.json"
+      - "rollup.config.mjs"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        lfs: true
+    
+    - name: Node setup for extension build
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+    
+    - name: Build extension
+      run: |
+        mkdir -p ./dist
+        npm install
+        npm run build
+
+    - name: Produce build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist
+        path: |
+          dist
+
+    # creds will expire around 2024-06-16
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
+    
+    - name: Upload to blob storage
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
+    
+    - name: Azure logout
+      run: az logout
+      if: always()
