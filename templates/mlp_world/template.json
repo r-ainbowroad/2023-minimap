@@ -1,66 +1,179 @@
 {
-	"endu_info": {
-		"contact": "https://discord.gg/bronyplace #diplomacy",
-		"source_root": "https://ponyplace.z19.web.core.windows.net/mlp/",
-		"name": "r/place bronies"
-	},
-	"world_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
-	"templates": [
-		{
-			"name": "dash",
-			"images": ["source/dash.png"],
-			"x": 408,
-			"y": 705,
-			"priority": 10,
-			"autopick": true,
-			"export_group": "starter"
-		},
-		{
-			"name": "book page 1",
-			"enabled_utc": 2000000000,
-			"images": ["source/book_frame01.png"],
-			"x": 451,
-			"y": 712,
-			"priority": 9,
-			"autopick": true,
-			"export_group": "starter"
-		},
-		{
-			"name": "book base",
-			"images": ["source/book_base.png"],
-			"x": 446,
-			"y": 700,
-			"priority": 10,
-			"autopick": true,
-			"export_group": "starter"
-		},
-		{
-			"name": "derpy",
-			"images": ["source/derpy.png"],
-			"x": 479,
-			"y": 709,
-			"priority": 7,
-			"autopick": true,
-			"export_group": "starter"
-		},
-		{
-			"name": "base",
-			"images": ["source/base.png"],
-			"x": 405,
-			"y": 750,
-			"priority": 8,
-			"autopick": true,
-			"export_group": "starter"
-		},
-		{
-			"name": "loaf",
-			"images": ["source/llvm_loaf.png"],
-			"enabled_utc": 2000000000,
-			"x": 150,
-			"y": 972,
-			"priority": 3,
-			"autopick": false,
-			"export_group": "ponydev"
-		}
-	]
+  "endu_info": {
+    "contact": "https://discord.gg/bronyplace #diplomacy",
+    "source_root": "https://ponyplace.z19.web.core.windows.net/mlp/",
+    "name": "r/place bronies"
+  },
+  "world_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
+  "templates": [
+    {
+      "name": "dash",
+      "images": [
+        "../mlp/source/dash.png"
+      ],
+      "x": 408,
+      "y": 705,
+      "priority": 10,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 1",
+      "enabled_utc": 2000000000,
+      "images": [
+        "../mlp/source/book_frame01.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 9,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book base",
+      "images": [
+        "../mlp/source/book_base.png"
+      ],
+      "x": 446,
+      "y": 700,
+      "priority": 10,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "derpy",
+      "images": [
+        "../mlp/source/derpy.png"
+      ],
+      "x": 479,
+      "y": 709,
+      "priority": 7,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "base",
+      "images": [
+        "../mlp/source/base.png"
+      ],
+      "x": 405,
+      "y": 750,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "loaf",
+      "images": [
+        "../mlp/source/llvm_loaf.png"
+      ],
+      "enabled_utc": 2000000000,
+      "x": 150,
+      "y": 972,
+      "priority": 3,
+      "autopick": false,
+      "export_group": "ponydev"
+    },
+    {
+      "name": "korea",
+      "images": [
+        "../mlp/source/korea.png"
+      ],
+      "x": 405,
+      "y": 640,
+      "enabled_utc": 2000000000,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "birb",
+      "images": [
+        "../mlp/source/birb.png"
+      ],
+      "x": 446,
+      "y": 675,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "TFH",
+      "images": [
+        "../mlp/source/TFH.png"
+      ],
+      "x": 536,
+      "y": 714,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "FoE",
+      "images": [
+        "../mlp/source/FoE.png"
+      ],
+      "x": 554,
+      "y": 652,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "TinyTardis",
+      "images": [
+        "../mlp/source/TinyTardis.png"
+      ],
+      "x": 470,
+      "y": 739,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "WaddleDee",
+      "images": [
+        "../mlp/source/WaddleDee.png"
+      ],
+      "x": 476,
+      "y": 743,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "Madoka",
+      "images": [
+        "../mlp/source/Madoka.png"
+      ],
+      "x": 504,
+      "y": 640,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "cozy",
+      "images": [
+        "../mlp/source/cozy.png"
+      ],
+      "x": 522,
+      "y": 741,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "german",
+      "images": [
+        "../mlp/source/german.png"
+      ],
+      "x": 404,
+      "y": 728,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "monster_hunter",
+      "images": [
+        "../mlp/source/monster_hunter.png"
+      ],
+      "x": 512,
+      "y": 697,
+      "priority": 1,
+      "autopick": true
+    }
+  ]
 }

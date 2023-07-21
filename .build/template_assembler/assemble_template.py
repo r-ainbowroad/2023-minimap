@@ -104,7 +104,7 @@ def normalizeImage(convertedImage):
     fixedPixels = 0
     alphaProblems = 0
     wrongPixels = set()
-    collorCorrections = dict()
+    colorCorrections = dict()
     
     for y in range(0, convertedImage.height):
         for x in range(0, convertedImage.width):
@@ -118,9 +118,9 @@ def normalizeImage(convertedImage):
             if pixel in palette:
                 continue
 
-            if pixel[0:3] in collorCorrections:
-                v = collorCorrections[pixel[0:3]]
-                newColor = (v[0], v[1], v[2])
+            if pixel[0:3] in colorCorrections:
+                v = colorCorrections[pixel[0:3]]
+                newColor = (v[0], v[1], v[2], pixel[3])
                 newDelta = v[3]
             else:
                 newDelta = 99999999
@@ -130,7 +130,7 @@ def normalizeImage(convertedImage):
                     if colorDelta < newDelta:
                         newColor = color
                         newDelta = colorDelta
-                collorCorrections[pixel[0:3]] = [*newColor[0:3], newDelta]
+                colorCorrections[pixel[0:3]] = [*newColor[0:3], newDelta]
             
             if pixel[0:3] == newColor[0:3]:
                 alphaProblems += 1
@@ -154,10 +154,10 @@ def normalizeImage(convertedImage):
 def loadTemplateEntryImage(templateEntry, subfolder):
     # used to erase animations from all shipped images. render a fully opaque mask
     try:
-        if "forcewidth" in templateEntry:
+        if "forcewidth" in templateEntry and templateEntry["forcewidth"] != None:
             return createImage((templateEntry["forcewidth"], templateEntry["forceheight"]), isMask = True)
     except Exception as e:
-        print("Eat exception {0}".format(e))
+        print("Eat exception {0}".format(traceback.format_exc()))
 
     for imageSource in templateEntry["images"]:
         try:
@@ -192,6 +192,11 @@ def resolveTemplateFileEntry(templateFileEntry):
     if "endu" in templateFileEntry:
         try:
             target = templateFileEntry["endu"]
+            
+            if "rentry.co" in target:
+                print("Rejecting rentry.co template from {0}".format(templateFileEntry["name"]))
+                return []
+            
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
@@ -228,7 +233,7 @@ def resolveTemplateFileEntry(templateFileEntry):
                     converted["x"] = abs(converted["x"])
                     converted["y"] = abs(converted["y"])
                 
-                if "frameRate" in enduTemplateEntry:
+                if "frameRate" in enduTemplateEntry and enduTemplateEntry["frameRate"] != None:
                     print("Forcing exclusion of animated template {0}".format(localName))
                     converted["autopick"] = False
                     converted["__exclude"] = True
