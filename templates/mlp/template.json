@@ -66,6 +66,7 @@
 			"images": ["source/korea.png"],
 			"x": 405,
 			"y": 640,
+			"enabled_utc": 2000000000,
 			"priority": 1,
 			"autopick": true
 		},
@@ -80,7 +81,7 @@
 		{
 			"name": "TFH",
 			"images": ["source/TFH.png"],
-			"x": 529,
+			"x": 536,
 			"y": 714,
 			"priority": 1,
 			"autopick": true
@@ -130,6 +131,14 @@
 			"images": ["source/german.png"],
 			"x": 404,
 			"y": 728,
+			"priority": 1,
+			"autopick": true
+		},
+		{
+			"name": "monster_hunter",
+			"images": ["source/monster_hunter.png"],
+			"x": 512,
+			"y": 697,
 			"priority": 1,
 			"autopick": true
 		}
