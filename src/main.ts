@@ -14,7 +14,7 @@ import {html} from 'uhtml';
 import {waitForDocumentLoad, getMostLikelyCanvas, RedditCanvas, getRedditCanvas} from './canvas';
 import {Settings, CheckboxSetting, CycleSetting, ButtonSetting, DisplaySetting} from './minimap/minimap-components';
 import {createMinimapUI} from './minimap/minimap-ui';
-import {overlay} from './overlay';
+import {Overlay, fallbackOverlay} from './overlay';
 import {ImageTemplate, Template, updateLoop} from './template/template';
 import {AsyncWorkQueue, waitMs} from './utils';
 import {Analytics} from './analytics';
@@ -105,7 +105,7 @@ function logError(...args) {
     // Start overlay async.
     logError("Failed to find site specific handler. Falling back to overlay.");
     setRPlaceTemplate(rPlaceTemplateNames[1]);
-    overlay(canvas, rPlaceTemplate);
+    fallbackOverlay(canvas, rPlaceTemplate);
     // Don't load the settings interface, some pixel game sites will ban you for mousedown/mouseup
     // events.
     return;
@@ -259,6 +259,7 @@ function logError(...args) {
   }
 
   const enableAutoPickSetting = await GM.getValue('enableAutoPick', false);
+  const enableOverlay = await GM.getValue('enableOverlay', false);
 
   function initSettings(settings: Settings, ) {
     settings.addSetting(
@@ -296,6 +297,17 @@ function logError(...args) {
       })
     );
     settings.addSetting(
+        "overlay",
+        new CheckboxSetting("Fullscreen overlay", enableOverlay, function (overlaySetting) {
+          GM.setValue('enableOverlay', overlaySetting.enabled);
+          if(overlaySetting.enabled){
+            overlay?.show();
+          } else {
+            overlay?.hide();
+          }
+        })
+    );
+    settings.addSetting(
       "pixelDisplayProgress",
       new DisplaySetting("Current progress", "Unknown", true)
     );
@@ -330,8 +342,9 @@ function logError(...args) {
     }
   }
 
-  let template: Template | undefined = undefined;
+  let template: ImageTemplate | undefined = undefined;
   const templateWorkQueue = new AsyncWorkQueue();
+  let overlay: Overlay | undefined = undefined;
 
   function loadMask() {
     const maskData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height).data;
@@ -373,10 +386,16 @@ function logError(...args) {
     }
   }
 
-  const applyTemplate = (templ: Template) => {
+  const applyTemplate = (templ: ImageTemplate) => {
     palettizeTemplate(templ);
     minimapUI.setTemplate(templ);
     minimapUI.recalculateImagePos(posParser.pos);
+    if(overlay instanceof Overlay){
+      overlay.applyTemplate(templ);
+    } else {
+      overlay = new Overlay(canvas!, null, templ);
+      if (!settings.getSetting("overlay").enabled) overlay.hide();
+    }
     maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
     if (templ.mask) {
       templ.mask.drawTo(maskCtx);

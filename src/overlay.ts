@@ -13,7 +13,7 @@
 import {ImageTemplate, updateLoop} from "./template/template";
 import {AsyncWorkQueue, waitMs} from "./utils";
 
-class Overlay {
+export class Overlay {
   canvas: HTMLCanvasElement;
   templateDict;
   template: ImageTemplate;
@@ -25,7 +25,10 @@ class Overlay {
     this.templateDict = templateDict;
     this.template = template;
     this.overlayCanvas = document.createElement('canvas');
-    this.overlayContext = this.overlayCanvas.getContext('2d')!;  }
+    this.overlayContext = this.overlayCanvas.getContext('2d')!;
+    this.inject();
+    this.updateOverlayStyle();
+  }
 
   static async create(canvas: HTMLCanvasElement, templateDict) {
     const template = await ImageTemplate.fetchTemplate(templateDict.canvasUrl);
@@ -79,16 +82,25 @@ class Overlay {
     }
   }
 
-  applyTemplate() {
+  applyTemplate(template: ImageTemplate | undefined = undefined) {
+    if (template instanceof ImageTemplate){
+      this.template = template;
+    }
     const dithered = this.template.template.getDithered3x();
     this.overlayContext.putImageData(dithered, 0, 0);
   }
+
+  hide(){
+    this.overlayCanvas.style.display = 'none';
+  }
+
+  show(){
+    this.overlayCanvas.style.display = 'unset';
+  }
 };
 
-export async function overlay(canvas: HTMLCanvasElement, templateDict) {
+export async function fallbackOverlay(canvas: HTMLCanvasElement, templateDict) {
   const overlay = await Overlay.create(canvas, templateDict);
-  overlay.inject();
-  overlay.updateOverlayStyle();
   
   const queue = new AsyncWorkQueue();
   // Start the update loop, runs in the background.
