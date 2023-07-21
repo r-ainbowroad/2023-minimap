@@ -5,9 +5,9 @@
         {
             "name": "r/place bronies - starter",
             "sources": [
-                "https://ponyplace.z19.web.core.windows.net/mlp/endu_starter.png"
+                "http://ponyplace-cdn.ferrictorus.com/mlp/endu_starter.png"
             ],
-            "x": 405,
+            "x": 407,
             "y": 700
         }
     ]
