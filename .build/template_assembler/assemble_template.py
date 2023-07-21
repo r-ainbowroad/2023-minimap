@@ -518,6 +518,7 @@ def loadAllianceTemplatesFromCsv(csvLink, selfSourceRoot, honorAlliance):
         
         if selfSourceRoot in enduLink:
             print("skipping self {0}".format(name))
+            continue
         
         print("import template {0}".format(name))
         outputTemplate = {

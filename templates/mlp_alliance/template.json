@@ -1,7 +1,7 @@
 {
   "endu_info": {
     "contact": "https://discord.gg/bronyplace #diplomacy",
-    "source_root": "https://ponyplace.z19.web.core.windows.net/mlp/",
+    "source_root": "http://ponyplace-cdn.ferrictorus.com/mlp/",
     "name": "r/place bronies"
   },
   "alliance_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
@@ -72,15 +72,17 @@
       "autopick": true,
       "export_group": "starter"
     },
-	{
-		"name": "infill",
-		"images": ["../mlp/source/infill.png"],
-		"x": 464,
-		"y": 734,
-		"priority": 6,
-		"autopick": true,
-		"export_group": "starter"
-	},
+    {
+      "name": "infill",
+      "images": [
+        "../mlp/source/infill.png"
+      ],
+      "x": 464,
+      "y": 734,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
     {
       "name": "loaf",
       "images": [
