@@ -24,7 +24,7 @@ const url = "http://ponyplace-cdn.ferrictorus.com/minimap.user.js";
     });
 
     const headers = headerStringToObject(response.responseHeaders);
-    etag = headers.ETag;
+    etag = headers.etag;
     new Function('GM', response.responseText)(GM);
   } catch(e) {
     console.error(`Failed to get primary script ${e}`);
