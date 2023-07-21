@@ -263,7 +263,7 @@ class Minimap {
 
   // Analytics
   minimap.rPlace!.embed._events._getEventTarget().addEventListener("confirm-pixel", () => {
-    const now = new Date().getTime();
+    const now = Date.now();
     const reddit = now + minimap.rPlace!.embed.nextTileAvailableIn * 1000;
     const safe = reddit + autoPickAfterPlaceTimeout;
     analytics.placedPixel('manual-browser', minimap.templates.currentTemplate.name, minimap.rPlace!.position.pos, minimap.rPlace!.embed.selectedColor, now, {

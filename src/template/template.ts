@@ -125,7 +125,7 @@ export class ImageTemplate implements Template {
       ...req,
       method: "GET",
       responseType: "arraybuffer",
-      url: `${url}?t=${new Date().getTime()}`
+      url: `${url}?t=${Date.now()}`
     });
   }
 

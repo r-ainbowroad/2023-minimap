@@ -10,13 +10,13 @@ import math
 import traceback
 
 palettes = [
-    set([ # 2k x 2k palette from 2022
-        (0,     0,   0, 255),
-        (0,   117, 111, 255),
-        (0,   158, 170, 255),
-        (0,   163, 104, 255),
-        (0,   204, 120, 255),
-        (0,   204, 192, 255),
+    set([ # 2022 expansion 2 / 2k x 2k palette
+        (  0,   0,   0, 255),
+        (  0, 117, 111, 255),
+        (  0, 158, 170, 255),
+        (  0, 163, 104, 255),
+        (  0, 204, 120, 255),
+        (  0, 204, 192, 255),
         (106,  92, 255, 255),
         (109,   0,  26, 255),
         (109,  72,  47, 255),
@@ -38,16 +38,57 @@ palettes = [
         (255, 214,  53, 255),
         (255, 248, 184, 255),
         (255, 255, 255, 255),
-        (36,   80, 164, 255),
-        (54,  144, 234, 255),
-        (73,   58, 193, 255),
-        (81,   82,  82, 255),
-        (81,  233, 244, 255),
+        ( 36,  80, 164, 255),
+        ( 54, 144, 234, 255),
+        ( 73,  58, 193, 255),
+        ( 81,  82,  82, 255),
+        ( 81, 233, 244, 255),
+    ]),
+    set([ # 2023 inital
+        # 0
+        # 1
+        (255,  69,   0, 255),
+        (255, 168,   0, 255),
+        (255, 214,  53, 255),
+        # 5
+        (  0, 163, 104, 255),
+        # 8
+        # 9
+        # 10
+        # 11
+        # 12
+        ( 54, 144, 234, 255),
+        # 14
+        # 15
+        # 16
+        # 17
+        # 18
+        (180,  74, 192, 255),
+        # 20
+        # 21
+        # 22
+        # 23
+        # 24
+        # 25
+        # 26
+        (  0,   0,   0, 255),
+        # 28
+        # 29
+        # 30
+        (255, 255, 255, 255),
     ]),
 ]
 
-canvasSize = (1000, 1000)
-palette = palettes[0]
+# starter canvas of 1k x 1x. 0, 0 on the client moved to 500, 500 in screen space
+# we expect the canvas to be able to expand left or up which screws with the origin
+leftExpansion = 0
+rightExpansion = 0
+topExpansion = 0
+bottomExpansion = 0
+
+canvasSize = (1000 + leftExpansion + rightExpansion, 1000 + topExpansion + bottomExpansion)
+topLeftOffset = (leftExpansion, topExpansion)
+palette = palettes[1]
 
 def loadTemplate(subfolder):
     with open(os.path.join(subfolder, "template.json"), "r", encoding="utf-8") as f:
@@ -69,6 +110,7 @@ def copyTemplateEntryIntoCanvas(templateEntry, image, canvas):
         templateEntry["y"] < 0):
         templateEntry["x"] += 500
         templateEntry["y"] += 500
+        print("{0} seems to respect center?? {1}".format(templateEntry["name"], templateEntry))
 
     if (templateEntry["x"] + image.width > canvasSize[0] or
         templateEntry["y"] + image.height > canvasSize[1] or
@@ -104,7 +146,7 @@ def normalizeImage(convertedImage):
     fixedPixels = 0
     alphaProblems = 0
     wrongPixels = set()
-    collorCorrections = dict()
+    colorCorrections = dict()
     
     for y in range(0, convertedImage.height):
         for x in range(0, convertedImage.width):
@@ -118,9 +160,9 @@ def normalizeImage(convertedImage):
             if pixel in palette:
                 continue
 
-            if pixel[0:3] in collorCorrections:
-                v = collorCorrections[pixel[0:3]]
-                newColor = (v[0], v[1], v[2])
+            if pixel[0:3] in colorCorrections:
+                v = colorCorrections[pixel[0:3]]
+                newColor = (v[0], v[1], v[2], pixel[3])
                 newDelta = v[3]
             else:
                 newDelta = 99999999
@@ -130,7 +172,7 @@ def normalizeImage(convertedImage):
                     if colorDelta < newDelta:
                         newColor = color
                         newDelta = colorDelta
-                collorCorrections[pixel[0:3]] = [*newColor[0:3], newDelta]
+                colorCorrections[pixel[0:3]] = [*newColor[0:3], newDelta]
             
             if pixel[0:3] == newColor[0:3]:
                 alphaProblems += 1
@@ -154,10 +196,10 @@ def normalizeImage(convertedImage):
 def loadTemplateEntryImage(templateEntry, subfolder):
     # used to erase animations from all shipped images. render a fully opaque mask
     try:
-        if "forcewidth" in templateEntry:
+        if "forcewidth" in templateEntry and templateEntry["forcewidth"] != None:
             return createImage((templateEntry["forcewidth"], templateEntry["forceheight"]), isMask = True)
     except Exception as e:
-        print("Eat exception {0}".format(e))
+        print("Eat exception {0}".format(traceback.format_exc()))
 
     for imageSource in templateEntry["images"]:
         try:
@@ -192,6 +234,11 @@ def resolveTemplateFileEntry(templateFileEntry):
     if "endu" in templateFileEntry:
         try:
             target = templateFileEntry["endu"]
+            
+            if "rentry.co" in target:
+                print("Rejecting rentry.co template from {0}".format(templateFileEntry["name"]))
+                return []
+            
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
@@ -215,8 +262,8 @@ def resolveTemplateFileEntry(templateFileEntry):
                 converted = {
                     "name": localName,
                     "images": enduTemplateEntry["sources"],
-                    "x": enduTemplateEntry["x"],
-                    "y": enduTemplateEntry["y"]
+                    "x": enduTemplateEntry["x"] + topLeftOffset[0],
+                    "y": enduTemplateEntry["y"] + topLeftOffset[1]
                 }
                 
                 for copyProperty in ["export_group", "autopick", "priority"]:
@@ -228,7 +275,7 @@ def resolveTemplateFileEntry(templateFileEntry):
                     converted["x"] = abs(converted["x"])
                     converted["y"] = abs(converted["y"])
                 
-                if "frameRate" in enduTemplateEntry:
+                if "frameRate" in enduTemplateEntry and enduTemplateEntry["frameRate"] != None:
                     print("Forcing exclusion of animated template {0}".format(localName))
                     converted["autopick"] = False
                     converted["__exclude"] = True
@@ -246,6 +293,10 @@ def resolveTemplateFileEntry(templateFileEntry):
                 # going to make a bad assumption that name is provided...
                 print("Missing required property {1} from {0}".format(templateFileEntry["name"], requiredProperty))
                 raise KeyError()
+        
+        templateFileEntry["x"] += topLeftOffset[0]
+        templateFileEntry["y"] += topLeftOffset[1]
+        
         return [templateFileEntry]
     else:
         raise KeyError("template entry for {0} needs either images or endu keys".format(templateEntry["name"]))
@@ -415,8 +466,8 @@ def writeEnduInfos(enduGroups, enduInfo, subfolder):
             "sources": [
                 enduInfo["source_root"] + imageName + ".png"
             ],
-            "x": enduExtents["x1"],
-            "y": enduExtents["y1"]
+            "x": enduExtents["x1"] - topLeftOffset[0],
+            "y": enduExtents["y1"] - topLeftOffset[1]
         }
         
         outputObject["templates"].append(groupInfo)
@@ -467,6 +518,7 @@ def loadAllianceTemplatesFromCsv(csvLink, selfSourceRoot, honorAlliance):
         
         if selfSourceRoot in enduLink:
             print("skipping self {0}".format(name))
+            continue
         
         print("import template {0}".format(name))
         outputTemplate = {

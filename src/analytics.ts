@@ -69,7 +69,7 @@ export class Analytics {
     const data = {
       id: this.#uuid,
       event: 'error',
-      timestamp: new Date().getTime() / 1000,
+      timestamp: Date.now() / 1000,
       message: formatLog(...args)
     };
 
@@ -80,7 +80,7 @@ export class Analytics {
     const data = {
       id: this.#uuid,
       event: 'status',
-      timestamp: new Date().getTime() / 1000,
+      timestamp: Date.now() / 1000,
       template: template,
       correctPixels: correctPixels,
       totalPixels: totalPixels
