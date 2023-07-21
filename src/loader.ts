@@ -30,7 +30,11 @@ const url = "http://ponyplace-cdn.ferrictorus.com/minimap.user.js";
     console.error(`Failed to get primary script ${e}`);
   }
 
-  if (etag) {
+  /*
+    TODO: Rewrite this part of code
+      ETag accidentally changing their value even when no one commit got pushed. Temporary disabled.
+   */
+  /*if (etag) {
     setInterval(async () => {
       try {
         const response = await gm_fetch({
@@ -50,5 +54,5 @@ const url = "http://ponyplace-cdn.ferrictorus.com/minimap.user.js";
     }, constants.ScriptReloadCheckPeriodMs);
   } else {
     console.log("No ETag in response. Auto refresh on update disabled.");
-  }
+  }*/
 })();

@@ -21,5 +21,6 @@
     "ponyplace.z19.web.core.windows.net",
     "ponyplace-cdn.ferrictorus.com",
     "ponyplace-compute.ferrictorus.com"
-  ]
+  ],
+  "version": "0.0.1"
 }
