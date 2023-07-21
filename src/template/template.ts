@@ -54,7 +54,7 @@ type UpdateResult = 'MaybeChangedCached' | 'MaybeChangedNotCached' | 'NotChanged
 
 function mergeResponse(current: UpdateResult, resp: GM.Response<any>): UpdateResult {
   const headers = headerStringToObject(resp.responseHeaders);
-  if (current == 'MaybeChangedNotCached' || !headers.ETag)
+  if (current == 'MaybeChangedNotCached' || !headers.etag)
     return 'MaybeChangedNotCached';
   if (current == 'MaybeChangedCached' || resp.status != 304)
     return 'MaybeChangedCached';

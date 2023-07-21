@@ -33,9 +33,11 @@ export function headerStringToObject(headers: string) {
   return Object.fromEntries(headers.split('\r\n').filter((val) => {
     return !!val;
   }).map((val) => {
-    return val.split(': ').map((val) => {
+    const out = val.split(': ').map((val) => {
       return val.trim().replace(/^"+/, '').replace(/"+$/, '');
     });
+    out[0] = out[0].toLowerCase();
+    return out;
   }));
 }
 
