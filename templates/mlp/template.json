@@ -16,13 +16,24 @@
       "autopick": true
     },
     {
+		"name": "eyes",
+		"images": [
+		  "source/eyes.png"
+		],
+		"x": 422,
+		"y": 722,
+		"priority": 10,
+		"autopick": true,
+		"export_group": "starter"
+	  },
+    {
       "name": "dash",
       "images": [
         "source/dash.png"
       ],
       "x": 408,
       "y": 705,
-      "priority": 10,
+      "priority": 9,
       "autopick": true,
       "export_group": "starter"
     },
@@ -34,7 +45,7 @@
       ],
       "x": 451,
       "y": 712,
-      "priority": 9,
+      "priority": 8,
       "autopick": true,
       "export_group": "starter"
     },
@@ -45,7 +56,7 @@
       ],
       "x": 446,
       "y": 700,
-      "priority": 10,
+      "priority": 9,
       "autopick": true,
       "export_group": "starter"
     },
@@ -77,7 +88,7 @@
       ],
       "x": 407,
       "y": 750,
-      "priority": 9,
+      "priority": 8,
       "autopick": true,
       "export_group": "starter"
     },
