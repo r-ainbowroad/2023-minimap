@@ -145,6 +145,13 @@ export async function getRedditCanvas() {
         console.log("Failed to find `garlic-bread-canvas`");
         continue;
       }
+      const rPlacePaletteButtons = embed
+        .shadowRoot!.querySelector("garlic-bread-color-picker")!
+        .shadowRoot!.querySelectorAll(".palette button.color")!;
+      if (rPlacePaletteButtons.length === 0 && tries > 1) {
+        console.log("rPlace is exists but pallete is empty!");
+        continue;
+      }
       return new RedditCanvas(rPlaceCanvas, embed);
     } catch(error) {
       console.log("Failed to get the reddit canvas: ", error);
