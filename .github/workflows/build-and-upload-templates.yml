@@ -1,4 +1,4 @@
-name: Build and upload to blob
+name: Build templates and upload to blob
 
 on:
   workflow_dispatch:
@@ -8,9 +8,6 @@ on:
     branches:
       - "main"
     paths:
-      - "src/**.ts"
-      - "*.json"
-      - "rollup.config.mjs"
       - "templates/*/autopick*.png"
       - "templates/*/canvas*.png"
       - "templates/*/endu*.png"
@@ -46,19 +43,9 @@ jobs:
             python3 .build/template_assembler/assemble_template.py templates/$buildTemplate
         done
     
-    - name: Node setup for extension build
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18.x
-    
-    - name: Build extension
-      run: |
-        mkdir -p ./dist
-        npm install
-        npm run build
-    
     - name: Copy canvas files
       run: |
+        mkdir -p ./dist
         copyTemplates="mlp mlp_alliance mlp_world r-ainbowroad spain phoenixmc"
         # cp -f ./templates/mlp/autopick.png ./templates/mlp/canvas.png ./templates/mlp/mask.png ./templates/mlp/endu.png ./templates/mlp/endu_template.json ./templates/mlp/version.txt ./dist/mlp
         for copyTemplate in $copyTemplates; do
