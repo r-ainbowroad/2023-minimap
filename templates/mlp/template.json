@@ -6,6 +6,16 @@
   },
   "templates": [
     {
+      "name": "german",
+      "images": [
+        "source/german.png"
+      ],
+      "x": 404,
+      "y": 728,
+      "priority": 1,
+      "autopick": true
+    },
+    {
       "name": "dash",
       "images": [
         "source/dash.png"
@@ -162,16 +172,6 @@
       ],
       "x": 504,
       "y": 640,
-      "priority": 1,
-      "autopick": true
-    },
-    {
-      "name": "german",
-      "images": [
-        "source/german.png"
-      ],
-      "x": 404,
-      "y": 728,
       "priority": 1,
       "autopick": true
     },
