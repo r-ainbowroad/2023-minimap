@@ -76,3 +76,37 @@ export function waitMs(ms) {
     }, ms)
   );
 }
+
+export function intToHex(int1) {
+  return int1.toString(16).padStart(2, "0").slice(-2);
+}
+
+export class Emitter extends EventTarget {
+  constructor() {
+    super();
+    var delegate = document.createDocumentFragment();
+    ["addEventListener", "dispatchEvent", "removeEventListener"].forEach(
+      (f) => (this[f] = (...xs) => delegate[f](...xs))
+    );
+  }
+}
+
+export class BlobServer {
+  baseURL: string = "";
+
+  constructor(baseURL) {
+    this.baseURL = baseURL;
+  }
+
+  getTemplateUrl(templateName: string, type: string) {
+    return `${this.baseURL}/${templateName}/${type}.png`;
+  };
+
+  getTemplate(templateName: string, options) {
+    return {
+      canvasUrl: this.getTemplateUrl(templateName, "canvas"),
+      autoPickUrl: options.autoPick ? this.getTemplateUrl(templateName, "autopick") : undefined,
+      maskUrl: options.mask ? this.getTemplateUrl(templateName, "mask") : undefined,
+    }
+  }
+}

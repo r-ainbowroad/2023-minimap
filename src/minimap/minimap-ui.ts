@@ -12,6 +12,7 @@
 
 import {Template} from "../template/template";
 import {constants} from "../constants";
+import {Resizer} from "./minimap-components";
 
 const htmlBlock = `<style>
 mlpminimap {
@@ -87,15 +88,15 @@ display: none;
   <div class="crosshair"></div>
   <div class="settings"></div>
   <div id="resizer"></div>
-  <audio id="noSleep" src="https://hot-potato.reddit.com/media/interactions/select-color.mp3" playsinline></audio>
 </mlpminimap>`;
 
-class MinimapUI {
+export class MinimapUI {
   mlpMinimapBlock: HTMLElement;
   imageCanvas: HTMLCanvasElement;
   imageCanvasCtx: CanvasRenderingContext2D;
   crosshairBlock: HTMLDivElement;
   settingsBlock: HTMLDivElement;
+  lastPos: MonaLisa.Pos = {x: 0, y: 0, zoom: 0};
 
   constructor(mlpMinimapBlock: HTMLElement, 
               imageCanvas: HTMLCanvasElement, imageCanvasCtx: CanvasRenderingContext2D,
@@ -105,6 +106,12 @@ class MinimapUI {
     this.imageCanvasCtx = imageCanvasCtx;
     this.crosshairBlock = crosshairBlock;
     this.settingsBlock = settingsBlock;
+
+    const _root = this;
+    const resizerBlock = this.mlpMinimapBlock.querySelector("#resizer");
+    const resizerAction = new Resizer(resizerBlock, mlpMinimapBlock, () => {
+      _root.recalculateImagePos();
+    });
   }
 
   setTemplate(template: Template) {
@@ -113,28 +120,19 @@ class MinimapUI {
     template.template.drawTo(this.imageCanvasCtx);
   }
 
-  recalculateImagePos(pos: MonaLisa.Pos) {
+  recalculateImagePos(pos: MonaLisa.Pos | undefined = undefined) {
+    if (typeof pos === "undefined") {
+      pos = this.lastPos;
+    }
     const rPlacePixelSize = constants.rPlacePixelSize;
-    const coordinatesData = pos;
     const minimapData = this.getMinimapSize();
-    this.imageCanvas.style.width = `${
-      this.imageCanvas.width * rPlacePixelSize * coordinatesData.scale
-    }px`;
-    this.imageCanvas.style.height = `${
-      this.imageCanvas.height * rPlacePixelSize * coordinatesData.scale
-    }px`;
-    this.imageCanvas.style["margin-left"] = `${
-      -1 *
-      ((coordinatesData.x * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
-        minimapData.width / 2)
-    }px`;
-    this.imageCanvas.style["margin-top"] = `${
-      -1 *
-      ((coordinatesData.y * rPlacePixelSize + rPlacePixelSize / 2) * coordinatesData.scale -
-        minimapData.height / 2)
-    }px`;
-    this.crosshairBlock.style.width = `${rPlacePixelSize * coordinatesData.scale}px`;
-    this.crosshairBlock.style.height = `${rPlacePixelSize * coordinatesData.scale}px`;
+    this.imageCanvas.style.width = `${this.imageCanvas.width * rPlacePixelSize * pos.zoom}px`;
+    this.imageCanvas.style.height = `${this.imageCanvas.height * rPlacePixelSize * pos.zoom}px`;
+    this.imageCanvas.style["margin-left"] = `${-((pos.x * rPlacePixelSize + rPlacePixelSize / 2) * pos.zoom - minimapData.width / 2)}px`;
+    this.imageCanvas.style["margin-top"] = `${-((pos.y * rPlacePixelSize + rPlacePixelSize / 2) * pos.zoom - minimapData.height / 2)}px`;
+    this.crosshairBlock.style.width = `${rPlacePixelSize * pos.zoom}px`;
+    this.crosshairBlock.style.height = `${rPlacePixelSize * pos.zoom}px`;
+    this.lastPos = pos;
   }
 
   private getMinimapSize() {

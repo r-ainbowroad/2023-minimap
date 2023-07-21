@@ -157,6 +157,32 @@ export class ImageTemplate implements Template {
     return new ImageTemplate(template.getWidth(), template.getHeight(), template, templateURL, mask,
                              maskURL);
   }
+
+  palettize(pallete) {
+    const data = this.template.getImageData();
+    for (let i = 0; i < data.length / 4; i++) {
+      const base = i * 4;
+      const currentColor = data.slice(base, base + 3);
+      if (currentColor[0] + currentColor[1] + currentColor[2] === 0) continue;
+
+      let newColor;
+      let bestDiff = Infinity;
+      for (const color of pallete) {
+        const diff = Math.abs(currentColor[0] - color[0]) + Math.abs(currentColor[1] - color[1]) + Math.abs(currentColor[2] - color[2]);
+        if (diff === 0)
+          return color;
+        if (diff < bestDiff) {
+          bestDiff = diff;
+          newColor = color;
+        }
+      }
+      if (!newColor) newColor = [0, 0, 0];
+
+      data[base] = newColor[0];
+      data[base + 1] = newColor[1];
+      data[base + 2] = newColor[2];
+    }
+  }
 }
 
 export async function updateLoop(workQueue: AsyncWorkQueue, getTemplate: () => Template,
