@@ -63,9 +63,9 @@
     {
       "name": "cozy",
       "images": [
-        "source/cozy2.png"
+        "source/cozy.png"
       ],
-      "x": 512,
+      "x": 522,
       "y": 740,
       "priority": 1,
       "autopick": true
@@ -132,6 +132,7 @@
       ],
       "x": 536,
       "y": 714,
+      "enabled_utc": 2000000000,
       "priority": 1,
       "autopick": true
     },
@@ -142,6 +143,7 @@
       ],
       "x": 554,
       "y": 652,
+      "enabled_utc": 2000000000,
       "priority": 1,
       "autopick": true
     },

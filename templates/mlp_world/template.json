@@ -65,9 +65,9 @@
     {
       "name": "cozy",
       "images": [
-        "../mlp/source/cozy2.png"
+        "../mlp/source/cozy.png"
       ],
-      "x": 512,
+      "x": 522,
       "y": 740,
       "priority": 1,
       "autopick": true
@@ -119,20 +119,22 @@
     {
       "name": "TFH",
       "images": [
-        "../mlp/source/TFH.png"
+        "source/TFH.png"
       ],
       "x": 536,
       "y": 714,
+      "enabled_utc": 2000000000,
       "priority": 1,
       "autopick": true
     },
     {
       "name": "FoE",
       "images": [
-        "../mlp/source/FoE.png"
+        "source/FoE.png"
       ],
       "x": 554,
       "y": 652,
+      "enabled_utc": 2000000000,
       "priority": 1,
       "autopick": true
     },
