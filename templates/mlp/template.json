@@ -116,6 +116,22 @@
 			"y": 640,
 			"priority": 1,
 			"autopick": true
+		},
+		{
+			"name": "cozy",
+			"images": ["source/cozy.png"],
+			"x": 522,
+			"y": 741,
+			"priority": 1,
+			"autopick": true
+		},
+		{
+			"name": "german",
+			"images": ["source/german.png"],
+			"x": 404,
+			"y": 728,
+			"priority": 1,
+			"autopick": true
 		}
 	]
 }
