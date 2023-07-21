@@ -4,11 +4,10 @@ const NEXT_ART_MIN_DIST = 100; // art within this range is considered the same
 const FOCUS_AREA_SIZE = 75;
 
 export class CanvasComparer extends Emitter {
-  private currentLocationIndex: number | null = null;
-  private rPlaceCanvas: HTMLCanvasElement;
-  private templateCanvas: HTMLCanvasElement;
-  private maskCanvas: HTMLCanvasElement;
-  compareCanvas: HTMLCanvasElement;
+  private compareCanvas: HTMLCanvasElement;
+  rPlaceCanvas: HTMLCanvasElement;
+  templateCanvas: HTMLCanvasElement;
+  maskCanvas: HTMLCanvasElement;
 
   constructor(rPlaceCanvas: HTMLCanvasElement, templateCanvas: HTMLCanvasElement, maskCanvas: HTMLCanvasElement) {
     super();
@@ -21,6 +20,7 @@ export class CanvasComparer extends Emitter {
     this.compareCanvas.height = rPlaceCanvas.height;
   }
 
+  private currentLocationIndex: number | null = null;
   findNextArt() {
     const templateData = this.templateCanvas.getContext("2d")!.getImageData(0, 0, this.rPlaceCanvas.width, this.rPlaceCanvas.height).data;
 
