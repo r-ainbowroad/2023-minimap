@@ -60,6 +60,15 @@
 			"export_group": "starter"
 		},
 		{
+			"name": "infill",
+			"images": ["source/infill.png"],
+			"x": 464,
+			"y": 734,
+			"priority": 6,
+			"autopick": true,
+			"export_group": "starter"
+		},
+		{
 			"name": "loaf",
 			"images": ["source/llvm_loaf.png"],
 			"enabled_utc": 2000000000,
