@@ -47,7 +47,7 @@
 			"images": ["source/base.png"],
 			"x": 405,
 			"y": 750,
-			"priority": 8,
+			"priority": 10,
 			"autopick": true,
 			"export_group": "starter"
 		},

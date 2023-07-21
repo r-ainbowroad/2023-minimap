@@ -10,13 +10,13 @@ import math
 import traceback
 
 palettes = [
-    set([ # 2k x 2k palette from 2022
-        (0,     0,   0, 255),
-        (0,   117, 111, 255),
-        (0,   158, 170, 255),
-        (0,   163, 104, 255),
-        (0,   204, 120, 255),
-        (0,   204, 192, 255),
+    set([ # 2022 expansion 2 / 2k x 2k palette
+        (  0,   0,   0, 255),
+        (  0, 117, 111, 255),
+        (  0, 158, 170, 255),
+        (  0, 163, 104, 255),
+        (  0, 204, 120, 255),
+        (  0, 204, 192, 255),
         (106,  92, 255, 255),
         (109,   0,  26, 255),
         (109,  72,  47, 255),
@@ -38,16 +38,50 @@ palettes = [
         (255, 214,  53, 255),
         (255, 248, 184, 255),
         (255, 255, 255, 255),
-        (36,   80, 164, 255),
-        (54,  144, 234, 255),
-        (73,   58, 193, 255),
-        (81,   82,  82, 255),
-        (81,  233, 244, 255),
+        ( 36,  80, 164, 255),
+        ( 54, 144, 234, 255),
+        ( 73,  58, 193, 255),
+        ( 81,  82,  82, 255),
+        ( 81, 233, 244, 255),
+    ]),
+    set([ # 2023 inital
+        # 0
+        # 1
+        (255,  69,   0, 255),
+        (255, 168,   0, 255),
+        (255, 214,  53, 255),
+        # 5
+        (  0, 163, 104, 255),
+        # 8
+        # 9
+        # 10
+        # 11
+        # 12
+        ( 54, 144, 234, 255),
+        # 14
+        # 15
+        # 16
+        # 17
+        # 18
+        (180,  74, 192, 255),
+        # 20
+        # 21
+        # 22
+        # 23
+        # 24
+        # 25
+        # 26
+        (  0,   0,   0, 255),
+        # 28
+        # 29
+        # 30
+        (255, 255, 255, 255),
     ]),
 ]
 
 canvasSize = (1000, 1000)
-palette = palettes[0]
+topLeftOffset = (0, 0)
+palette = palettes[1]
 
 def loadTemplate(subfolder):
     with open(os.path.join(subfolder, "template.json"), "r", encoding="utf-8") as f:
@@ -69,6 +103,7 @@ def copyTemplateEntryIntoCanvas(templateEntry, image, canvas):
         templateEntry["y"] < 0):
         templateEntry["x"] += 500
         templateEntry["y"] += 500
+        print("{0} seems to respect center?? {1}".format(templateEntry["name"], templateEntry))
 
     if (templateEntry["x"] + image.width > canvasSize[0] or
         templateEntry["y"] + image.height > canvasSize[1] or
