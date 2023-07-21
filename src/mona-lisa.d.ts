@@ -9,7 +9,7 @@ declare namespace MonaLisa {
   interface Pos {
     x: number,
     y: number,
-    scale: number
+    zoom: number
   }
 
   interface Camera {

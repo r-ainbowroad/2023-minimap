@@ -154,3 +154,32 @@ export class Settings {
     return this.settingsByName.get(name);
   }
 }
+
+export class Resizer {
+  constructor(elResizer, elBlock, callback = () => {
+  }) {
+    var startX, startY, startWidth, startHeight;
+
+    function doDrag(e) {
+      elBlock.style.width = startWidth - e.clientX + startX + "px";
+      elBlock.style.height = startHeight + e.clientY - startY + "px";
+      callback();
+    }
+
+    function stopDrag(e) {
+      document.documentElement.removeEventListener("mousemove", doDrag, false);
+      document.documentElement.removeEventListener("mouseup", stopDrag, false);
+    }
+
+    function initDrag(e) {
+      startX = e.clientX;
+      startY = e.clientY;
+      startWidth = parseInt(document.defaultView!.getComputedStyle(elBlock).width, 10);
+      startHeight = parseInt(document.defaultView!.getComputedStyle(elBlock).height, 10);
+      document.documentElement.addEventListener("mousemove", doDrag, false);
+      document.documentElement.addEventListener("mouseup", stopDrag, false);
+    }
+
+    elResizer.addEventListener("mousedown", initDrag, false);
+  }
+}
