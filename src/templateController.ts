@@ -1,5 +1,5 @@
 import {AsyncWorkQueue, Emitter} from "./utils";
-import {ImageTemplate} from "./template/template";
+import {ImageTemplate, updateLoop} from "./template/template";
 
 interface MinimapTemplate {
   name: string;
@@ -18,6 +18,10 @@ export class MinimapTemplateController extends Emitter {
 
   constructor() {
     super();
+    const _root = this;
+    updateLoop(this.templateWorkQueue, () => { return this.currentTemplate.obj!; }, () => {
+      _root.dispatchEvent(new Event("templateFetched"));
+    });
   }
 
   add(name, template) {
