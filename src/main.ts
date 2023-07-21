@@ -94,9 +94,7 @@ class Minimap {
     this.templates.set(this.templates.keys[0]);
 
     await waitForDocumentLoad();
-    // TODO: Replace constanted timeout to smart
-    // If Reddit r/Place has been loaded but not connected to server, so pallete can be empty and after that we have black colors
-    await waitMs(2500);
+    await waitMs(1000);
     this.rPlace = await getRedditCanvas();
     if (!this.rPlace) {
       const canvas = this.rPlace!.canvas;

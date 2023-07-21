@@ -12,7 +12,7 @@
 
 export namespace constants {
   export const rPlacePixelSize = 1;
-  export const MaxSiteSpecificDetectAttempts = 3;
+  export const MaxSiteSpecificDetectAttempts = 5;
   export const SiteSpecificDetectRetryDelayMs = 1000;
 
   export const ScriptReloadCheckPeriodMs = 60 * 1000;
