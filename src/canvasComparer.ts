@@ -218,14 +218,14 @@ export class CanvasComparer extends Emitter {
    */
   selectRandomPixelFromDiff() {
     let pixel;
-    /*let isMaskNotEmpty = this.maskCanvas!.getContext('2d')!
+    let isMaskNotEmpty = this.maskCanvas!.getContext('2d')!
         .getImageData(0, 0, this.maskCanvas!.width, this.maskCanvas!.height).data
-        .some(channel => channel !== 0);*/
-    //if (true) {
-    pixel = this._diff[Math.floor(Math.random() * this._diff.length)];
-    //} else {
-    //    pixel = this.selectRandomPixelWeighted(diff);
-    //}
+        .some(channel => channel !== 0);
+    if (!isMaskNotEmpty) {
+      pixel = this._diff[Math.floor(Math.random() * this._diff.length)];
+    } else {
+      pixel = this.selectRandomPixelWeighted(this._diff);
+    }
     const [x, y] = pixel;
     return {x, y};
   }
