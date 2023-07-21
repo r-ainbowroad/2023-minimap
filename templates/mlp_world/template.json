@@ -119,7 +119,7 @@
     {
       "name": "TFH",
       "images": [
-        "source/TFH.png"
+        "../mlp/source/TFH.png"
       ],
       "x": 526,
       "y": 713,
@@ -129,11 +129,10 @@
     {
       "name": "FoE",
       "images": [
-        "source/FoE.png"
+        "../mlp/source/FoE.png"
       ],
-      "x": 732,
-      "y": 517,
-      "enabled_utc": 2000000000,
+      "x": 731,
+      "y": 516,
       "priority": 1,
       "autopick": true
     },

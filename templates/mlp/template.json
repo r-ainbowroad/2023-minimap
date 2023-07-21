@@ -140,9 +140,8 @@
       "images": [
         "source/FoE.png"
       ],
-      "x": 732,
-      "y": 517,
-      "enabled_utc": 2000000000,
+      "x": 731,
+      "y": 516,
       "priority": 1,
       "autopick": true
     },
