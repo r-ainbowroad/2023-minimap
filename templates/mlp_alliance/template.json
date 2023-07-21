@@ -52,13 +52,23 @@
       "export_group": "starter"
     },
     {
+      "name": "cozy",
+      "images": [
+        "../mlp/source/cozy2.png"
+      ],
+      "x": 512,
+      "y": 740,
+      "priority": 1,
+      "autopick": true
+    },
+    {
       "name": "base",
       "images": [
         "../mlp/source/base.png"
       ],
       "x": 405,
       "y": 750,
-      "priority": 8,
+      "priority": 9,
       "autopick": true,
       "export_group": "starter"
     },
@@ -142,16 +152,6 @@
       ],
       "x": 504,
       "y": 640,
-      "priority": 1,
-      "autopick": true
-    },
-    {
-      "name": "cozy",
-      "images": [
-        "../mlp/source/cozy.png"
-      ],
-      "x": 522,
-      "y": 741,
       "priority": 1,
       "autopick": true
     },

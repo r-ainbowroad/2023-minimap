@@ -43,11 +43,19 @@
 			"export_group": "starter"
 		},
 		{
+			"name": "cozy",
+			"images": ["source/cozy2.png"],
+			"x": 512,
+			"y": 740,
+			"priority": 1,
+			"autopick": true
+		},
+		{
 			"name": "base",
 			"images": ["source/base.png"],
 			"x": 405,
 			"y": 750,
-			"priority": 10,
+			"priority": 9,
 			"autopick": true,
 			"export_group": "starter"
 		},
@@ -115,14 +123,6 @@
 			"images": ["source/Madoka.png"],
 			"x": 504,
 			"y": 640,
-			"priority": 1,
-			"autopick": true
-		},
-		{
-			"name": "cozy",
-			"images": ["source/cozy.png"],
-			"x": 522,
-			"y": 741,
 			"priority": 1,
 			"autopick": true
 		},

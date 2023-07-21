@@ -79,8 +79,15 @@ palettes = [
     ]),
 ]
 
-canvasSize = (1000, 1000)
-topLeftOffset = (0, 0)
+# starter canvas of 1k x 1x. 0, 0 on the client moved to 500, 500 in screen space
+# we expect the canvas to be able to expand left or up which screws with the origin
+leftExpansion = 0
+rightExpansion = 0
+topExpansion = 0
+bottomExpansion = 0
+
+canvasSize = (1000 + leftExpansion + rightExpansion, 1000 + topExpansion + bottomExpansion)
+topLeftOffset = (leftExpansion, topExpansion)
 palette = palettes[1]
 
 def loadTemplate(subfolder):
@@ -255,8 +262,8 @@ def resolveTemplateFileEntry(templateFileEntry):
                 converted = {
                     "name": localName,
                     "images": enduTemplateEntry["sources"],
-                    "x": enduTemplateEntry["x"],
-                    "y": enduTemplateEntry["y"]
+                    "x": enduTemplateEntry["x"] + topLeftOffset[0],
+                    "y": enduTemplateEntry["y"] + topLeftOffset[1]
                 }
                 
                 for copyProperty in ["export_group", "autopick", "priority"]:
@@ -286,6 +293,10 @@ def resolveTemplateFileEntry(templateFileEntry):
                 # going to make a bad assumption that name is provided...
                 print("Missing required property {1} from {0}".format(templateFileEntry["name"], requiredProperty))
                 raise KeyError()
+        
+        templateFileEntry["x"] += topLeftOffset[0]
+        templateFileEntry["y"] += topLeftOffset[1]
+        
         return [templateFileEntry]
     else:
         raise KeyError("template entry for {0} needs either images or endu keys".format(templateEntry["name"]))
@@ -455,8 +466,8 @@ def writeEnduInfos(enduGroups, enduInfo, subfolder):
             "sources": [
                 enduInfo["source_root"] + imageName + ".png"
             ],
-            "x": enduExtents["x1"],
-            "y": enduExtents["y1"]
+            "x": enduExtents["x1"] - topLeftOffset[0],
+            "y": enduExtents["y1"] - topLeftOffset[1]
         }
         
         outputObject["templates"].append(groupInfo)
