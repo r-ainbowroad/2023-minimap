@@ -131,7 +131,7 @@
       "images": [
         "../mlp/source/FoE.png"
       ],
-      "x": 731,
+      "x": 741,
       "y": 516,
       "priority": 1,
       "autopick": true
@@ -161,8 +161,8 @@
       "images": [
         "../mlp/source/Madoka.png"
       ],
-      "x": 504,
-      "y": 640,
+      "x": 503,
+      "y": 637,
       "priority": 1,
       "autopick": true
     },
