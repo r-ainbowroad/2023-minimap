@@ -25,7 +25,7 @@
 		"priority": 10,
 		"autopick": true,
 		"export_group": "starter"
-	  },
+	},
     {
       "name": "dash",
       "images": [
@@ -182,7 +182,7 @@
         "source/Madoka.png"
       ],
       "x": 503,
-      "y": 637,
+      "y": 638,
       "priority": 1,
       "autopick": true
     },
