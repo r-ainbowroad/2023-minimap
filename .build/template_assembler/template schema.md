@@ -55,7 +55,7 @@ The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwis
     * optional, defaults to false
     * if true, causes the image to be put on the autopick canvas along with generating a priority mask to put on the mask canvas
     * enabling this for an Endu template means **all the things in it** are autopick-enabled
-  
+
 * `priority`
 
     integer (between 1 and 10, inclusive)
@@ -108,3 +108,9 @@ The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwis
 
   integer
   * the y coordinate in screen space of the top left corner of the image
+
+* `useRedditCoords`
+
+    boolean (or something that parses to a bool)
+    * optional, defaults to false
+    * if true, uses reddit's coordinate system relative to the center rather than 0,0 of the original 1k x 1k canvas
