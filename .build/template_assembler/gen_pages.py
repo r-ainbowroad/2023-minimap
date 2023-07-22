@@ -1,12 +1,12 @@
 for i in range(27, 0, -1):
-    time = 1690002000 + 7400 * (i - 1)
+    time = 1690002000 + 7200 * (i - 1)
     page = i
     print(f"""\
     {{
       "name": "book page {page}",
       "enabled_utc": {time},
       "images": [
-        "../mlp/source/book_frame{page:02d}.png"
+        "source/book_frame{page:02d}.png"
       ],
       "x": 451,
       "y": 712,
