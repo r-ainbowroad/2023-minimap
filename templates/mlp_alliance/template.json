@@ -579,6 +579,16 @@
       "y": 582,
       "priority": 4,
       "autopick": true
+    },
+    {
+      "name": "m6",
+      "images": [
+        "../mlp/source/source/m6.png"
+      ],
+      "x": 0,
+      "y": -100,
+      "priority": 4,
+      "autopick": true
     }
   ]
 }
