@@ -463,7 +463,6 @@ def generatePriorityMask(templateEntry, image, priority_override = None):
                         pixelTuple = (0, 0, 0, 0)
                     else:
                         currentPriority = int(priority + 25 - 8 + priorityRaw / 32)
-                        print(currentPriority)
                         pixelTuple = (currentPriority, currentPriority, currentPriority, 255)
                     maskDraw.point((x, y), pixelTuple)
 
@@ -628,7 +627,6 @@ def main(subfolder):
     utcNow = int(datetime.datetime.utcnow().timestamp())
     print(f"now is {utcNow}")
     for templateEntry in templates:
-        print(templateEntry)
         if ("enabled_utc" in templateEntry and int(templateEntry["enabled_utc"]) > utcNow):
             print("skip {0} due to future animation frame ({1:.02f}h)".format(templateEntry["name"], (int(templateEntry["enabled_utc"])-utcNow)/3600.0))
             continue
