@@ -527,6 +527,16 @@
       "y": 859,
       "priority": 4,
       "autopick": true
+    },
+    {
+      "name": "trixie",
+      "images": [
+        "source/trixie.png"
+      ],
+      "x": 750,
+      "y": 542,
+      "priority": 4,
+      "autopick": true
     }
   ]
 }
