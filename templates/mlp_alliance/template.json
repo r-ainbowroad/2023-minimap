@@ -206,6 +206,16 @@
       "y": 697,
       "priority": 1,
       "autopick": true
-    }
+    },
+	{
+		"name": "catdog",
+		"images": [
+		  "../mlp/source/catdog.png"
+		],
+		"x": 501,
+		"y": 705,
+		"priority": 1,
+		"autopick": true
+	}
   ]
 }
