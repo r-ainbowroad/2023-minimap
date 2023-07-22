@@ -543,7 +543,7 @@ def loadAllianceTemplatesFromCsv(csvLink, selfSourceRoot, honorAlliance):
             continue
 
         chunks = [v.strip('"') for v in chunks]
-        (name, enduLink, blacklisted, allianceMember) = chunks
+        (name, enduLink, blacklisted, allianceMember) = chunks[0:4]
         if blacklisted != "":
             print("skipping blacklisted template {0}".format(name))
             continue
