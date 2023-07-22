@@ -28,6 +28,17 @@
       "export_group": "starter"
     },
     {
+      "name": "cmc",
+      "images": [
+        "source/cmc.png"
+      ],
+      "x": 445,
+      "y": 727,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "dash",
       "images": [
         "source/dash.png"
