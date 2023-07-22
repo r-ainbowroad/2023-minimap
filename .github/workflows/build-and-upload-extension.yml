@@ -41,6 +41,16 @@ jobs:
         path: |
           dist
 
+    - name: Setup rclone
+      uses: AnimMouse/setup-rclone@v1
+      with:
+        rclone_config: |
+          [ponyplace]
+          type = azureblob
+          env_auth = true
+          account = ponyplace
+        disable_base64: true
+
     # creds will expire around 2024-06-16
     - name: Azure login
       uses: azure/login@v1
@@ -48,10 +58,8 @@ jobs:
         creds: ${{ secrets.PONYPLACE_BLOB_CREDS }}
     
     - name: Upload to blob storage
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
+      run: |
+        rclone -c copy ./dist "ponyplace:\$web"
     
     - name: Azure logout
       run: az logout
