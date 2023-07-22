@@ -34,7 +34,7 @@
       ],
       "x": 422,
       "y": 722,
-      "priority": 10,
+      "priority": 9,
       "autopick": true,
       "export_group": "starter"
     },
@@ -587,7 +587,7 @@
       ],
       "x": 0,
       "y": -100,
-      "priority": 4,
+      "priority": 10,
       "autopick": true
     }
   ]
