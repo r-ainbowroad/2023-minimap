@@ -116,7 +116,7 @@ palettes = [
 # starter canvas of 1k x 1x. 0, 0 on the client moved to 500, 500 in screen space
 # we expect the canvas to be able to expand left or up which screws with the origin
 leftExpansion = 0
-rightExpansion = 0
+rightExpansion = 500
 topExpansion = 0
 bottomExpansion = 0
 
