@@ -594,6 +594,7 @@ def main(subfolder):
     enduGroups = dict()
     
     utcNow = int(datetime.datetime.utcnow().timestamp())
+    print(f"now is {utcNow}")
     for templateEntry in templates:
         if ("enabled_utc" in templateEntry and int(templateEntry["enabled_utc"]) > utcNow):
             print("skip {0} due to future animation frame ({1:.02f}h)".format(templateEntry["name"], (int(templateEntry["enabled_utc"])-utcNow)/3600.0))
