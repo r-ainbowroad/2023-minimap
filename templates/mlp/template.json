@@ -17,6 +17,16 @@
       "export_group": "starter"
     },
     {
+      "name": "tinyshiny",
+      "images": [
+        "source/tinyshiny.png"
+      ],
+      "x": 479,
+      "y": 729,
+      "priority": 4,
+      "autopick": true
+    },
+    {
       "name": "eyes",
       "images": [
         "source/eyes.png"
