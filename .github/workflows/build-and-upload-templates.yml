@@ -78,7 +78,7 @@ jobs:
           [ponyplace]
           type = azureblob
           env_auth = true
-          account = ponyplace/
+          account = ponyplace
         disable_base64: true
 
     # creds will expire around 2024-06-16
