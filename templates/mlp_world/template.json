@@ -588,7 +588,8 @@
       "x": 0,
       "y": -160,
       "priority": 10,
-      "autopick": true
+      "autopick": true,
+      "export_group": "expansion3"
     }
   ]
 }

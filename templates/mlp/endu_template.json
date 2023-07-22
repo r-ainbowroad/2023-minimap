@@ -9,6 +9,14 @@
             ],
             "x": 907,
             "y": 1200
+        },
+        {
+            "name": "r/place bronies - expansion3",
+            "sources": [
+                "http://ponyplace-cdn.ferrictorus.com/mlp/endu_expansion3.png"
+            ],
+            "x": 500,
+            "y": 340
         }
     ]
 }
