@@ -115,7 +115,8 @@ palettes = [
 
 # starter canvas of 1k x 1x. 0, 0 on the client moved to 500, 500 in screen space
 # we expect the canvas to be able to expand left or up which screws with the origin
-leftExpansion = 0
+leftExpansion = 500
+leftExpansion = 500
 rightExpansion = 500
 topExpansion = 0
 bottomExpansion = 0
@@ -296,8 +297,8 @@ def resolveTemplateFileEntry(templateFileEntry):
                 converted = {
                     "name": localName,
                     "images": enduTemplateEntry["sources"],
-                    "x": enduTemplateEntry["x"] + topLeftOffset[0],
-                    "y": enduTemplateEntry["y"] + topLeftOffset[1]
+                    "x": enduTemplateEntry["x"],
+                    "y": enduTemplateEntry["y"],
                 }
                 
                 for copyProperty in ["export_group", "autopick", "priority"]:
@@ -326,8 +327,9 @@ def resolveTemplateFileEntry(templateFileEntry):
             if not requiredProperty in templateFileEntry:
                 # going to make a bad assumption that name is provided...
                 print("Missing required property {1} from {0}".format(templateFileEntry["name"], requiredProperty))
-                raise KeyError()
+                raise KeyError(1)
         
+        # our templates are rooted at the original 1k x 1k 0,0
         templateFileEntry["x"] += topLeftOffset[0]
         templateFileEntry["y"] += topLeftOffset[1]
         
@@ -500,8 +502,8 @@ def writeEnduInfos(enduGroups, enduInfo, subfolder):
             "sources": [
                 enduInfo["source_root"] + imageName + ".png"
             ],
-            "x": enduExtents["x1"] - topLeftOffset[0],
-            "y": enduExtents["y1"] - topLeftOffset[1]
+            "x": enduExtents["x1"],
+            "y": enduExtents["y1"],
         }
         
         outputObject["templates"].append(groupInfo)
