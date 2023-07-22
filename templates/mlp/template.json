@@ -568,6 +568,16 @@
       "y": 735,
       "priority": 4,
       "autopick": true
+    },
+    {
+      "name": "glimpeek",
+      "images": [
+        "source/glimpeek.png"
+      ],
+      "x": 1126,
+      "y": 582,
+      "priority": 4,
+      "autopick": true
     }
   ]
 }
