@@ -3,7 +3,7 @@ name: Build templates and upload to blob
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0,10,20,30,40,50,50 * * * *'
+    - cron: '9,19,29,39,49,59,59 * * * *'
   push:
     branches:
       - "main"
