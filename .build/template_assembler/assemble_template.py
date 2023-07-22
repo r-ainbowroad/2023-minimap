@@ -139,7 +139,7 @@ def createImage(size, isMask):
 def createCanvas(isMask = False):
     return createImage(canvasSize, isMask)
 
-def copyTemplateEntryIntoCanvas(templateEntry, image, canvas):
+def copyTemplateEntryIntoCanvas(templateEntry, image, canvas, priorityOverride=None):
     if (templateEntry["x"] < 0 or
         templateEntry["y"] < 0):
         templateEntry["x"] += 500
@@ -152,6 +152,15 @@ def copyTemplateEntryIntoCanvas(templateEntry, image, canvas):
         templateEntry["y"] < 0):
         print("{0} is not entirely on canvas?? {1}".format(templateEntry["name"], templateEntry))
     
+    if priorityOverride != None:
+        image = image.copy()
+        imagePixels = image.load()
+        overridePixels = priorityOverride.load()
+        for x in range(image.size[0]):
+            for y in range(image.size[1]):
+                if overridePixels[x, y] == (0, 0, 0, 255):
+                    imagePixels[x, y] = (0, 0, 0, 0)
+
     canvas.alpha_composite(image, (templateEntry["x"], templateEntry["y"]))
 
 def eraseFromCanvas(templateEntry, maskImage, canvas, isMask = False):
@@ -393,7 +402,7 @@ def isFilledPixelOnEdge(image, knownTransparent, xy):
 def isTransparent(pixelTuple):
     return pixelTuple[3] < 128
 
-def generatePriorityMask(templateEntry, image):
+def generatePriorityMask(templateEntry, image, priority_override = None):
     priority = 1
     if "priority" in templateEntry:
         priority = int(templateEntry["priority"])
@@ -442,13 +451,36 @@ def generatePriorityMask(templateEntry, image):
     pixelTuple = (priority, priority, priority, 255)
     for pixel in innerPixels:
         maskDraw.point(pixel, pixelTuple)
+    
+    if (priority_override != None):
+        priorityOverridePixels = priority_override.load()
+        for x in range(priority_override.size[0]):
+            for y in range(priority_override.size[1]):
+                if priorityOverridePixels[x, y][3] != 0:
+                    priorityRaw = priorityOverridePixels[x, y][0]
+                    pixelTuple = None
+                    if (priorityRaw == 0):
+                        pixelTuple = (0, 0, 0, 0)
+                    else:
+                        currentPriority = int(priority + 25 - 8 + priorityRaw / 32)
+                        print(currentPriority)
+                        pixelTuple = (currentPriority, currentPriority, currentPriority, 255)
+                    maskDraw.point((x, y), pixelTuple)
 
     return mask
 
 def generateTransparencyMask(image):
     return image.getchannel("A").point(lambda a: 0 if a == 0 else 255)
 
-
+def loadPriorityOverride(templateEntry, subfolder):
+    if ("priority_override" in templateEntry):
+        rawImage = Image.open(os.path.join(subfolder, templateEntry["priority_override"]))
+        convertedImage = Image.new("RGBA", (rawImage.width, rawImage.height))
+        convertedImage.paste(rawImage)
+        rawImage.close()
+        return convertedImage
+    return None
+    
 def getEnduGroup(enduGroups, enduTag):
     if not enduTag in enduGroups:
         enduImage = createCanvas()
@@ -596,6 +628,7 @@ def main(subfolder):
     utcNow = int(datetime.datetime.utcnow().timestamp())
     print(f"now is {utcNow}")
     for templateEntry in templates:
+        print(templateEntry)
         if ("enabled_utc" in templateEntry and int(templateEntry["enabled_utc"]) > utcNow):
             print("skip {0} due to future animation frame ({1:.02f}h)".format(templateEntry["name"], (int(templateEntry["enabled_utc"])-utcNow)/3600.0))
             continue
@@ -611,8 +644,9 @@ def main(subfolder):
                     copyTemplateEntryIntoCanvas(templateEntry, image, canvasImage)
                 
                 if ("autopick" in templateEntry and bool(templateEntry["autopick"]) and not "__noauto" in templateEntry):
-                    copyTemplateEntryIntoCanvas(templateEntry, image, autoPickImage)
-                    with generatePriorityMask(templateEntry, image) as priorityMask:
+                    priority_override = loadPriorityOverride(templateEntry, subfolder)
+                    copyTemplateEntryIntoCanvas(templateEntry, image, autoPickImage, priority_override)
+                    with generatePriorityMask(templateEntry, image, priority_override) as priorityMask:
                         copyTemplateEntryIntoCanvas(templateEntry, priorityMask, maskImage)
                 else:
                     eraseFromCanvas(templateEntry, transparencyMaskImage, autoPickImage)
