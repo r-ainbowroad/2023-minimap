@@ -7,7 +7,6 @@
   "templates": [
     {
       "name": "infill",
-      "enabled_utc": 9999999999,
       "images": [
         "source/infill.png"
       ],
@@ -19,7 +18,6 @@
     },
     {
       "name": "tinyshiny",
-      "enabled_utc": 9999999999,
       "images": [
         "source/tinyshiny.png"
       ],
@@ -30,7 +28,6 @@
     },
     {
       "name": "eyes",
-      "enabled_utc": 9999999999,
       "images": [
         "source/eyes.png"
       ],
@@ -42,7 +39,6 @@
     },
     {
       "name": "cmc",
-      "enabled_utc": 9999999999,
       "images": [
         "source/cmc.png"
       ],
@@ -54,7 +50,6 @@
     },
     {
       "name": "dash",
-      "enabled_utc": 9999999999,
       "images": [
         "source/dash.png"
       ],
@@ -65,8 +60,331 @@
       "export_group": "starter"
     },
     {
+      "name": "book page 27",
+      "enabled_utc": 501690201620,
+      "images": [
+        "source/book_frame27.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 26",
+      "enabled_utc": 501690194420,
+      "images": [
+        "source/book_frame26.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 25",
+      "enabled_utc": 501690187220,
+      "images": [
+        "source/book_frame25.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 24",
+      "enabled_utc": 501690180020,
+      "images": [
+        "source/book_frame24.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 23",
+      "enabled_utc": 501690172820,
+      "images": [
+        "source/book_frame23.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 22",
+      "enabled_utc": 501690165620,
+      "images": [
+        "source/book_frame22.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 21",
+      "enabled_utc": 501690158420,
+      "images": [
+        "source/book_frame21.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 20",
+      "enabled_utc": 501690151220,
+      "images": [
+        "source/book_frame20.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 19",
+      "enabled_utc": 501690144020,
+      "images": [
+        "source/book_frame19.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 18",
+      "enabled_utc": 501690136820,
+      "images": [
+        "source/book_frame18.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 17",
+      "enabled_utc": 501690129620,
+      "images": [
+        "source/book_frame17.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 16",
+      "enabled_utc": 501690122420,
+      "images": [
+        "source/book_frame16.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 15",
+      "enabled_utc": 501690115220,
+      "images": [
+        "source/book_frame15.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 14",
+      "enabled_utc": 501690108020,
+      "images": [
+        "source/book_frame14.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 13",
+      "enabled_utc": 501690100820,
+      "images": [
+        "source/book_frame13.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 12",
+      "enabled_utc": 501690093620,
+      "images": [
+        "source/book_frame12.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 11",
+      "enabled_utc": 501690086420,
+      "images": [
+        "source/book_frame11.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 10",
+      "enabled_utc": 501690079220,
+      "images": [
+        "source/book_frame10.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 9",
+      "enabled_utc": 501690072020,
+      "images": [
+        "source/book_frame09.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 8",
+      "enabled_utc": 501690064820,
+      "images": [
+        "source/book_frame08.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 7",
+      "enabled_utc": 501690057620,
+      "images": [
+        "source/book_frame07.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 6",
+      "enabled_utc": 1690036020,
+      "images": [
+        "source/book_frame06.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 5",
+      "enabled_utc": 1690028820,
+      "images": [
+        "source/book_frame05.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 4",
+      "enabled_utc": 1690021620,
+      "images": [
+        "source/book_frame04.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 3",
+      "enabled_utc": 1690016400,
+      "images": [
+        "source/book_frame03.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 2",
+      "enabled_utc": 1690009200,
+      "images": [
+        "source/book_frame02.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 1",
+      "enabled_utc": 1690002000,
+      "images": [
+        "source/book_frame01.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "book base",
-      "enabled_utc": 9999999999,
       "images": [
         "source/book_base.png"
       ],
@@ -89,7 +407,6 @@
     },
     {
       "name": "cozy",
-      "enabled_utc": 9999999999,
       "images": [
         "source/cozy.png"
       ],
@@ -100,7 +417,6 @@
     },
     {
       "name": "base",
-      "enabled_utc": 9999999999,
       "images": [
         "source/base.png"
       ],
@@ -135,7 +451,6 @@
     },
     {
       "name": "LP_BJ",
-      "enabled_utc": 9999999999,
       "images": [
         "source/LP_BJ.png"
       ],
@@ -146,7 +461,6 @@
     },
     {
       "name": "birb",
-      "enabled_utc": 9999999999,
       "images": [
         "source/birb.png"
       ],
@@ -157,7 +471,6 @@
     },
     {
       "name": "TFH",
-      "enabled_utc": 9999999999,
       "images": [
         "source/TFH.png"
       ],
@@ -168,7 +481,6 @@
     },
     {
       "name": "FoE",
-      "enabled_utc": 9999999999,
       "images": [
         "source/FoE.png"
       ],
@@ -179,7 +491,6 @@
     },
     {
       "name": "TinyTardis",
-      "enabled_utc": 9999999999,
       "images": [
         "source/TinyTardis.png"
       ],
@@ -190,7 +501,6 @@
     },
     {
       "name": "WaddleDee",
-      "enabled_utc": 9999999999,
       "images": [
         "source/WaddleDee.png"
       ],
@@ -201,7 +511,6 @@
     },
     {
       "name": "Madoka",
-      "enabled_utc": 9999999999,
       "images": [
         "source/Madoka.png"
       ],
@@ -212,7 +521,6 @@
     },
     {
       "name": "monster_hunter",
-      "enabled_utc": 9999999999,
       "images": [
         "source/monster_hunter.png"
       ],
@@ -223,7 +531,6 @@
     },
     {
       "name": "catdog",
-      "enabled_utc": 9999999999,
       "images": [
         "source/catdog.png"
       ],
@@ -234,7 +541,6 @@
     },
     {
       "name": "pets",
-      "enabled_utc": 9999999999,
       "images": [
         "source/pets.png"
       ],
@@ -245,7 +551,6 @@
     },
     {
       "name": "transtrixie",
-      "enabled_utc": 9999999999,
       "images": [
         "source/trixie.png"
       ],
@@ -256,7 +561,6 @@
     },
     {
       "name": "ajpeek",
-      "enabled_utc": 9999999999,
       "images": [
         "source/ajpeek.png"
       ],
@@ -267,7 +571,6 @@
     },
     {
       "name": "glimpeek",
-      "enabled_utc": 9999999999,
       "images": [
         "source/glimpeek.png"
       ],
