@@ -14,27 +14,35 @@ import {html, render} from 'uhtml';
 
 export class CheckboxSetting {
   name: string;
-  enabled: boolean;
+  _enabled: boolean;
   callback: Function;
 
   constructor(name, enabled = false, callback = function (setting) {}) {
     this.name = name;
-    this.enabled = enabled;
+    this._enabled = enabled;
     this.callback = callback;
   }
+
+  get enabled() {
+    return this._enabled;
+  }
+
+  set enabled(val) {
+    this._enabled = val;
+    this.callback(this);
+  }
   // onchange(e) {
-  //   this.enabled = e.target.checked;
+  //   this._enabled = e.target.checked;
   //   this.callback();
   // }
   onclick() {
     this.enabled = !this.enabled;
-    this.callback(this);
   }
   htmlFor(ref, id) {
     // NOTE(Dusk): It looks like Reddit hijacks all native checkboxes.
     // const onchange = () => this.onchange();
     // return html.for(ref, id)`<label data-id=${id}>
-    //   ${this.name}: <input type="checkbox" .checked=${this.enabled} onchange=${onchange} />
+    //   ${this.name}: <input type="checkbox" .checked=${this._enabled} onchange=${onchange} />
     // </label>`;
     const onclick = () => this.onclick();
     const classes = ["clickable"];
