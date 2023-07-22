@@ -17,16 +17,6 @@
       "export_group": "starter"
     },
     {
-      "name": "german",
-      "images": [
-        "source/german.png"
-      ],
-      "x": 404,
-      "y": 728,
-      "priority": 1,
-      "autopick": true
-    },
-    {
       "name": "eyes",
       "images": [
         "source/eyes.png"

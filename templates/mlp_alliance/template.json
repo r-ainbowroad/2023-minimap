@@ -500,16 +500,6 @@
       "autopick": true
     },
     {
-      "name": "german",
-      "images": [
-        "../mlp/source/german.png"
-      ],
-      "x": 404,
-      "y": 728,
-      "priority": 1,
-      "autopick": true
-    },
-    {
       "name": "monster_hunter",
       "images": [
         "../mlp/source/monster_hunter.png"
