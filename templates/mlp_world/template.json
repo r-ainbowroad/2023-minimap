@@ -7,6 +7,17 @@
   "world_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
   "templates": [
     {
+		"name": "infill",
+		"images": [
+		  "../mlp/source/infill.png"
+		],
+		"x": 464,
+		"y": 734,
+		"priority": 6,
+		"autopick": true,
+		"export_group": "starter"
+	},
+    {
 		"name": "eyes",
 		"images": [
 		  "../mlp/source/eyes.png"
@@ -59,17 +70,6 @@
       "x": 479,
       "y": 709,
       "priority": 7,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "infill",
-      "images": [
-        "../mlp/source/infill.png"
-      ],
-      "x": 464,
-      "y": 734,
-      "priority": 6,
       "autopick": true,
       "export_group": "starter"
     },
@@ -163,7 +163,7 @@
         "../mlp/source/TinyTardis.png"
       ],
       "x": 470,
-      "y": 739,
+      "y": 738,
       "priority": 1,
       "autopick": true
     },

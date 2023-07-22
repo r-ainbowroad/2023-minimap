@@ -6,6 +6,17 @@
   },
   "templates": [
     {
+		"name": "infill",
+		"images": [
+		  "source/infill.png"
+		],
+		"x": 464,
+		"y": 734,
+		"priority": 6,
+		"autopick": true,
+		"export_group": "starter"
+	},
+    {
       "name": "german",
       "images": [
         "source/german.png"
@@ -93,17 +104,6 @@
       "export_group": "starter"
     },
     {
-      "name": "infill",
-      "images": [
-        "source/infill.png"
-      ],
-      "x": 464,
-      "y": 734,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
       "name": "loaf",
       "images": [
         "source/llvm_loaf.png"
@@ -172,7 +172,7 @@
         "source/TinyTardis.png"
       ],
       "x": 470,
-      "y": 739,
+      "y": 738,
       "priority": 1,
       "autopick": true
     },
