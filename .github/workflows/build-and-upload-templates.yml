@@ -86,7 +86,7 @@ jobs:
       #   inlineScript: |
       #     az storage blob upload-batch --account-name ponyplace --auth-mode login -d '$web' --overwrite true -s ./dist
       run: |
-        rclone sync --azureblob-env-auth --azureblob-account=ponyplace ./dist ":azureblob:\$web"
+        rclone copy --azureblob-env-auth --azureblob-account=ponyplace ./dist ":azureblob:\$web"
 
     - name: Azure logout
       run: az logout
