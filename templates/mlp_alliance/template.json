@@ -522,11 +522,11 @@
     {
       "name": "pets",
       "images": [
-        "source/pets.png"
+        "../mlp/source/pets.png"
       ],
       "x": -175,
       "y": 859,
-      "priority": 1,
+      "priority": 4,
       "autopick": true
     }
   ]
