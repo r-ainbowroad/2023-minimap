@@ -7,27 +7,27 @@
   "world_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
   "templates": [
     {
-		"name": "infill",
-		"images": [
-		  "../mlp/source/infill.png"
-		],
-		"x": 464,
-		"y": 734,
-		"priority": 6,
-		"autopick": true,
-		"export_group": "starter"
-	},
+      "name": "infill",
+      "images": [
+        "../mlp/source/infill.png"
+      ],
+      "x": 464,
+      "y": 734,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
     {
-		"name": "eyes",
-		"images": [
-		  "../mlp/source/eyes.png"
-		],
-		"x": 422,
-		"y": 722,
-		"priority": 10,
-		"autopick": true,
-		"export_group": "starter"
-	},
+      "name": "eyes",
+      "images": [
+        "../mlp/source/eyes.png"
+      ],
+      "x": 422,
+      "y": 722,
+      "priority": 10,
+      "autopick": true,
+      "export_group": "starter"
+    },
     {
       "name": "dash",
       "images": [
@@ -36,6 +36,318 @@
       "x": 408,
       "y": 705,
       "priority": 9,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 27",
+      "enabled_utc": 1690194400,
+      "images": [
+        "../mlp/source/book_frame27.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 26",
+      "enabled_utc": 1690187000,
+      "images": [
+        "../mlp/source/book_frame26.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 25",
+      "enabled_utc": 1690179600,
+      "images": [
+        "../mlp/source/book_frame25.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 24",
+      "enabled_utc": 1690172200,
+      "images": [
+        "../mlp/source/book_frame24.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 23",
+      "enabled_utc": 1690164800,
+      "images": [
+        "../mlp/source/book_frame23.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 22",
+      "enabled_utc": 1690157400,
+      "images": [
+        "../mlp/source/book_frame22.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 21",
+      "enabled_utc": 1690150000,
+      "images": [
+        "../mlp/source/book_frame21.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 20",
+      "enabled_utc": 1690142600,
+      "images": [
+        "../mlp/source/book_frame20.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 19",
+      "enabled_utc": 1690135200,
+      "images": [
+        "../mlp/source/book_frame19.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 18",
+      "enabled_utc": 1690127800,
+      "images": [
+        "../mlp/source/book_frame18.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 17",
+      "enabled_utc": 1690120400,
+      "images": [
+        "../mlp/source/book_frame17.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 16",
+      "enabled_utc": 1690113000,
+      "images": [
+        "../mlp/source/book_frame16.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 15",
+      "enabled_utc": 1690105600,
+      "images": [
+        "../mlp/source/book_frame15.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 14",
+      "enabled_utc": 1690098200,
+      "images": [
+        "../mlp/source/book_frame14.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 13",
+      "enabled_utc": 1690090800,
+      "images": [
+        "../mlp/source/book_frame13.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 12",
+      "enabled_utc": 1690083400,
+      "images": [
+        "../mlp/source/book_frame12.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 11",
+      "enabled_utc": 1690076000,
+      "images": [
+        "../mlp/source/book_frame11.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 10",
+      "enabled_utc": 1690068600,
+      "images": [
+        "../mlp/source/book_frame10.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 9",
+      "enabled_utc": 1690061200,
+      "images": [
+        "../mlp/source/book_frame09.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 8",
+      "enabled_utc": 1690053800,
+      "images": [
+        "../mlp/source/book_frame08.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 7",
+      "enabled_utc": 1690046400,
+      "images": [
+        "../mlp/source/book_frame07.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 6",
+      "enabled_utc": 1690039000,
+      "images": [
+        "../mlp/source/book_frame06.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 5",
+      "enabled_utc": 1690031600,
+      "images": [
+        "../mlp/source/book_frame05.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 4",
+      "enabled_utc": 1690024200,
+      "images": [
+        "../mlp/source/book_frame04.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 3",
+      "enabled_utc": 1690016800,
+      "images": [
+        "../mlp/source/book_frame03.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book page 2",
+      "enabled_utc": 1690009400,
+      "images": [
+        "../mlp/source/book_frame02.png"
+      ],
+      "x": 451,
+      "y": 712,
+      "priority": 8,
       "autopick": true,
       "export_group": "starter"
     },
@@ -117,16 +429,16 @@
       "priority": 1,
       "autopick": true
     },
-	{
-		"name": "LP_BJ",
-		"images": [
-		  "../mlp/source/LP_BJ.png"
-		],
-		"x": 468,
-		"y": 701,
-		"priority": 1,
-		"autopick": true
-	},
+    {
+      "name": "LP_BJ",
+      "images": [
+        "../mlp/source/LP_BJ.png"
+      ],
+      "x": 468,
+      "y": 701,
+      "priority": 1,
+      "autopick": true
+    },
     {
       "name": "birb",
       "images": [
@@ -207,15 +519,15 @@
       "priority": 1,
       "autopick": true
     },
-	{
-		"name": "catdog",
-		"images": [
-		  "../mlp/source/catdog.png"
-		],
-		"x": 501,
-		"y": 705,
-		"priority": 1,
-		"autopick": true
-	}
+    {
+      "name": "catdog",
+      "images": [
+        "../mlp/source/catdog.png"
+      ],
+      "x": 501,
+      "y": 705,
+      "priority": 1,
+      "autopick": true
+    }
   ]
 }
