@@ -46,6 +46,7 @@
       "y": 705,
       "priority": 9,
       "autopick": true,
+      "priority_override": "source/dash_prioOverride.png",
       "export_group": "starter"
     },
     {
@@ -380,6 +381,7 @@
       "x": 446,
       "y": 700,
       "priority": 9,
+      "priority_override": "source/book_base_prioOverride.png",
       "autopick": true,
       "export_group": "starter"
     },
