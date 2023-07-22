@@ -541,12 +541,22 @@
       "autopick": true
     },
     {
-      "name": "trixie",
+      "name": "transtrixie",
       "images": [
         "../mlp/source/trixie.png"
       ],
       "x": 750,
       "y": 542,
+      "priority": 4,
+      "autopick": true
+    },
+    {
+      "name": "ajpeek",
+      "images": [
+        "../mlp/source/ajpeek.png"
+      ],
+      "x": 407,
+      "y": 735,
       "priority": 4,
       "autopick": true
     }
