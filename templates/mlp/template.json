@@ -534,8 +534,8 @@
       "images": [
         "source/pets.png"
       ],
-      "x": -175,
-      "y": 859,
+      "x": -829,
+      "y": 10,
       "priority": 4,
       "autopick": true
     },
