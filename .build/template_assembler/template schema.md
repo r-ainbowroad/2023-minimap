@@ -109,7 +109,7 @@ The presence of an `endu` property means this is a `TemplateEntryEndu`, otherwis
   integer
   * the y coordinate in screen space of the top left corner of the image
 
-* `useRedditCoords`
+* `use_reddit_coords`
 
     boolean (or something that parses to a bool)
     * optional, defaults to false

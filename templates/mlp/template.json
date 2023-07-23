@@ -580,16 +580,27 @@
       "autopick": true
     },
     {
-      "name": "m6",
+      "name": "m6_1x6",
       "images": [
-        "source/m6.png"
+        "source/m6_1x6.png"
       ],
       "use_reddit_coords": true,
       "x": -575,
-      "y": -660,
+      "y": -635,
       "priority": 10,
       "autopick": true,
       "export_group": "expansion3"
+    },
+    {
+      "name": "m6_2x3",
+      "images": [
+        "source/m6_2x3.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -500,
+      "y": -660,
+      "priority": 5,
+      "autopick": true
     }
   ]
 }
