@@ -102,60 +102,6 @@
       "y": -805,
       "priority": 4,
       "autopick": true
-    },
-    {
-      "name": "TinyTardis",
-      "images": [
-        "source/TinyTardis.png"
-      ],
-      "use_reddit_coords": true,
-      "x": -608,
-      "y": -624,
-      "priority": 1,
-      "autopick": true
-    },
-    {
-      "name": "Madoka",
-      "images": [
-        "source/Madoka.png"
-      ],
-      "x": 501,
-      "y": 638,
-      "priority": 1,
-      "autopick": true
-    },
-    {
-      "name": "onepiece",
-      "images": [
-        "source/onepiece.png"
-      ],
-      "use_reddit_coords": true,
-      "x": -623,
-      "y": -791,
-      "priority": 1,
-      "autopick": true
-    },
-    {
-      "name": "catdog",
-      "images": [
-        "source/catdog.png"
-      ],
-      "use_reddit_coords": true,
-      "x": -623,
-      "y": -618,
-      "priority": 1,
-      "autopick": true
-    },
-    {
-      "name": "WaddleDee",
-      "images": [
-        "source/WaddleDee.png"
-      ],
-      "use_reddit_coords": true,
-      "x": -614,
-      "y": -618,
-      "priority": 1,
-      "autopick": true
     }
   ]
 }
