@@ -6,6 +6,17 @@
   },
   "templates": [
     {
+      "name": "static_original",
+      "images": [
+        "source/static_original.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 600,
+      "y": 800,
+      "priority": 2,
+      "autopick": true
+    },
+    {
       "name": "pets",
       "images": [
         "source/pets.png"

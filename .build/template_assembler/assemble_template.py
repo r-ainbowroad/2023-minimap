@@ -119,7 +119,7 @@ leftExpansion = 500
 leftExpansion = 500
 rightExpansion = 500
 topExpansion = 500
-bottomExpansion = 0
+bottomExpansion = 500
 
 canvasSize = (1000 + leftExpansion + rightExpansion, 1000 + topExpansion + bottomExpansion)
 topLeftOffset = (leftExpansion, topExpansion)
