@@ -127,12 +127,7 @@
     },
     {
       "name": "onepiece",
-      "images": [
-        "../mlp/source/onepiece.png"
-      ],
-      "use_reddit_coords": true,
-      "x": -623,
-      "y": -791,
+      "endu": "https://raw.githubusercontent.com/Lopeh/onepiece-place/main/oneplace-template.json",
       "priority": 1,
       "autopick": true
     },
