@@ -490,16 +490,6 @@
       "autopick": true
     },
     {
-      "name": "TinyTardis",
-      "images": [
-        "source/TinyTardis.png"
-      ],
-      "x": 470,
-      "y": 738,
-      "priority": 1,
-      "autopick": true
-    },
-    {
       "name": "WaddleDee",
       "images": [
         "source/WaddleDee.png"
@@ -603,6 +593,17 @@
       "priority": 10,
       "autopick": true,
       "export_group": "expansion3"
+    },
+    {
+      "name": "TinyTardis",
+      "images": [
+        "source/TinyTardis.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -607,
+      "y": -623,
+      "priority": 1,
+      "autopick": true
     }
   ]
 }
