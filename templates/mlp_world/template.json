@@ -250,17 +250,6 @@
       "autopick": true
     },
     {
-      "name": "tinytardis",
-      "images": [
-        "../mlp/source/TinyTardis.png"
-      ],
-      "use_reddit_coords": true,
-      "x": -604,
-      "y": -623,
-      "priority": 5,
-      "autopick": true
-    },
-    {
       "name": "Madoka",
       "images": [
         "../mlp/source/Madoka.png"

@@ -195,17 +195,6 @@
       "export_group": "expansion3"
     },
     {
-      "name": "tinytardis",
-      "images": [
-        "../mlp/source/TinyTardis.png"
-      ],
-      "use_reddit_coords": true,
-      "x": -604,
-      "y": -623,
-      "priority": 5,
-      "autopick": true
-    },
-    {
       "name": "derp_box",
       "images": [
         "../mlp/source/derp_box.png"

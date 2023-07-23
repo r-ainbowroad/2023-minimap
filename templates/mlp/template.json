@@ -43,6 +43,18 @@
       "export_group": "starter"
     },
     {
+      "name": "carrot",
+      "images": [
+        "source/carrot.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 501,
+      "y": 835,
+      "priority": 7,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "octybrit",
       "images": [
         "source/octybrit.png"
@@ -192,17 +204,6 @@
       "priority": 9,
       "autopick": true,
       "export_group": "expansion3"
-    },
-    {
-      "name": "tinytardis",
-      "images": [
-        "source/TinyTardis.png"
-      ],
-      "use_reddit_coords": true,
-      "x": -604,
-      "y": -623,
-      "priority": 5,
-      "autopick": true
     },
     {
       "name": "derp_box",
