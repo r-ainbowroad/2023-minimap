@@ -591,6 +591,18 @@
       "priority": 10,
       "autopick": true,
       "export_group": "expansion3"
+    },
+    {
+      "name": "derp_box",
+      "images": [
+        "../mlp/source/derp_box.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -600,
+      "y": -635,
+      "priority": 10,
+      "autopick": true,
+      "export_group": "expansion3"
     }
   ]
 }
