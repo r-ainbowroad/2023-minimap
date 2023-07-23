@@ -134,6 +134,17 @@
       "y": -618,
       "priority": 1,
       "autopick": true
+    },
+    {
+      "name": "WaddleDee",
+      "images": [
+        "../mlp/source/WaddleDee.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -614,
+      "y": -618,
+      "priority": 1,
+      "autopick": true
     }
   ]
 }
