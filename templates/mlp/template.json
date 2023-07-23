@@ -43,6 +43,18 @@
       "export_group": "starter"
     },
     {
+      "name": "octybrit",
+      "images": [
+        "source/octybrit.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 500,
+      "y": 845,
+      "priority": 7,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "derpy",
       "images": [
         "source/derpy2.png"
