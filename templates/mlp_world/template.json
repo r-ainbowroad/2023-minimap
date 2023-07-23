@@ -13,8 +13,8 @@
         "../mlp/source/book_frame07.png"
       ],
       "use_reddit_coords": true,
-      "x": 644,
-      "y": 812,
+      "x": 544,
+      "y": 857,
       "priority": 8,
       "autopick": true,
       "export_group": "starter"
@@ -25,8 +25,8 @@
         "../mlp/source/infill.png"
       ],
       "use_reddit_coords": true,
-      "x": 658,
-      "y": 834,
+      "x": 558,
+      "y": 879,
       "priority": 6,
       "autopick": true,
       "export_group": "starter"
@@ -37,9 +37,9 @@
         "../mlp/source/dash.png"
       ],
       "use_reddit_coords": true,
-      "x": 601,
-      "y": 805,
-      "priority": 9,
+      "x": 501,
+      "y": 850,
+      "priority": 10,
       "autopick": true,
       "export_group": "starter"
     },
@@ -49,8 +49,8 @@
         "../mlp/source/derpy2.png"
       ],
       "use_reddit_coords": true,
-      "x": 672,
-      "y": 809,
+      "x": 572,
+      "y": 854,
       "priority": 7,
       "autopick": true,
       "export_group": "starter"
@@ -61,8 +61,8 @@
         "../mlp/source/base.png"
       ],
       "use_reddit_coords": true,
-      "x": 600,
-      "y": 850,
+      "x": 500,
+      "y": 895,
       "priority": 8,
       "autopick": true,
       "export_group": "starter"
@@ -73,8 +73,8 @@
         "../mlp/source/book_base.png"
       ],
       "use_reddit_coords": true,
-      "x": 639,
-      "y": 800,
+      "x": 539,
+      "y": 845,
       "priority": 9,
       "autopick": true,
       "export_group": "starter"
@@ -85,8 +85,8 @@
         "../mlp/source/LP_BJ.png"
       ],
       "use_reddit_coords": true,
-      "x": 649,
-      "y": 793,
+      "x": 549,
+      "y": 838,
       "priority": 9,
       "autopick": true,
       "export_group": "starter"
@@ -97,8 +97,8 @@
         "../mlp/source/birb.png"
       ],
       "use_reddit_coords": true,
-      "x": 659,
-      "y": 789,
+      "x": 559,
+      "y": 834,
       "priority": 9,
       "autopick": true,
       "export_group": "starter"
@@ -109,8 +109,8 @@
         "../mlp/source/TFH.png"
       ],
       "use_reddit_coords": true,
-      "x": 625,
-      "y": 790,
+      "x": 525,
+      "y": 835,
       "priority": 9,
       "autopick": true,
       "export_group": "starter"
@@ -121,8 +121,20 @@
         "../mlp/source/stampy.png"
       ],
       "use_reddit_coords": true,
-      "x": 601,
-      "y": 800,
+      "x": 610,
+      "y": 834,
+      "priority": 4,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "background",
+      "images": [
+        "../mlp/source/background.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 501,
+      "y": 835,
       "priority": 4,
       "autopick": true,
       "export_group": "starter"

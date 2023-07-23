@@ -7,13 +7,13 @@
   "templates": [
     {
       "name": "book page 7",
-      "enabled_utc": 501690057620,
+      "enabled_utc": 1690057620,
       "images": [
         "source/book_frame07.png"
       ],
       "use_reddit_coords": true,
-      "x": 644,
-      "y": 812,
+      "x": 544,
+      "y": 857,
       "priority": 8,
       "autopick": true,
       "export_group": "starter"
@@ -38,7 +38,7 @@
       "use_reddit_coords": true,
       "x": 501,
       "y": 850,
-      "priority": 9,
+      "priority": 10,
       "autopick": true,
       "export_group": "starter"
     },
@@ -120,8 +120,8 @@
         "source/stampy.png"
       ],
       "use_reddit_coords": true,
-      "x": 501,
-      "y": 845,
+      "x": 610,
+      "y": 834,
       "priority": 4,
       "autopick": true,
       "export_group": "starter"
@@ -134,7 +134,7 @@
       "use_reddit_coords": true,
       "x": 501,
       "y": 835,
-      "priority": 8,
+      "priority": 4,
       "autopick": true,
       "export_group": "starter"
     },
