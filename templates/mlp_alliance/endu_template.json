@@ -3,6 +3,14 @@
     "contact": "https://discord.gg/bronyplace #diplomacy",
     "templates": [
         {
+            "name": "r/place bronies - starter",
+            "sources": [
+                "http://ponyplace-cdn.ferrictorus.com/mlp/endu_starter.png"
+            ],
+            "x": 1600,
+            "y": 1800
+        },
+        {
             "name": "r/place bronies - expansion3",
             "sources": [
                 "http://ponyplace-cdn.ferrictorus.com/mlp/endu_expansion3.png"

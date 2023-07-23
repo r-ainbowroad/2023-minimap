@@ -74,6 +74,17 @@
       "export_group": "expansion3"
     },
     {
+      "name": "tinytardis",
+      "images": [
+        "../mlp/source/TinyTardis.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -604,
+      "y": -624,
+      "priority": 5,
+      "autopick": true
+    },
+    {
       "name": "derp_box",
       "images": [
         "../mlp/source/derp_box.png"
@@ -122,20 +133,10 @@
         "../mlp/source/lain.png"
       ],
       "use_reddit_coords": true,
+      "enabled_utc": 500000000000,
       "x": -623,
       "y": -639,
       "priority": 2,
-      "autopick": true
-    },
-    {
-      "name": "TinyTardis",
-      "images": [
-        "../mlp/source/TinyTardis.png"
-      ],
-      "use_reddit_coords": true,
-      "x": -608,
-      "y": -624,
-      "priority": 1,
       "autopick": true
     },
     {

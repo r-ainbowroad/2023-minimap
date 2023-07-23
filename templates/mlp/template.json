@@ -73,6 +73,17 @@
       "export_group": "expansion3"
     },
     {
+      "name": "tinytardis",
+      "images": [
+        "source/TinyTardis.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -604,
+      "y": -624,
+      "priority": 5,
+      "autopick": true
+    },
+    {
       "name": "derp_box",
       "images": [
         "source/derp_box.png"
@@ -121,6 +132,7 @@
         "source/lain.png"
       ],
       "use_reddit_coords": true,
+      "enabled_utc": 500000000000,
       "x": -623,
       "y": -639,
       "priority": 2,

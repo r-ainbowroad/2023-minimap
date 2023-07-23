@@ -122,20 +122,21 @@
         "../mlp/source/lain.png"
       ],
       "use_reddit_coords": true,
+      "enabled_utc": 500000000000,
       "x": -623,
       "y": -639,
       "priority": 2,
       "autopick": true
     },
     {
-      "name": "TinyTardis",
+      "name": "tinytardis",
       "images": [
         "../mlp/source/TinyTardis.png"
       ],
       "use_reddit_coords": true,
-      "x": -608,
+      "x": -604,
       "y": -624,
-      "priority": 1,
+      "priority": 5,
       "autopick": true
     },
     {
