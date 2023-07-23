@@ -111,6 +111,40 @@ palettes = [
         (212, 215, 217, 255), # 30
         (255, 255, 255, 255),
     ]),
+    set([ # 2023 3rd
+        # 0
+        (190, 0, 57, 255) # 1
+        (255, 69, 0, 255) # 2
+        (255, 168, 0, 255) # 3
+        (255, 214, 53, 255) # 4
+        # 5
+        (0, 163, 104, 255) # 6
+        (0, 204, 120, 255) # 7
+        (126, 237, 86, 255) # 8
+        (0, 117, 111, 255) # 9
+        (0, 158, 170, 255) # 10
+        # 11
+        (36, 80, 164, 255) # 12
+        (54, 144, 234, 255) # 13
+        (81, 233, 244, 255) # 14
+        (73, 58, 193, 255) # 15
+        (106, 92, 255, 255) # 16
+        # 17
+        (129, 30, 159, 255) # 18
+        (180, 74, 192, 255) # 19
+        # 20
+        # 21
+        (255, 56, 129, 255) # 22
+        (255, 153, 170, 255) # 23
+        (109, 72, 47, 255) # 24
+        (156, 105, 38, 255) # 25
+        # 26
+        (0, 0, 0, 255) # 27
+        # 28
+        (137, 141, 144, 255) # 29
+        (212, 215, 217, 255) # 30
+        (255, 255, 255, 255) # 31
+    ])
 ]
 
 # starter canvas of 1k x 1x. 0, 0 on the client moved to 500, 500 in screen space
@@ -123,7 +157,7 @@ bottomExpansion = 500
 
 canvasSize = (1000 + leftExpansion + rightExpansion, 1000 + topExpansion + bottomExpansion)
 topLeftOffset = (leftExpansion, topExpansion)
-palette = palettes[2]
+palette = palettes[3]
 
 def loadTemplate(subfolder):
     with open(os.path.join(subfolder, "template.json"), "r", encoding="utf-8") as f:
