@@ -11,8 +11,8 @@
         "source/pets.png"
       ],
       "use_reddit_coords": true,
-      "x": -942,
-      "y": 10,
+      "x": -943,
+      "y": 9,
       "priority": 6,
       "autopick": true
     },
