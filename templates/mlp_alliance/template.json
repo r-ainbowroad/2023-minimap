@@ -105,6 +105,17 @@
       "autopick": true
     },
     {
+      "name": "lain",
+      "images": [
+        "../mlp/source/lain.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -623,
+      "y": -639,
+      "priority": 2,
+      "autopick": true
+    },
+    {
       "name": "TinyTardis",
       "images": [
         "../mlp/source/TinyTardis.png"

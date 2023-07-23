@@ -102,6 +102,17 @@
       "y": -805,
       "priority": 4,
       "autopick": true
+    },
+    {
+      "name": "lain",
+      "images": [
+        "source/lain.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -623,
+      "y": -639,
+      "priority": 2,
+      "autopick": true
     }
   ]
 }
