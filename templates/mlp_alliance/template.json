@@ -249,16 +249,6 @@
       "autopick": true
     },
     {
-      "name": "Madoka",
-      "images": [
-        "../mlp/source/Madoka.png"
-      ],
-      "x": 497,
-      "y": 638,
-      "priority": 1,
-      "autopick": true
-    },
-    {
       "name": "onepiece",
       "endu": "https://raw.githubusercontent.com/Lopeh/onepiece-place/main/oneplace-template.json",
       "priority": 1,
@@ -296,6 +286,12 @@
       "y": 55,
       "priority": 1,
       "autopick": true
+    },
+    {
+      "name": "madoka",
+      "endu": "https://nyancat.de/mado16.json",
+      "priority": 2,
+      "autopick": false
     }
   ]
 }

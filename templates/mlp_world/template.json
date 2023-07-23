@@ -284,6 +284,12 @@
       "y": 55,
       "priority": 1,
       "autopick": true
+    },
+    {
+      "name": "madoka",
+      "endu": "https://nyancat.de/mado16.json",
+      "priority": 2,
+      "autopick": false
     }
   ]
 }
