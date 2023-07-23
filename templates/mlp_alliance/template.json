@@ -19,6 +19,42 @@
       "export_group": "starter"
     },
     {
+      "name": "LP_BJ",
+      "images": [
+        "../mlp/source/LP_BJ.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 719,
+      "y": 814,
+      "priority": 9,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "birb",
+      "images": [
+        "../mlp/source/birb.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 697,
+      "y": 788,
+      "priority": 9,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "background",
+      "images": [
+        "../mlp/source/background.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 602,
+      "y": 781,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "pets",
       "images": [
         "../mlp/source/pets.png"

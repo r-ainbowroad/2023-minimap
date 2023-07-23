@@ -69,7 +69,7 @@
       "use_reddit_coords": true,
       "x": -575,
       "y": -635,
-      "priority": 10,
+      "priority": 9,
       "autopick": true,
       "export_group": "expansion3"
     },
@@ -81,7 +81,7 @@
       "use_reddit_coords": true,
       "x": -600,
       "y": -635,
-      "priority": 10,
+      "priority": 9,
       "autopick": true,
       "export_group": "expansion3"
     },
