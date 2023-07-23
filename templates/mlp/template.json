@@ -544,7 +544,8 @@
       "images": [
         "source/pets.png"
       ],
-      "x": -828,
+      "use_reddit_coords": true,
+      "x": -942,
       "y": 10,
       "priority": 4,
       "autopick": true
