@@ -152,6 +152,17 @@
       "y": -618,
       "priority": 1,
       "autopick": true
+    },
+    {
+      "name": "monster high",
+      "images": [
+        "../mlp/source/monsterhigh.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -937,
+      "y": 55,
+      "priority": 1,
+      "autopick": true
     }
   ]
 }
