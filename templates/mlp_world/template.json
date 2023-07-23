@@ -62,6 +62,26 @@
       "export_group": "expansion3"
     },
     {
+      "name": "FoE",
+      "images": [
+        "../mlp/source/FoE.png"
+      ],
+      "x": 741,
+      "y": 516,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "cozy",
+      "images": [
+        "../mlp/source/cozy.png"
+      ],
+      "x": 522,
+      "y": 740,
+      "priority": 1,
+      "autopick": true
+    },
+    {
       "name": "TinyTardis",
       "images": [
         "../mlp/source/TinyTardis.png"
@@ -83,22 +103,23 @@
       "autopick": true
     },
     {
-      "name": "FoE",
-      "images": [
-        "../mlp/source/FoE.png"
-      ],
-      "x": 741,
-      "y": 516,
-      "priority": 1,
-      "autopick": true
-    },
-    {
       "name": "cozy",
       "images": [
         "../mlp/source/cozy.png"
       ],
       "x": 522,
       "y": 740,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "onepiece",
+      "images": [
+        "../mlp/source/onepiece.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -623,
+      "y": -791,
       "priority": 1,
       "autopick": true
     }
