@@ -24,8 +24,8 @@
         "../mlp/source/LP_BJ.png"
       ],
       "use_reddit_coords": true,
-      "x": 719,
-      "y": 814,
+      "x": 687,
+      "y": 800,
       "priority": 9,
       "autopick": true,
       "export_group": "starter"
@@ -36,8 +36,8 @@
         "../mlp/source/birb.png"
       ],
       "use_reddit_coords": true,
-      "x": 697,
-      "y": 788,
+      "x": 647,
+      "y": 789,
       "priority": 9,
       "autopick": true,
       "export_group": "starter"
@@ -48,8 +48,8 @@
         "../mlp/source/TFH.png"
       ],
       "use_reddit_coords": true,
-      "x": 602,
-      "y": 789,
+      "x": 625,
+      "y": 790,
       "priority": 9,
       "autopick": true,
       "export_group": "starter"
