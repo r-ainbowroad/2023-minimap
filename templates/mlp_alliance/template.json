@@ -40,7 +40,7 @@
     {
       "name": "m6_1x6_top",
       "images": [
-        "source/m6_1x6_top.png"
+        "../mlp/source/m6_1x6_top.png"
       ],
       "use_reddit_coords": true,
       "x": -575,
