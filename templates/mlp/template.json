@@ -37,6 +37,18 @@
       "autopick": true
     },
     {
+      "name": "m6_1x6_top",
+      "images": [
+        "source/m6_1x6_top.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -575,
+      "y": -635,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "expansion3"
+    },
+    {
       "name": "m6_1x6",
       "images": [
         "source/m6_1x6.png"
