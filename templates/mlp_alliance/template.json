@@ -68,7 +68,7 @@
       ],
       "x": 741,
       "y": 516,
-      "priority": 1,
+      "priority": 2,
       "autopick": true
     },
     {
@@ -78,7 +78,18 @@
       ],
       "x": 522,
       "y": 740,
-      "priority": 1,
+      "priority": 2,
+      "autopick": true
+    },
+    {
+      "name": "sunpeek",
+      "images": [
+        "../mlp/source/sunpeek.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -385,
+      "y": -805,
+      "priority": 4,
       "autopick": true
     },
     {
@@ -99,16 +110,6 @@
       ],
       "x": 501,
       "y": 638,
-      "priority": 1,
-      "autopick": true
-    },
-    {
-      "name": "cozy",
-      "images": [
-        "../mlp/source/cozy.png"
-      ],
-      "x": 522,
-      "y": 740,
       "priority": 1,
       "autopick": true
     },
