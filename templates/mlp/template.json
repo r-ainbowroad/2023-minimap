@@ -6,14 +6,75 @@
   },
   "templates": [
     {
-      "name": "static_original",
+      "name": "book page 7",
+      "enabled_utc": 1690057620,
       "images": [
-        "source/static_original.png"
+        "source/book_frame07.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 644,
+      "y": 812,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "infill",
+      "images": [
+        "source/infill.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 658,
+      "y": 834,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "dash",
+      "images": [
+        "source/dash.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 601,
+      "y": 805,
+      "priority": 9,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "derpy",
+      "images": [
+        "source/derpy2.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 672,
+      "y": 809,
+      "priority": 7,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "base",
+      "images": [
+        "source/base.png"
       ],
       "use_reddit_coords": true,
       "x": 600,
+      "y": 850,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book base",
+      "images": [
+        "source/book_base.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 639,
       "y": 800,
-      "priority": 10,
+      "priority": 9,
       "autopick": true,
       "export_group": "starter"
     },

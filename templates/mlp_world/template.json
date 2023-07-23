@@ -7,14 +7,75 @@
   "world_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
   "templates": [
     {
-      "name": "static_original",
+      "name": "book page 7",
+      "enabled_utc": 1690057620,
       "images": [
-        "../mlp/source/static_original.png"
+        "../mlp/source/book_frame07.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 644,
+      "y": 812,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "infill",
+      "images": [
+        "../mlp/source/infill.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 658,
+      "y": 834,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "dash",
+      "images": [
+        "../mlp/source/dash.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 601,
+      "y": 805,
+      "priority": 9,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "derpy",
+      "images": [
+        "../mlp/source/derpy2.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 672,
+      "y": 809,
+      "priority": 7,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "base",
+      "images": [
+        "../mlp/source/base.png"
       ],
       "use_reddit_coords": true,
       "x": 600,
+      "y": 850,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "book base",
+      "images": [
+        "../mlp/source/book_base.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 639,
       "y": 800,
-      "priority": 10,
+      "priority": 9,
       "autopick": true,
       "export_group": "starter"
     },
