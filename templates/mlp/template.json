@@ -38,7 +38,7 @@
       "use_reddit_coords": true,
       "x": 501,
       "y": 850,
-      "priority": 10,
+      "priority": 9,
       "autopick": true,
       "export_group": "starter"
     },
