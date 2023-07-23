@@ -81,6 +81,26 @@
       "y": 638,
       "priority": 1,
       "autopick": true
+    },
+    {
+      "name": "FoE",
+      "images": [
+        "../mlp/source/FoE.png"
+      ],
+      "x": 741,
+      "y": 516,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "cozy",
+      "images": [
+        "../mlp/source/cozy.png"
+      ],
+      "x": 522,
+      "y": 740,
+      "priority": 1,
+      "autopick": true
     }
   ]
 }
