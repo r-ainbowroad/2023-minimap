@@ -73,8 +73,8 @@
         "../mlp/source/derpy2.png"
       ],
       "use_reddit_coords": true,
-      "x": 572,
-      "y": 854,
+      "x": 672,
+      "y": 809,
       "priority": 7,
       "autopick": true,
       "export_group": "starter"
