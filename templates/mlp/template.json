@@ -584,8 +584,9 @@
       "images": [
         "source/m6.png"
       ],
-      "x": 0,
-      "y": -160,
+      "use_reddit_coords": true,
+      "x": -575,
+      "y": -600,
       "priority": 10,
       "autopick": true,
       "export_group": "expansion3"

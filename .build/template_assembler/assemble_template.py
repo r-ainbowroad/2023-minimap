@@ -329,7 +329,7 @@ def resolveTemplateFileEntry(templateFileEntry):
                 print("Missing required property {1} from {0}".format(templateFileEntry["name"], requiredProperty))
                 raise KeyError(1)
         
-        if "useRedditCoords" in templateFileEntry and templateFileEntry["useRedditCoords"]:
+        if "use_reddit_coords" in templateFileEntry and templateFileEntry["use_reddit_coords"]:
             templateFileEntry["x"] += topLeftOffset[0] + 500
             templateFileEntry["y"] += topLeftOffset[1] + 500
         else:
