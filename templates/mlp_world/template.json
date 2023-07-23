@@ -7,6 +7,18 @@
   "world_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
   "templates": [
     {
+      "name": "static_original",
+      "images": [
+        "../mlp/source/static_original.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 600,
+      "y": 800,
+      "priority": 10,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "pets",
       "images": [
         "../mlp/source/pets.png"
