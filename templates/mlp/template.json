@@ -311,7 +311,7 @@
         "../mlp/source/bigdiscord.png"
       ],
       "use_reddit_coords": true,
-      "x": 1346,
+      "x": 1351,
       "y": -77,
       "priority": 1,
       "autopick": true
