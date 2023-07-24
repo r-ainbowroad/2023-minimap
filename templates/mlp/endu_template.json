@@ -7,7 +7,7 @@
             "sources": [
                 "http://ponyplace-cdn.ferrictorus.com/mlp/endu_starter.png"
             ],
-            "x": 1500,
+            "x": 2000,
             "y": 1809
         },
         {
@@ -15,7 +15,7 @@
             "sources": [
                 "http://ponyplace-cdn.ferrictorus.com/mlp/endu_expansion3.png"
             ],
-            "x": 400,
+            "x": 900,
             "y": 365
         }
     ]

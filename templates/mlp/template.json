@@ -228,6 +228,17 @@
       "autopick": true
     },
     {
+      "name": "bj",
+      "images": [
+        "source/bj.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 648,
+      "y": 803,
+      "priority": 2,
+      "autopick": true
+    },
+    {
       "name": "cozy",
       "images": [
         "source/cozy.png"
