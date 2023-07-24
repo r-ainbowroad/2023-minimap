@@ -6,10 +6,10 @@
   },
   "templates": [
     {
-      "name": "book page 21",
+      "name": "book page 22",
       "enabled_utc": 1690057620,
       "images": [
-        "../mlp/source/book_page21.png"
+        "../mlp/source/book_page22.png"
       ],
       "use_reddit_coords": true,
       "x": 544,
