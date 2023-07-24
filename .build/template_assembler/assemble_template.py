@@ -144,19 +144,53 @@ palettes = [
         (137, 141, 144, 255), # 29
         (212, 215, 217, 255), # 30
         (255, 255, 255, 255), # 31
+    ]),
+    set([ # 2023 4th
+        (109,   0,  26, 255), #  0
+        (190,   0,  57, 255), #  1
+        (255,  69,   0, 255), #  2
+        (255, 168,   0, 255), #  3
+        (255, 214,  53, 255), #  4
+        (255, 248, 184, 255), #  5
+        (  0, 163, 104, 255), #  6
+        (  0, 204, 120, 255), #  7
+        (126, 237,  86, 255), #  8
+        (  0, 117, 111, 255), #  9
+        (  0, 158, 170, 255), # 10
+        (  0, 204, 192, 255), # 11
+        ( 36,  80, 164, 255), # 12
+        ( 54, 144, 234, 255), # 13
+        ( 81, 233, 244, 255), # 14
+        ( 73,  58, 193, 255), # 15
+        (106,  92, 255, 255), # 16
+        (148, 179, 255, 255), # 17
+        (129,  30, 159, 255), # 18
+        (180,  74, 192, 255), # 19
+        (228, 171, 255, 255), # 20
+        (222,  16, 127, 255), # 21
+        (255,  56, 129, 255), # 22
+        (255, 153, 170, 255), # 23
+        (109,  72,  47, 255), # 24
+        (156, 105,  38, 255), # 25
+        (255, 180, 112, 255), # 26
+        (  0,   0,   0, 255), # 27
+        ( 81,  82,  82, 255), # 28
+        (137, 141, 144, 255), # 29
+        (212, 215, 217, 255), # 30
+        (255, 255, 255, 255), # 31
     ])
 ]
 
 # starter canvas of 1k x 1x. 0, 0 on the client moved to 500, 500 in screen space
 # we expect the canvas to be able to expand left or up which screws with the origin
 leftExpansion = 1000
-rightExpansion = 500
+rightExpansion = 1000
 topExpansion = 500
 bottomExpansion = 500
 
 canvasSize = (1000 + leftExpansion + rightExpansion, 1000 + topExpansion + bottomExpansion)
 topLeftOffset = (leftExpansion, topExpansion)
-palette = palettes[3]
+palette = palettes[4]
 
 def loadTemplate(subfolder):
     with open(os.path.join(subfolder, "template.json"), "r", encoding="utf-8", newline='\n') as f:
