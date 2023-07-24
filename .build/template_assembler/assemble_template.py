@@ -159,7 +159,7 @@ topLeftOffset = (leftExpansion, topExpansion)
 palette = palettes[3]
 
 def loadTemplate(subfolder):
-    with open(os.path.join(subfolder, "template.json"), "r", encoding="utf-8") as f:
+    with open(os.path.join(subfolder, "template.json"), "r", encoding="utf-8", newline='\n') as f:
         template = json.loads(f.read())
     return template
 
@@ -545,7 +545,7 @@ def writeEnduInfos(enduGroups, enduInfo, subfolder):
         
         outputObject["templates"].append(groupInfo)
     
-    with open(os.path.join(subfolder, "endu_template.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(subfolder, "endu_template.json"), "w", encoding="utf-8", newline='\n') as f:
         f.write(json.dumps(outputObject, indent=4))
 
 
@@ -554,12 +554,12 @@ def updateVersion(subfolder):
     templateVersion = 0
     
     if os.path.isfile(filePath):
-        with open(filePath, "r", encoding="utf-8") as versionFile:
+        with open(filePath, "r", encoding="utf-8", newline='\n') as versionFile:
             templateVersion = int(versionFile.read())
     
     templateVersion += 1
     
-    with open(filePath, "w", encoding="utf-8") as versionFile:
+    with open(filePath, "w", encoding="utf-8", newline='\n') as versionFile:
         versionFile.write(str(templateVersion))
 
 
