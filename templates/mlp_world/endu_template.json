@@ -7,16 +7,32 @@
             "sources": [
                 "http://ponyplace-cdn.ferrictorus.com/mlp/endu_starter.png"
             ],
-            "x": 1600,
-            "y": 1789
+            "x": 2000,
+            "y": 1834
+        },
+        {
+            "name": "r/place bronies - pets",
+            "sources": [
+                "http://ponyplace-cdn.ferrictorus.com/mlp/endu_pets.png"
+            ],
+            "x": 557,
+            "y": 1009
         },
         {
             "name": "r/place bronies - expansion3",
             "sources": [
                 "http://ponyplace-cdn.ferrictorus.com/mlp/endu_expansion3.png"
             ],
-            "x": 400,
+            "x": 900,
             "y": 365
+        },
+        {
+            "name": "r/place bronies - derpy",
+            "sources": [
+                "http://ponyplace-cdn.ferrictorus.com/mlp/endu_derpy.png"
+            ],
+            "x": 2148,
+            "y": 1803
         }
     ]
 }
