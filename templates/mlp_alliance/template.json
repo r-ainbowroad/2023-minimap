@@ -358,6 +358,17 @@
       "y": 541,
       "priority": 1,
       "autopick": true
+    },
+    {
+      "name": "NSO",
+      "images": [
+        "../mlp/source/NSO.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -830,
+      "y": 537,
+      "priority": 1,
+      "autopick": true
     }
   ]
 }
