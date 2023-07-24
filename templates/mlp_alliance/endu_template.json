@@ -7,15 +7,23 @@
             "sources": [
                 "http://ponyplace-cdn.ferrictorus.com/mlp/endu_starter.png"
             ],
-            "x": 1500,
+            "x": 2000,
             "y": 1809
+        },
+        {
+            "name": "r/place bronies - pets",
+            "sources": [
+                "http://ponyplace-cdn.ferrictorus.com/mlp/endu_pets.png"
+            ],
+            "x": 557,
+            "y": 1009
         },
         {
             "name": "r/place bronies - expansion3",
             "sources": [
                 "http://ponyplace-cdn.ferrictorus.com/mlp/endu_expansion3.png"
             ],
-            "x": 400,
+            "x": 900,
             "y": 365
         }
     ]

@@ -7,10 +7,10 @@
   "world_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
   "templates": [
     {
-      "name": "book page 9",
+      "name": "book page 10",
       "enabled_utc": 1690057620,
       "images": [
-        "../mlp/source/book_frame09.png"
+        "../mlp/source/book_frame10.png"
       ],
       "use_reddit_coords": true,
       "x": 544,
@@ -172,7 +172,8 @@
       "x": -943,
       "y": 9,
       "priority": 6,
-      "autopick": true
+      "autopick": true,
+      "export_group": "pets"
     },
     {
       "name": "transtrixie",
@@ -237,7 +238,8 @@
       "x": 648,
       "y": 803,
       "priority": 2,
-      "autopick": true
+      "autopick": true,
+      "export_group": "starter"
     },
     {
       "name": "cozy",
