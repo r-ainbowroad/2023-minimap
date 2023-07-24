@@ -417,6 +417,17 @@
       "y": -77,
       "priority": 1,
       "autopick": true
+    },
+    {
+      "name": "mareinthemoon",
+      "images": [
+        "../mlp/source/mareinthemoon.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 54,
+      "y": 86,
+      "priority": 8,
+      "autopick": true
     }
   ]
 }
