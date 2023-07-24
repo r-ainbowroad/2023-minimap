@@ -7,10 +7,10 @@
   "alliance_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
   "templates": [
     {
-      "name": "book page 20",
+      "name": "book page 21",
       "enabled_utc": 1690057620,
       "images": [
-        "../mlp/source/book_page20.png"
+        "../mlp/source/book_page21.png"
       ],
       "use_reddit_coords": true,
       "x": 544,
