@@ -304,6 +304,17 @@
       "y": -639,
       "priority": 2,
       "autopick": true
+    },
+    {
+      "name": "bigdiscord",
+      "images": [
+        "../mlp/source/bigdiscord.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 1346,
+      "y": -77,
+      "priority": 1,
+      "autopick": true
     }
   ]
 }
