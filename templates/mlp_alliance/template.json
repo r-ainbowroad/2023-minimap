@@ -403,12 +403,7 @@
     },
     {
       "name": "fspez",
-      "images": [
-        "../mlp/source/fspez.png"
-      ],
-      "use_reddit_coords": true,
-      "x": 1014,
-      "y": -211,
+      "endu": "https://fmxal.mooo.com/fuck-spez-live/template.json",
       "priority": 1,
       "autopick": true
     },
