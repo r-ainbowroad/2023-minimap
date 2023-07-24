@@ -273,6 +273,17 @@
       "autopick": true
     },
     {
+      "name": "blue_horse_central",
+      "images": [
+        "../mlp/source/blue_horse_central.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 1485,
+      "y": 383,
+      "priority": 3,
+      "autopick": true
+    },
+    {
       "name": "lain",
       "images": [
         "../mlp/source/lain.png"
