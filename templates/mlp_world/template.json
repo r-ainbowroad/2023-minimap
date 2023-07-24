@@ -284,6 +284,17 @@
       "autopick": true
     },
     {
+      "name": "sunset_cm",
+      "images": [
+        "../mlp/source/sunset_cm.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 1447,
+      "y": -97,
+      "priority": 4,
+      "autopick": true
+    },
+    {
       "name": "blue_horse_central",
       "images": [
         "../mlp/source/blue_horse_central.png"
