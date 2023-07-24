@@ -272,6 +272,17 @@
       "autopick": true
     },
     {
+      "name": "discord",
+      "images": [
+        "../mlp/source/discord.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -1306,
+      "y": 1015,
+      "priority": 5,
+      "autopick": true
+    },
+    {
       "name": "blue_horse_central",
       "images": [
         "../mlp/source/blue_horse_central.png"
