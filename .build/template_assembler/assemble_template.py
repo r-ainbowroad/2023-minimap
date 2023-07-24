@@ -372,7 +372,7 @@ def resolveTemplateFileEntry(templateFileEntry):
         
         return [templateFileEntry]
     else:
-        raise KeyError("template entry for {0} needs either images or endu keys".format(templateEntry["name"]))
+        raise KeyError("template entry for {0} needs either images or endu keys".format(templateFileEntry["name"]))
 
 
 def getSurroundingPixels(xy):
