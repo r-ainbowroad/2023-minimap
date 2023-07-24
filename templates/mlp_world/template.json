@@ -222,7 +222,7 @@
       "images": [
         "../mlp/source/FoE.png"
       ],
-      "x": 741,
+      "x": 740,
       "y": 515,
       "priority": 2,
       "autopick": true
@@ -426,6 +426,17 @@
       "x": 1351,
       "y": -77,
       "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "mareinthemoon",
+      "images": [
+        "../mlp/source/mareinthemoon.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 54,
+      "y": 86,
+      "priority": 8,
       "autopick": true
     }
   ]
