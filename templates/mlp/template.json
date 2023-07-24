@@ -268,8 +268,8 @@
         "../mlp/source/sunpeek.png"
       ],
       "use_reddit_coords": true,
-      "x": 659,
-      "y": 115,
+      "x": -844,
+      "y": -349,
       "priority": 4,
       "autopick": true
     },
