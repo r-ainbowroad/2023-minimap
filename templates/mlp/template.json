@@ -6,19 +6,6 @@
   },
   "templates": [
     {
-      "name": "book page 27",
-      "enabled_utc": 1690057620,
-      "images": [
-        "../mlp/source/book_page27.png"
-      ],
-      "use_reddit_coords": true,
-      "x": 544,
-      "y": 857,
-      "priority": 10,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
       "name": "infill",
       "images": [
         "../mlp/source/infill.png"
