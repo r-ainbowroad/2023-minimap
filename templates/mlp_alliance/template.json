@@ -68,6 +68,17 @@
       "export_group": "starter"
     },
     {
+      "name": "hong_kong_letters",
+      "images": [
+        "../mlp/source/hong_kong_letters.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 721,
+      "y": 829,
+      "priority": 7,
+      "autopick": true
+    },
+    {
       "name": "derpy",
       "images": [
         "../mlp/source/derpy2.png"
@@ -98,7 +109,7 @@
       ],
       "use_reddit_coords": true,
       "x": 539,
-      "y": 842,
+      "y": 841,
       "priority": 9,
       "autopick": true,
       "export_group": "starter"
