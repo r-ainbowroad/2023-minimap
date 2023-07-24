@@ -232,7 +232,7 @@
     {
       "name": "bj",
       "images": [
-        "source/bj.png"
+        "../mlp/source/bj.png"
       ],
       "use_reddit_coords": true,
       "x": 648,
@@ -252,13 +252,25 @@
       "autopick": true
     },
     {
+      "name": "rook",
+      "images": [
+        "source/rook.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 716,
+      "y": 840,
+      "priority": 2,
+      "autopick": true,
+      "export_group": "derpy"
+    },
+    {
       "name": "sunpeek",
       "images": [
         "../mlp/source/sunpeek.png"
       ],
       "use_reddit_coords": true,
-      "x": -387,
-      "y": -791,
+      "x": 659,
+      "y": 115,
       "priority": 4,
       "autopick": true
     },
