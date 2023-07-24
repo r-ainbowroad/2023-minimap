@@ -25,6 +25,14 @@
             ],
             "x": 2000,
             "y": 1803
+        },
+        {
+            "name": "r/place bronies - derpy",
+            "sources": [
+                "http://ponyplace-cdn.ferrictorus.com/mlp/endu_derpy.png"
+            ],
+            "x": 2216,
+            "y": 1840
         }
     ]
 }

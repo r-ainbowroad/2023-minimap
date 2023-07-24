@@ -7,10 +7,10 @@
   "alliance_csv_import": "https://docs.google.com/spreadsheets/d/1sIkfCgoVKWMWJbjenPn2dcvfuBFOegwMJxsGQ_MgsxU/gviz/tq?tqx=out:csv&sheet=Sheet1",
   "templates": [
     {
-      "name": "book page 11",
+      "name": "book page 12",
       "enabled_utc": 1690057620,
       "images": [
-        "../mlp/source/book_frame11.png"
+        "../mlp/source/book_frame12.png"
       ],
       "use_reddit_coords": true,
       "x": 544,
@@ -254,7 +254,7 @@
     {
       "name": "rook",
       "images": [
-        "source/rook.png"
+        "../mlp/source/rook.png"
       ],
       "use_reddit_coords": true,
       "x": 716,
@@ -330,6 +330,23 @@
       "endu": "https://nyaan.moe/bocchiplace2023.json",
       "priority": 1,
       "autopick": false
+    },
+    {
+      "name": "superbear",
+      "endu": "https://raw.githubusercontent.com/jalenluorion/helpme/main/superbear.json",
+      "priority": 1,
+      "autopick": false
+    },
+    {
+      "name": "monster_hunter",
+      "images": [
+        "../mlp/source/monster_hunter.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -1488,
+      "y": -338,
+      "priority": 1,
+      "autopick": true
     }
   ]
 }
