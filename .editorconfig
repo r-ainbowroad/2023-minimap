@@ -1,0 +1,4 @@
+root = true
+
+[version.txt]
+insert_final_newline = false

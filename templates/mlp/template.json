@@ -84,7 +84,7 @@
         "source/base.png"
       ],
       "use_reddit_coords": true,
-      "x": 500,
+      "x": 501,
       "y": 895,
       "priority": 8,
       "autopick": true,
