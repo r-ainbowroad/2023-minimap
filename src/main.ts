@@ -25,6 +25,7 @@ const autoPickAfterPlaceTimeout = 3000;
 
   const blobServer = new BlobServer("https://ponyplace.z19.web.core.windows.net");
   minimap.templates.add("mlp_alliance", blobServer.getTemplate("mlp_alliance", {autoPick: true, mask: true}));
+  minimap.templates.add("mlp_world", blobServer.getTemplate("mlp_world", {autoPick: true, mask: true}));
   minimap.templates.add("mlp", blobServer.getTemplate("mlp", {autoPick: true, mask: true}));
 
   await minimap.initialize();
