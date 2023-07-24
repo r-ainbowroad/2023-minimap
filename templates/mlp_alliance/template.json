@@ -343,8 +343,19 @@
         "../mlp/source/monster_hunter.png"
       ],
       "use_reddit_coords": true,
-      "x": -1488,
-      "y": -338,
+      "x": -1494,
+      "y": -354,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "monsterhigh",
+      "images": [
+        "../mlp/source/monsterhigh.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -1381,
+      "y": 541,
       "priority": 1,
       "autopick": true
     }
