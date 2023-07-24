@@ -389,6 +389,17 @@
       "y": 537,
       "priority": 1,
       "autopick": true
+    },
+    {
+      "name": "fspez",
+      "images": [
+        "../mlp/source/fspez.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 1014,
+      "y": -210,
+      "priority": 1,
+      "autopick": true
     }
   ]
 }
