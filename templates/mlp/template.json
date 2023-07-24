@@ -288,8 +288,8 @@
         "../mlp/source/blue_horse_central.png"
       ],
       "use_reddit_coords": true,
-      "x": 1485,
-      "y": 383,
+      "x": 1484,
+      "y": -109,
       "priority": 3,
       "autopick": true
     },
