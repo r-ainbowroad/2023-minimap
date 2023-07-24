@@ -315,6 +315,12 @@
       "endu": "https://nyancat.de/mado16.json",
       "priority": 2,
       "autopick": false
+    },
+    {
+      "name": "BocchiTheRock",
+      "endu": "https://nyaan.moe/bocchiplace2023.json",
+      "priority": 1,
+      "autopick": false
     }
   ]
 }
