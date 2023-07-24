@@ -157,7 +157,7 @@
         "../mlp/source/background.png"
       ],
       "use_reddit_coords": true,
-      "x": 500,
+      "x": 501,
       "y": 846,
       "priority": 4,
       "autopick": true,

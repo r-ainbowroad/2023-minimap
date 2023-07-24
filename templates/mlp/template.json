@@ -9,7 +9,7 @@
       "name": "book page 19",
       "enabled_utc": 1690057620,
       "images": [
-        "source/book_page19.png"
+        "../mlp/source/book_page19.png"
       ],
       "use_reddit_coords": true,
       "x": 544,
@@ -21,7 +21,7 @@
     {
       "name": "infill",
       "images": [
-        "source/infill.png"
+        "../mlp/source/infill.png"
       ],
       "use_reddit_coords": true,
       "x": 558,
@@ -33,7 +33,7 @@
     {
       "name": "dash",
       "images": [
-        "source/dash.png"
+        "../mlp/source/dash.png"
       ],
       "use_reddit_coords": true,
       "x": 501,
@@ -45,7 +45,7 @@
     {
       "name": "carrot",
       "images": [
-        "source/carrot.png"
+        "../mlp/source/carrot.png"
       ],
       "use_reddit_coords": true,
       "x": 501,
@@ -57,7 +57,7 @@
     {
       "name": "octybrit",
       "images": [
-        "source/octybrit.png"
+        "../mlp/source/octybrit.png"
       ],
       "use_reddit_coords": true,
       "x": 500,
@@ -69,7 +69,7 @@
     {
       "name": "derpy",
       "images": [
-        "source/derpy2.png"
+        "../mlp/source/derpy2.png"
       ],
       "use_reddit_coords": true,
       "x": 672,
@@ -81,7 +81,7 @@
     {
       "name": "base",
       "images": [
-        "source/base.png"
+        "../mlp/source/base.png"
       ],
       "use_reddit_coords": true,
       "x": 501,
@@ -93,7 +93,7 @@
     {
       "name": "book base",
       "images": [
-        "source/book_base.png"
+        "../mlp/source/book_base.png"
       ],
       "use_reddit_coords": true,
       "x": 539,
@@ -105,7 +105,7 @@
     {
       "name": "LP_BJ",
       "images": [
-        "source/LP_BJ.png"
+        "../mlp/source/LP_BJ.png"
       ],
       "use_reddit_coords": true,
       "x": 549,
@@ -117,7 +117,7 @@
     {
       "name": "birb",
       "images": [
-        "source/birb.png"
+        "../mlp/source/birb.png"
       ],
       "use_reddit_coords": true,
       "x": 559,
@@ -129,7 +129,7 @@
     {
       "name": "TFH",
       "images": [
-        "source/TFH.png"
+        "../mlp/source/TFH.png"
       ],
       "use_reddit_coords": true,
       "x": 525,
@@ -141,7 +141,7 @@
     {
       "name": "stampy",
       "images": [
-        "source/stampy.png"
+        "../mlp/source/stampy.png"
       ],
       "use_reddit_coords": true,
       "x": 610,
@@ -153,10 +153,10 @@
     {
       "name": "background",
       "images": [
-        "source/background.png"
+        "../mlp/source/background.png"
       ],
       "use_reddit_coords": true,
-      "x": 500,
+      "x": 501,
       "y": 846,
       "priority": 4,
       "autopick": true,
@@ -165,7 +165,7 @@
     {
       "name": "pets",
       "images": [
-        "source/pets.png"
+        "../mlp/source/pets.png"
       ],
       "use_reddit_coords": true,
       "x": -943,
@@ -177,7 +177,7 @@
     {
       "name": "transtrixie",
       "images": [
-        "source/trixie.png"
+        "../mlp/source/trixie.png"
       ],
       "x": 750,
       "y": 542,
@@ -187,7 +187,7 @@
     {
       "name": "glimpeek",
       "images": [
-        "source/glimpeek.png"
+        "../mlp/source/glimpeek.png"
       ],
       "x": 1126,
       "y": 582,
@@ -197,7 +197,7 @@
     {
       "name": "m6_1x6",
       "images": [
-        "source/m6_1x6.png"
+        "../mlp/source/m6_1x6.png"
       ],
       "use_reddit_coords": true,
       "x": -575,
@@ -209,7 +209,7 @@
     {
       "name": "derp_box",
       "images": [
-        "source/derp_box.png"
+        "../mlp/source/derp_box.png"
       ],
       "use_reddit_coords": true,
       "x": -600,
@@ -221,7 +221,7 @@
     {
       "name": "FoE",
       "images": [
-        "source/FoE.png"
+        "../mlp/source/FoE.png"
       ],
       "x": 741,
       "y": 516,
@@ -231,7 +231,7 @@
     {
       "name": "bj",
       "images": [
-        "source/bj.png"
+        "../mlp/source/bj.png"
       ],
       "use_reddit_coords": true,
       "x": 648,
@@ -243,7 +243,7 @@
     {
       "name": "cozy",
       "images": [
-        "source/cozy.png"
+        "../mlp/source/cozy.png"
       ],
       "x": 522,
       "y": 740,
@@ -253,7 +253,7 @@
     {
       "name": "rook",
       "images": [
-        "source/rook.png"
+        "../mlp/source/rook.png"
       ],
       "use_reddit_coords": true,
       "x": 716,
@@ -265,7 +265,7 @@
     {
       "name": "sunpeek",
       "images": [
-        "source/sunpeek.png"
+        "../mlp/source/sunpeek.png"
       ],
       "use_reddit_coords": true,
       "x": 659,
@@ -276,7 +276,7 @@
     {
       "name": "lain",
       "images": [
-        "source/lain.png"
+        "../mlp/source/lain.png"
       ],
       "use_reddit_coords": true,
       "enabled_utc": 500000000000,

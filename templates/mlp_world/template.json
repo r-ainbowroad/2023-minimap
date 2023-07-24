@@ -10,7 +10,7 @@
       "name": "book page 19",
       "enabled_utc": 1690057620,
       "images": [
-        "../mlp/source/book_frame19.png"
+        "../mlp/source/book_page19.png"
       ],
       "use_reddit_coords": true,
       "x": 544,
@@ -158,7 +158,7 @@
       ],
       "use_reddit_coords": true,
       "x": 501,
-      "y": 835,
+      "y": 846,
       "priority": 4,
       "autopick": true,
       "export_group": "starter"
