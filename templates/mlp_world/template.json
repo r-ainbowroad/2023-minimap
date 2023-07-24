@@ -145,7 +145,7 @@
         "../mlp/source/stampy.png"
       ],
       "use_reddit_coords": true,
-      "x": 610,
+      "x": 609,
       "y": 834,
       "priority": 4,
       "autopick": true,
