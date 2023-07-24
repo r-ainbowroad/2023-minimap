@@ -297,12 +297,6 @@
       "autopick": true
     },
     {
-      "name": "onepiece",
-      "endu": "https://raw.githubusercontent.com/Lopeh/onepiece-place/main/oneplace-template.json",
-      "priority": 1,
-      "autopick": true
-    },
-    {
       "name": "catdog",
       "images": [
         "../mlp/source/catdog.png"
