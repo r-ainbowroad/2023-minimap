@@ -332,7 +332,7 @@
     {
       "name": "madoka",
       "endu": "https://nyancat.de/mado16.json",
-      "priority": 2,
+      "priority": 1,
       "autopick": false
     },
     {
@@ -366,6 +366,17 @@
       "use_reddit_coords": true,
       "x": -1381,
       "y": 541,
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "NSO",
+      "images": [
+        "../mlp/source/NSO.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -830,
+      "y": 537,
       "priority": 1,
       "autopick": true
     }

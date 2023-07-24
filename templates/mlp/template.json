@@ -84,7 +84,7 @@
         "../mlp/source/base.png"
       ],
       "use_reddit_coords": true,
-      "x": 501,
+      "x": 500,
       "y": 895,
       "priority": 8,
       "autopick": true,
