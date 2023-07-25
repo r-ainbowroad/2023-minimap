@@ -324,8 +324,8 @@
         "../mlp/source/blue_horse_central.png"
       ],
       "use_reddit_coords": true,
-      "x": 1484,
-      "y": -93,
+      "x": 1467,
+      "y": -104,
       "priority": 3,
       "autopick": true
     },
@@ -495,13 +495,36 @@
       "export_group": "bigtwi"
     },
     {
+      "name": "mlpp_chrysalis",
+      "images": [
+        "../mlp/source/mlpp_chrysalis.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -1141,
+      "y": 77,
+      "priority": 4,
+      "autopick": true,
+      "export_group": "bigtwi"
+    },
+    {
+      "name": "milkinsideabagofmilk",
+      "images": [
+        "../mlp_world/source/milkNew2.png"
+      ],
+      "use_reddit_coords": false,
+      "x": 94,
+      "y": 1001,
+      "priority": 4,
+      "autopick": true
+    },
+    {
       "name": "FOE_below_bigtwi",
       "images": [
         "../mlp/source/FOE_below_bigtwi.png"
       ],
       "use_reddit_coords": true,
-      "x": -1346,
-      "y": 115,
+      "x": -1386,
+      "y": 139,
       "priority": 3,
       "autopick": true
     }
