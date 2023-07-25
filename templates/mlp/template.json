@@ -356,8 +356,8 @@
         "../mlp/source/longglim.png"
       ],
       "use_reddit_coords": true,
-      "x": 996,
-      "y": 377,
+      "x": -1261,
+      "y": 2,
       "priority": 10,
       "autopick": true,
       "export_group": "longglim"
