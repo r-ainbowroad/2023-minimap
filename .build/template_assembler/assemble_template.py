@@ -178,6 +178,13 @@ palettes = [
         (137, 141, 144, 255), # 29
         (212, 215, 217, 255), # 30
         (255, 255, 255, 255), # 31
+    ]),
+        set([ # 2023 4th
+        (  0,   0,   0, 255), # 27
+        ( 81,  82,  82, 255), # 28
+        (137, 141, 144, 255), # 29
+        (212, 215, 217, 255), # 30
+        (255, 255, 255, 255) # 31
     ])
 ]
 
@@ -190,7 +197,7 @@ bottomExpansion = 500
 
 canvasSize = (1000 + leftExpansion + rightExpansion, 1000 + topExpansion + bottomExpansion)
 topLeftOffset = (leftExpansion, topExpansion)
-palette = palettes[4]
+palette = palettes[5]
 
 def loadTemplate(subfolder):
     with open(os.path.join(subfolder, "template.json"), "r", encoding="utf-8", newline='\n') as f:
@@ -290,7 +297,7 @@ def normalizeImage(convertedImage):
             maxOops = max(maxOops, difference)
             print("\t\t{0} -> {1} (delta = {2})".format(original, new, difference))
         
-        if (maxOops > 20):
+        if (maxOops > 20000):
             print("\ttoo broken with max = {0}, excluding from autopick".format(maxOops))
             return False
     return True
