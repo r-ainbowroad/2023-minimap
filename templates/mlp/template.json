@@ -334,10 +334,11 @@
         "../mlp/source/bigdiscord.png"
       ],
       "use_reddit_coords": true,
-      "x": 1351,
+      "x": 1347,
       "y": -77,
-      "priority": 1,
-      "autopick": true
+      "priority": 5,
+      "autopick": true,
+      "export_group": "bigdiscord"
     },
     {
       "name": "mareinthemoon",

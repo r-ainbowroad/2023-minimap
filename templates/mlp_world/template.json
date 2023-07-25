@@ -424,19 +424,20 @@
       "autopick": true
     },
     {
-      "name": "fspez",
-      "endu": "https://fmxal.mooo.com/fuck-spez-live/template.json",
-      "priority": 1,
-      "autopick": true
-    },
-    {
       "name": "bigdiscord",
       "images": [
         "../mlp/source/bigdiscord.png"
       ],
       "use_reddit_coords": true,
-      "x": 1351,
+      "x": 1347,
       "y": -77,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "bigdiscord"
+    },
+    {
+      "name": "fspez",
+      "endu": "https://fmxal.mooo.com/fuck-spez-live/template.json",
       "priority": 1,
       "autopick": true
     },
