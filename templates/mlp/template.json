@@ -358,7 +358,7 @@
       "use_reddit_coords": true,
       "x": 996,
       "y": 377,
-      "priority": 5,
+      "priority": 10,
       "autopick": true,
       "export_group": "longglim"
     }
