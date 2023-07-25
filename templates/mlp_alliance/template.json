@@ -285,6 +285,18 @@
       "autopick": true
     },
     {
+      "name": "raid_counter",
+      "images": [
+        "../mlp/source/raid_counter.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 687,
+      "y": 851,
+      "priority": 7,
+      "autopick": true,
+      "export_group": "derpy"
+    },
+    {
       "name": "discord",
       "images": [
         "../mlp/source/discord.png"
@@ -313,7 +325,7 @@
       ],
       "use_reddit_coords": true,
       "x": 1484,
-      "y": -109,
+      "y": -93,
       "priority": 3,
       "autopick": true
     },
@@ -471,6 +483,17 @@
       "priority": 9,
       "autopick": true,
       "export_group": "bigtwi"
+    },
+    {
+      "name": "FOE_below_bigtwi",
+      "images": [
+        "../mlp/source/FOE_below_bigtwi.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -1346,
+      "y": 115,
+      "priority": 3,
+      "autopick": true
     }
   ]
 }
