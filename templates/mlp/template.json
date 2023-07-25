@@ -349,6 +349,18 @@
       "y": 86,
       "priority": 8,
       "autopick": true
+    },
+    {
+      "name": "longglim",
+      "images": [
+        "../mlp/source/longglim.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 996,
+      "y": 377,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "longglim"
     }
   ]
 }
