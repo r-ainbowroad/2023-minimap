@@ -33,6 +33,30 @@
             ],
             "x": 2148,
             "y": 1803
+        },
+        {
+            "name": "r/place bronies - bigdiscord",
+            "sources": [
+                "http://ponyplace-cdn.ferrictorus.com/mlp/endu_bigdiscord.png"
+            ],
+            "x": 2847,
+            "y": 923
+        },
+        {
+            "name": "r/place bronies - longglim",
+            "sources": [
+                "http://ponyplace-cdn.ferrictorus.com/mlp/endu_longglim.png"
+            ],
+            "x": 239,
+            "y": 1002
+        },
+        {
+            "name": "r/place bronies - bigtwi",
+            "sources": [
+                "http://ponyplace-cdn.ferrictorus.com/mlp/endu_bigtwi.png"
+            ],
+            "x": 112,
+            "y": 1037
         }
     ]
 }
