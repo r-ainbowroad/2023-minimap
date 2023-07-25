@@ -463,6 +463,18 @@
       "priority": 10,
       "autopick": true,
       "export_group": "longglim"
+    },
+    {
+      "name": "bigtwi",
+      "images": [
+        "../mlp/source/bigtwi.png"
+      ],
+      "use_reddit_coords": true,
+      "x": -1388,
+      "y": 34,
+      "priority": 9,
+      "autopick": true,
+      "export_group": "bigtwi"
     }
   ]
 }
