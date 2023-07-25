@@ -78,6 +78,18 @@
       "autopick": true
     },
     {
+      "name": "raid_counter",
+      "images": [
+        "../mlp/source/raid_counter.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 687,
+      "y": 851,
+      "priority": 7,
+      "autopick": true,
+      "export_group": "derpy"
+    },
+    {
       "name": "derpy",
       "images": [
         "../mlp/source/derpy2.png"
@@ -283,18 +295,6 @@
       "y": 551,
       "priority": 4,
       "autopick": true
-    },
-    {
-      "name": "raid_counter",
-      "images": [
-        "../mlp/source/raid_counter.png"
-      ],
-      "use_reddit_coords": true,
-      "x": 687,
-      "y": 851,
-      "priority": 7,
-      "autopick": true,
-      "export_group": "derpy"
     },
     {
       "name": "discord",
