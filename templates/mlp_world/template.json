@@ -430,7 +430,7 @@
       ],
       "use_reddit_coords": true,
       "x": 1347,
-      "y": -73,
+      "y": -81,
       "priority": 5,
       "autopick": true,
       "export_group": "bigdiscord"
