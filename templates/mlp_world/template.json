@@ -437,6 +437,12 @@
     },
     {
       "name": "fspez",
+      "endu": "https://gist.githubusercontent.com/Geechan/1a59334340415905cca08dd568890cb9/raw",
+      "priority": 1,
+      "autopick": true
+    },
+    {
+      "name": "fspez",
       "endu": "https://fmxal.mooo.com/fuck-spez-live/template.json",
       "priority": 1,
       "autopick": true
@@ -471,7 +477,7 @@
       ],
       "use_reddit_coords": true,
       "x": -1388,
-      "y": 34,
+      "y": 37,
       "priority": 9,
       "autopick": true,
       "export_group": "bigtwi"
