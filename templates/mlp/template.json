@@ -42,6 +42,18 @@
       "export_group": "starter"
     },
     {
+      "name": "WaddleDee",
+      "images": [
+        "../mlp/source/WaddleDee.png"
+      ],
+      "use_reddit_coords": true,
+      "x": 507,
+      "y": 884,
+      "priority": 4,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "octybrit",
       "images": [
         "../mlp/source/octybrit.png"
