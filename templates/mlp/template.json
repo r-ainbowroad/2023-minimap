@@ -6,12 +6,133 @@
   },
   "templates": [
     {
+      "name": "JOHN CAPCOM",
+      "images": [
+        "../mlp/source/JOHN CAPCOM.png"
+      ],
+      "x": 523,
+      "y": 466,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "FoE",
+      "images": [
+        "../mlp/source/FoE.png"
+      ],
+      "x": 382,
+      "y": 415,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "sweetie-bot.png",
+      "images": [
+        "../mlp/source/sweetie-bot.png.png"
+      ],
+      "x": 597,
+      "y": 489,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "what is this",
+      "images": [
+        "../mlp/source/what is this.png"
+      ],
+      "x": 428,
+      "y": 539,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Starlight",
+      "images": [
+        "../mlp/source/Starlight.png"
+      ],
+      "x": 518,
+      "y": 429,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "CrystalHeart",
+      "images": [
+        "../mlp/source/CrystalHeart.png"
+      ],
+      "x": 573,
+      "y": 522,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "newmanesix",
       "images": [
         "../mlp/source/newmanesix.png"
       ],
-      "x": 451,
-      "y": 453,
+      "x": 430,
+      "y": 451,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "trixie",
+      "images": [
+        "../mlp/source/trixie.png"
+      ],
+      "x": 454,
+      "y": 407,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Luna",
+      "images": [
+        "../mlp/source/Luna.png"
+      ],
+      "x": 533,
+      "y": 385,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "mario",
+      "images": [
+        "../mlp/source/mario.png"
+      ],
+      "x": 594,
+      "y": 479,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Celestia",
+      "images": [
+        "../mlp/source/Celestia.png"
+      ],
+      "x": 563,
+      "y": 435,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Background Elements",
+      "images": [
+        "../mlp/source/Background Elements.png"
+      ],
+      "x": 537,
+      "y": 459,
       "priority": 6,
       "autopick": true,
       "export_group": "starter"
