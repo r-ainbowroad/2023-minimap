@@ -72,6 +72,17 @@
       "export_group": "starter"
     },
     {
+      "name": "misty",
+      "images": [
+        "../mlp/source/misty.png"
+      ],
+      "x": 218,
+      "y": 521,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "newmanesix",
       "images": [
         "../mlp/source/newmanesix.png"
