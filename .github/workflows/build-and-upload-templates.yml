@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - "main"
+      - "events/lemmy/2023"
     paths:
       - "templates/*/autopick*.png"
       - "templates/*/canvas*.png"
@@ -15,6 +16,7 @@ on:
       - "templates/*/mask*.png"
       - "templates/*/template.json"
       - "templates/*/version.txt"
+      - "templates/*/sources/*.png"
 
 permissions:
   contents: read
