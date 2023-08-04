@@ -147,6 +147,17 @@
       "priority": 6,
       "autopick": true,
       "export_group": "starter"
+    },
+    {
+      "name": "2017 artwork",
+      "images": [
+        "../mlp/source/2017.png"
+      ],
+      "x": 685,
+      "y": 367,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
     }
   ]
 }
