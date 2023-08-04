@@ -179,7 +179,7 @@ palettes = [
         (212, 215, 217, 255), # 30
         (255, 255, 255, 255), # 31
     ]),
-        set([ # 2023 4th
+    set([ # 2023 4th
         (  0,   0,   0, 255), # 27
         ( 81,  82,  82, 255), # 28
         (137, 141, 144, 255), # 29
@@ -197,7 +197,7 @@ bottomExpansion = 500
 
 canvasSize = (1000 + leftExpansion + rightExpansion, 1000 + topExpansion + bottomExpansion)
 topLeftOffset = (leftExpansion, topExpansion)
-palette = palettes[5]
+palette = palettes[4]
 
 def loadTemplate(subfolder):
     with open(os.path.join(subfolder, "template.json"), "r", encoding="utf-8", newline='\n') as f:
@@ -720,10 +720,18 @@ def main(subfolder):
     
     updateVersion(subfolder)
 
+def palettize(path):
+  img = Image.open(path)
+  normalizeImage(img)
+  img.save(path + "palettized.png")
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Must provide a folder containing template.json as first arg")
         sys.exit(1)
+    if sys.argv[1].endswith(".png"):
+      palettize(sys.argv[1])
+      sys.exit(0)
     if not os.path.isfile(".build/template_assembler/assemble_template.py"):
         print("Must be invoked from repo root")
         sys.exit(1)
