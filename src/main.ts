@@ -31,6 +31,8 @@ const autoPickAfterPlaceTimeout = 3000;
   if (!await minimap.initialize())
     return;
 
+  minimap.templates.startUpdateLoop();
+
   // Analytics
   minimap.rPlace!.embed._events._getEventTarget().addEventListener("confirm-pixel", () => {
     const now = Date.now();

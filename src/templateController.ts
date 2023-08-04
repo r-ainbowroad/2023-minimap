@@ -18,10 +18,6 @@ export class MinimapTemplateController extends Emitter {
 
   constructor() {
     super();
-    const _root = this;
-    updateLoop(this.templateWorkQueue, () => { return this.currentTemplate.obj!; }, () => {
-      _root.dispatchEvent(new Event("templateFetched"));
-    });
   }
 
   add(name, template) {
@@ -49,5 +45,12 @@ export class MinimapTemplateController extends Emitter {
 
   get keys() {
     return Array.from(this.templates.keys())
+  }
+
+  startUpdateLoop() {
+    const _root = this;
+    updateLoop(this.templateWorkQueue, () => { return this.currentTemplate.obj!; }, () => {
+      _root.dispatchEvent(new Event("templateFetched"));
+    });
   }
 }
