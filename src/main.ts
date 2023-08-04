@@ -28,7 +28,8 @@ const autoPickAfterPlaceTimeout = 3000;
   //minimap.templates.add("mlp_world", blobServer.getTemplate("mlp_world", {autoPick: true, mask: true}));
   minimap.templates.add("mlp", blobServer.getTemplate("mlp", {autoPick: true, mask: true}));
 
-  await minimap.initialize();
+  if (!await minimap.initialize())
+    return;
 
   // Analytics
   minimap.rPlace!.embed._events._getEventTarget().addEventListener("confirm-pixel", () => {

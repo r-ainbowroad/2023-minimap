@@ -1,4 +1,4 @@
-import {getRedditCanvas, RedditCanvas, waitForDocumentLoad} from "../canvas";
+import {getMostLikelyCanvas, getRedditCanvas, RedditCanvas, waitForDocumentLoad} from "../canvas";
 import {fallbackOverlay, Overlay} from "../overlay";
 import {CanvasComparer} from "../canvasComparer";
 import {ButtonSetting, CheckboxSetting, CycleSetting, DisplaySetting, Settings} from "./minimap-components";
@@ -72,13 +72,13 @@ export class Minimap {
     await waitMs(1000);
     this.rPlace = await getRedditCanvas();
     if (!this.rPlace) {
-      const canvas = this.rPlace!.canvas;
+      const canvas = getMostLikelyCanvas();
       // Start overlay async.
       this.logger.logError("Failed to find site specific handler. Falling back to overlay.");
-      await fallbackOverlay(canvas, this.templates.currentTemplate.url);
+      await fallbackOverlay(canvas!, this.templates.currentTemplate.url);
       // Don't load the settings interface, some pixel game sites will ban you for mousedown/mouseup
       // events.
-      return;
+      return false;
     }
 
     this.ui = createMinimapUI(document);
@@ -206,6 +206,7 @@ export class Minimap {
     });
 
     await this.templates.fetch(this.settings.getSetting("autoPick").enabled);
+    return true;
   }
 
   pickColorFromPixel(imageData) {
