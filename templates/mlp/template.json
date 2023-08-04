@@ -72,6 +72,17 @@
       "export_group": "starter"
     },
     {
+      "name": "cmc",
+      "images": [
+        "../mlp/source/cmc.png"
+      ],
+      "x": 587,
+      "y": 338,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "misty",
       "images": [
         "../mlp/source/misty.png"
