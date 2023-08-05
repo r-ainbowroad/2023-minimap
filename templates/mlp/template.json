@@ -215,6 +215,17 @@
       "export_group": "starter"
     },
     {
+      "name": "mares",
+      "images": [
+        "../mlp/source/mares.png"
+      ],
+      "x": 650,
+      "y": 514,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "firefox",
       "images": [
         "../mlp/source/firefox.png"
