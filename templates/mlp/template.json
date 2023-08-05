@@ -226,6 +226,17 @@
       "export_group": "starter"
     },
     {
+      "name": "penk",
+      "images": [
+        "../mlp/source/penk.png"
+      ],
+      "x": 399,
+      "y": 382,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "firefox",
       "images": [
         "../mlp/source/firefox.png"
