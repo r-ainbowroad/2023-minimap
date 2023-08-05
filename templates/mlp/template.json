@@ -105,23 +105,23 @@
       "export_group": "starter"
     },
     {
-      "name": "trixie",
-      "images": [
-        "../mlp/source/trixie.png"
-      ],
-      "x": 454,
-      "y": 407,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
       "name": "Luna",
       "images": [
         "../mlp/source/Luna.png"
       ],
       "x": 533,
       "y": 385,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "trixie",
+      "images": [
+        "../mlp/source/trixie.png"
+      ],
+      "x": 454,
+      "y": 407,
       "priority": 6,
       "autopick": true,
       "export_group": "starter"
