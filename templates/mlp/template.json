@@ -6,262 +6,20 @@
   },
   "templates": [
     {
-      "name": "JOHN CAPCOM",
+      "name": "MLP: Cutie Mark Crusaders",
       "images": [
-        "../mlp/source/JOHN CAPCOM.png"
-      ],
-      "x": 523,
-      "y": 466,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "FoE",
-      "images": [
-        "../mlp/source/FoE.png"
-      ],
-      "x": 354,
-      "y": 414,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "sweetie-bot.png",
-      "images": [
-        "../mlp/source/sweetie-bot.png.png"
-      ],
-      "x": 597,
-      "y": 489,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "what is this",
-      "images": [
-        "../mlp/source/what is this.png"
-      ],
-      "x": 428,
-      "y": 539,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "tiny kissing ponies",
-      "images": [
-        "../mlp/source/tiny_kissing_ponies.png"
-      ],
-      "x": 528,
-      "y": 425,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "tiny kissing ponies - bg",
-      "images": [
-        "../mlp/source/tiny_kissing_ponies_bg.png"
-      ],
-      "x": 524,
-      "y": 424,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "Starlight",
-      "images": [
-        "../mlp/source/Starlight.png"
-      ],
-      "x": 518,
-      "y": 429,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "CrystalHeart",
-      "images": [
-        "../mlp/source/CrystalHeart.png"
-      ],
-      "x": 573,
-      "y": 522,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "cmc",
-      "images": [
-        "../mlp/source/cmc.png"
+        "../mlp/source/MLP__Cutie_Mark_Crusaders.png"
       ],
       "x": 587,
       "y": 338,
-      "priority": 6,
+      "priority": 9,
       "autopick": true,
       "export_group": "starter"
     },
     {
-      "name": "preventative German flag border",
+      "name": "MLP: Penk",
       "images": [
-        "../mlp/source/preventative_german_flag_border.png"
-      ],
-      "x": 601,
-      "y": 333,
-      "priority": 10,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "misty",
-      "images": [
-        "../mlp/source/misty.png"
-      ],
-      "x": 218,
-      "y": 521,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "newmanesix",
-      "images": [
-        "../mlp/source/newmanesix.png"
-      ],
-      "x": 429,
-      "y": 451,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "Luna",
-      "images": [
-        "../mlp/source/Luna.png"
-      ],
-      "x": 533,
-      "y": 385,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "trixie",
-      "images": [
-        "../mlp/source/trixie.png"
-      ],
-      "x": 454,
-      "y": 407,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "mario",
-      "images": [
-        "../mlp/source/mario.png"
-      ],
-      "x": 594,
-      "y": 479,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "Celestia",
-      "images": [
-        "../mlp/source/Celestia.png"
-      ],
-      "x": 563,
-      "y": 435,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "Background Elements",
-      "images": [
-        "../mlp/source/Background Elements.png"
-      ],
-      "x": 537,
-      "y": 459,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "derpy above 2017 artwork",
-      "images": [
-        "../mlp/source/derpy_above_2017.png"
-      ],
-      "x": 682,
-      "y": 323,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "2017 artwork",
-      "images": [
-        "../mlp/source/2017.png"
-      ],
-      "x": 685,
-      "y": 367,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "Fez",
-      "images": [
-        "../mlp/source/fez.png"
-      ],
-      "x": 618,
-      "y": 469,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "2022 artwork",
-      "images": [
-        "../mlp/source/2022.png"
-      ],
-      "x": 817,
-      "y": 756,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "littleshy",
-      "images": [
-        "../mlp/source/littleshy.png"
-      ],
-      "x": 454,
-      "y": 545,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "mares",
-      "images": [
-        "../mlp/source/mares.png"
-      ],
-      "x": 650,
-      "y": 514,
-      "priority": 6,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
-      "name": "penk",
-      "images": [
-        "../mlp/source/penk.png"
+        "../mlp/source/MLP__Penk.png"
       ],
       "x": 399,
       "y": 382,
@@ -270,9 +28,130 @@
       "export_group": "starter"
     },
     {
-      "name": "marekisser",
+      "name": "MLP: Luna heart",
       "images": [
-        "../mlp/source/marekisser.png"
+        "../mlp/source/MLP__Luna_heart.png"
+      ],
+      "x": 533,
+      "y": 385,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Celestia heart",
+      "images": [
+        "../mlp/source/MLP__Celestia_heart.png"
+      ],
+      "x": 563,
+      "y": 435,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: FoE: Littlepip & Blackjack",
+      "images": [
+        "../mlp/source/MLP__FoE__Littlepip_&_Blackjack.png"
+      ],
+      "x": 354,
+      "y": 414,
+      "priority": 7,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Mane Six (new)",
+      "images": [
+        "../mlp/source/MLP__Mane_Six_(new).png"
+      ],
+      "x": 429,
+      "y": 407,
+      "priority": 10,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: mail Derpy",
+      "images": [
+        "../mlp/source/MLP__mail_Derpy.png"
+      ],
+      "x": 454,
+      "y": 545,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Sweetie Bot",
+      "images": [
+        "../mlp/source/MLP__Sweetie_Bot.png"
+      ],
+      "x": 603,
+      "y": 489,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Crystal Heart",
+      "images": [
+        "../mlp/source/MLP__Crystal_Heart.png"
+      ],
+      "x": 573,
+      "y": 522,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: big Derpy",
+      "images": [
+        "../mlp/source/MLP__big_Derpy.png"
+      ],
+      "x": 682,
+      "y": 323,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Rainbow Dash heart (2017)",
+      "images": [
+        "../mlp/source/MLP__Rainbow_Dash_heart_(2017).png"
+      ],
+      "x": 685,
+      "y": 363,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Misty",
+      "images": [
+        "../mlp/source/MLP__Misty.png"
+      ],
+      "x": 218,
+      "y": 521,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Rainbow Shine",
+      "images": [
+        "../mlp/source/MLP__Rainbow_Shine.png"
+      ],
+      "x": 650,
+      "y": 514,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Marekisser",
+      "images": [
+        "../mlp/source/MLP__Marekisser.png"
       ],
       "x": 576,
       "y": 609,
@@ -281,26 +160,13 @@
       "export_group": "starter"
     },
     {
-      "name": "firefox",
+      "name": "MLP: crystal",
       "images": [
-        "../mlp/source/firefox.png"
+        "../mlp/source/MLP__crystal.png"
       ],
-      "x": 740,
-      "y": 500,
-      "enabled_utc": 50000000000000,
-      "priority": 4,
-      "autopick": true
-    },
-    {
-      "name": "preventative rainbow tiling",
-      "images": [
-        "../mlp/source/preventative_rainbow_tiling.png"
-      ],
-      "x": 604,
-      "y": 333,
-      "priority": 10,
+      "x": 817,
+      "y": 756,
+      "priority": 8,
       "autopick": true,
       "export_group": "starter"
     }
-  ]
-}
