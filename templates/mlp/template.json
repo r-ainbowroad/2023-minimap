@@ -50,6 +50,28 @@
       "export_group": "starter"
     },
     {
+      "name": "tiny kissing ponies",
+      "images": [
+        "../mlp/source/tiny_kissing_ponies.png"
+      ],
+      "x": 528,
+      "y": 425,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "tiny kissing ponies - bg",
+      "images": [
+        "../mlp/source/tiny_kissing_ponies_bg.png"
+      ],
+      "x": 524,
+      "y": 424,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "Starlight",
       "images": [
         "../mlp/source/Starlight.png"
