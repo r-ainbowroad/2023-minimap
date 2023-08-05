@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from gimpfu import PF_DIRNAME, PF_IMAGE, PF_STRING, PF_TOGGLE, main, pdb, register
+import binascii
 import os
 import re
+import struct
 import sys
 import traceback
 
@@ -58,6 +60,7 @@ def exportTemplate(image, dir):
         continue
       #pdb.gimp_message("Including: " + layer.name)
       priority = getPriority(layerNameMatch)
+      pngName = cleanFileName(layerNameMatch.group('name')) + '.png'
       tl = ""
       if not first:
         tl += ",\n"
@@ -66,15 +69,26 @@ def exportTemplate(image, dir):
       tl += """    {{
       "name": "{0}",
       "images": [
-        "../mlp/source/{1}.png"
+        "../mlp/source/{1}"
       ],
       "x": {2},
       "y": {3},
       "priority": {4},
       "autopick": true,
       "export_group": "starter"
-    }}""".format(layerNameMatch.group('name'), cleanFileName(layerNameMatch.group('name')), layer.offsets[0], layer.offsets[1], priority)
-      pdb.gimp_file_save(image, layer, os.path.join(dir, "source", cleanFileName(layerNameMatch.group('name')) + '.png'), "?")
+    }}""".format(layerNameMatch.group('name'), pngName, layer.offsets[0], layer.offsets[1], priority)
+      pdb.gimp_file_save(image, layer, os.path.join(dir, "source", pngName), "?")
+      png = open(os.path.join(dir, "source", pngName), 'rw+b')
+      content = png.read()
+      index = content.find(b'tIME')
+      png.seek(index + 4)
+      png.write(b'\x00' * 7)
+      png.seek(index)
+      bytes = png.read(11)
+      crc32 = binascii.crc32(bytes) & 0xFFFFFFFF
+      png.seek(index + 4 + 7)
+      png.write(struct.pack('>I', crc32))
+      png.close()
       jsonf.write(tl)
     jsonf.write("""\n  ]
 }
