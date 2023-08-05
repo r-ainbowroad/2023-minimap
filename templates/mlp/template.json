@@ -191,6 +191,16 @@
       "priority": 6,
       "autopick": true,
       "export_group": "starter"
+    },
+    {
+      "name": "firefox",
+      "images": [
+        "../mlp/source/firefox.png"
+      ],
+      "x": 740,
+      "y": 500,
+      "priority": 4,
+      "autopick": true
     }
   ]
 }
