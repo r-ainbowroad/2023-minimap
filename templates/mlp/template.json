@@ -17,6 +17,17 @@
       "export_group": "starter"
     },
     {
+      "name": "preventative German flag border",
+      "images": [
+        "../mlp/source/preventative_German_flag_border.png"
+      ],
+      "x": 601,
+      "y": 333,
+      "priority": 10,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "MLP: Penk",
       "images": [
         "../mlp/source/MLP__Penk.png"
@@ -167,6 +178,17 @@
       "x": 817,
       "y": 756,
       "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "preventative rainbow tiling",
+      "images": [
+        "../mlp/source/preventative_rainbow_tiling.png"
+      ],
+      "x": 604,
+      "y": 333,
+      "priority": 10,
       "autopick": true,
       "export_group": "starter"
     }
