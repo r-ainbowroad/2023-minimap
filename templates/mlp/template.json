@@ -160,6 +160,17 @@
       "export_group": "starter"
     },
     {
+      "name": "derpy above 2017 artwork",
+      "images": [
+        "../mlp/source/derpy_above_2017.png"
+      ],
+      "x": 682,
+      "y": 323,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "2017 artwork",
       "images": [
         "../mlp/source/2017.png"
@@ -199,6 +210,7 @@
       ],
       "x": 740,
       "y": 500,
+      "enabled_utc": 50000000000000,
       "priority": 4,
       "autopick": true
     }
