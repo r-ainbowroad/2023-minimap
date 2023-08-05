@@ -169,6 +169,28 @@
       "priority": 6,
       "autopick": true,
       "export_group": "starter"
+    },
+    {
+      "name": "Fez",
+      "images": [
+        "../mlp/source/fez.png"
+      ],
+      "x": 618,
+      "y": 469,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "2022 artwork",
+      "images": [
+        "../mlp/source/2022.png"
+      ],
+      "x": 817,
+      "y": 756,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
     }
   ]
 }
