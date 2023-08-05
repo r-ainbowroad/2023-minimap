@@ -39,7 +39,7 @@ def exportTemplate(image, dir):
   try:
     for f in os.listdir(os.path.join(dir, "source")):
       os.remove(os.path.join(dir, "source", f))
-    jsonf = open(os.path.join(dir, "template.json"), 'w')
+    jsonf = open(os.path.join(dir, "template.json"), 'wb')
     jsonf.write("""{
   "endu_info": {
     "contact": "https://discord.gg/bronyplace #diplomacy",
