@@ -204,6 +204,17 @@
       "export_group": "starter"
     },
     {
+      "name": "littleshy",
+      "images": [
+        "../mlp/source/littleshy.png"
+      ],
+      "x": 454,
+      "y": 545,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "firefox",
       "images": [
         "../mlp/source/firefox.png"
