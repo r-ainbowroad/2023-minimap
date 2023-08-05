@@ -83,6 +83,17 @@
       "export_group": "starter"
     },
     {
+      "name": "preventative German flag border",
+      "images": [
+        "../mlp/source/preventative_german_flag_border.png"
+      ],
+      "x": 601,
+      "y": 333,
+      "priority": 10,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "misty",
       "images": [
         "../mlp/source/misty.png"
@@ -232,6 +243,17 @@
       ],
       "x": 399,
       "y": 382,
+      "priority": 6,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "marekisser",
+      "images": [
+        "../mlp/source/marekisser.png"
+      ],
+      "x": 575,
+      "y": 600,
       "priority": 6,
       "autopick": true,
       "export_group": "starter"
