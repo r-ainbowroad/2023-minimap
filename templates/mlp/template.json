@@ -252,8 +252,8 @@
       "images": [
         "../mlp/source/marekisser.png"
       ],
-      "x": 575,
-      "y": 600,
+      "x": 576,
+      "y": 609,
       "priority": 6,
       "autopick": true,
       "export_group": "starter"
