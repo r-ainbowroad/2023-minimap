@@ -270,6 +270,17 @@
       "export_group": "starter"
     },
     {
+      "name": "MLP: peeking Sunset",
+      "images": [
+        "../mlp/source/MLP__peeking_Sunset.png"
+      ],
+      "x": 673,
+      "y": 394,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "MLP: GigaSpike",
       "images": [
         "../mlp/source/MLP__GigaSpike.png"
