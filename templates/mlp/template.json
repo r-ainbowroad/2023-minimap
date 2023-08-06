@@ -6,6 +6,17 @@
   },
   "templates": [
     {
+      "name": "Australia Chrysalis",
+      "images": [
+        "../mlp/source/Australia_Chrysalis.png"
+      ],
+      "x": 144,
+      "y": 788,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "MLP: Celestia heart",
       "images": [
         "../mlp/source/MLP__Celestia_heart.png"
@@ -270,6 +281,17 @@
       "export_group": "starter"
     },
     {
+      "name": "Germany Flag Segment",
+      "images": [
+        "../mlp/source/Germany_Flag_Segment.png"
+      ],
+      "x": 538,
+      "y": 333,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "MLP: Lunas future",
       "images": [
         "../mlp/source/MLP__Lunas_future.png"
@@ -321,6 +343,17 @@
       "x": 231,
       "y": 445,
       "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Soarin Pie",
+      "images": [
+        "../mlp/source/Soarin_Pie.png"
+      ],
+      "x": 425,
+      "y": 902,
+      "priority": 6,
       "autopick": true,
       "export_group": "starter"
     }
