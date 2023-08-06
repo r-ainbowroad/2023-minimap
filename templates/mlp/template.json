@@ -246,6 +246,17 @@
       "priority": 10,
       "autopick": true,
       "export_group": "starter"
+    },
+    {
+      "name": "MLP: Lunas future",
+      "images": [
+        "../mlp/source/MLP__Lunas_future.png"
+      ],
+      "x": 498,
+      "y": 270,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
     }
   ]
 }
