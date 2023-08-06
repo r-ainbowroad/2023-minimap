@@ -50,9 +50,20 @@
       "export_group": "starter"
     },
     {
-      "name": "Australia Chrysalis",
+      "name": "Tabarnak",
       "images": [
-        "../mlp/source/Australia_Chrysalis.png"
+        "../mlp/source/Tabarnak.png"
+      ],
+      "x": 177,
+      "y": 763,
+      "priority": 2,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Australia Chrysalis",
+      "images": [
+        "../mlp/source/MLP__Australia_Chrysalis.png"
       ],
       "x": 144,
       "y": 788,
