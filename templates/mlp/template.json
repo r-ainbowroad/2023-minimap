@@ -142,8 +142,19 @@
       "images": [
         "../mlp/source/MLP__falling_Twilight.png"
       ],
-      "x": 724,
-      "y": 369,
+      "x": 725,
+      "y": 388,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Trixie CM",
+      "images": [
+        "../mlp/source/MLP__Trixie_CM.png"
+      ],
+      "x": 727,
+      "y": 418,
       "priority": 5,
       "autopick": true,
       "export_group": "starter"
