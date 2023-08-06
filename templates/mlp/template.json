@@ -61,6 +61,17 @@
       "export_group": "starter"
     },
     {
+      "name": "MLP: Flufflepuff",
+      "images": [
+        "../mlp/source/MLP__Flufflepuff.png"
+      ],
+      "x": 206,
+      "y": 765,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "MLP: Celestia heart",
       "images": [
         "../mlp/source/MLP__Celestia_heart.png"
