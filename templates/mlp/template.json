@@ -12,6 +12,28 @@
       ],
       "x": 355,
       "y": 255,
+      "priority": 2,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Plant",
+      "images": [
+        "../mlp/source/Plant.png"
+      ],
+      "x": 335,
+      "y": 468,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Spitfire",
+      "images": [
+        "../mlp/source/Spitfire.png"
+      ],
+      "x": 114,
+      "y": 486,
       "priority": 5,
       "autopick": true,
       "export_group": "starter"
@@ -155,6 +177,17 @@
       ],
       "x": 609,
       "y": 517,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Bluey",
+      "images": [
+        "../mlp/source/Bluey.png"
+      ],
+      "x": 584,
+      "y": 539,
       "priority": 5,
       "autopick": true,
       "export_group": "starter"
@@ -373,8 +406,8 @@
       "images": [
         "../mlp/source/Sleepytime_Bingo.png"
       ],
-      "x": 849,
-      "y": 843,
+      "x": 349,
+      "y": 203,
       "priority": 5,
       "autopick": true,
       "export_group": "starter"
