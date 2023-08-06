@@ -160,17 +160,6 @@
       "export_group": "starter"
     },
     {
-      "name": "Geometry Dash",
-      "images": [
-        "../mlp/source/Geometry_Dash.png"
-      ],
-      "x": 541,
-      "y": 736,
-      "priority": 4,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
       "name": "MLP: Mane Six (new)",
       "images": [
         "../mlp/source/MLP__Mane_Six_(new).png"
