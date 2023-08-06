@@ -237,6 +237,17 @@
       "export_group": "starter"
     },
     {
+      "name": "MLP: Tantabus",
+      "images": [
+        "../mlp/source/MLP__Tantabus.png"
+      ],
+      "x": 686,
+      "y": 270,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "MLP: Ember",
       "images": [
         "../mlp/source/MLP__Ember.png"
