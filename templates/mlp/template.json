@@ -105,6 +105,17 @@
       "export_group": "starter"
     },
     {
+      "name": "Tiny Hazy",
+      "images": [
+        "../mlp/source/Tiny_Hazy.png"
+      ],
+      "x": 609,
+      "y": 517,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "MLP: Sweetie Bot",
       "images": [
         "../mlp/source/MLP__Sweetie_Bot.png"
