@@ -6,6 +6,17 @@
   },
   "templates": [
     {
+      "name": "Thorax Changeling",
+      "images": [
+        "../mlp/source/Thorax_Changeling.png"
+      ],
+      "x": 162,
+      "y": 484,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "Australia Chrysalis",
       "images": [
         "../mlp/source/Australia_Chrysalis.png"
@@ -342,6 +353,17 @@
       ],
       "x": 231,
       "y": 445,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Soarin Pie [6] 1",
+      "images": [
+        "../mlp/source/Soarin_Pie_[6]_1.png"
+      ],
+      "x": 425,
+      "y": 902,
       "priority": 5,
       "autopick": true,
       "export_group": "starter"
