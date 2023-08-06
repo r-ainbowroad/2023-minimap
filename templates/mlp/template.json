@@ -424,17 +424,6 @@
       "export_group": "starter"
     },
     {
-      "name": "Soarin Pie [6] 1",
-      "images": [
-        "../mlp/source/Soarin_Pie_[6]_1.png"
-      ],
-      "x": 425,
-      "y": 902,
-      "priority": 5,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
       "name": "Soarin Pie",
       "images": [
         "../mlp/source/Soarin_Pie.png"
