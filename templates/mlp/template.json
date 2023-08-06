@@ -6,6 +6,17 @@
   },
   "templates": [
     {
+      "name": "Nuero (Neuro-sama)",
+      "images": [
+        "../mlp/source/Nuero_(Neuro-sama).png"
+      ],
+      "x": 355,
+      "y": 255,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "Thorax Changeling",
       "images": [
         "../mlp/source/Thorax_Changeling.png"
@@ -57,6 +68,17 @@
       "x": 601,
       "y": 333,
       "priority": 10,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Sonic Rainboom Plus Various",
+      "images": [
+        "../mlp/source/Sonic_Rainboom_Plus_Various.png"
+      ],
+      "x": 333,
+      "y": 361,
+      "priority": 5,
       "autopick": true,
       "export_group": "starter"
     },
@@ -342,6 +364,17 @@
       ],
       "x": 198,
       "y": 486,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Sleepytime Bingo",
+      "images": [
+        "../mlp/source/Sleepytime_Bingo.png"
+      ],
+      "x": 849,
+      "y": 843,
       "priority": 5,
       "autopick": true,
       "export_group": "starter"
