@@ -6,11 +6,22 @@
   },
   "templates": [
     {
+      "name": "MLP: Celestia heart",
+      "images": [
+        "../mlp/source/MLP__Celestia_heart.png"
+      ],
+      "x": 563,
+      "y": 435,
+      "priority": 8,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
       "name": "MLP: Cutie Mark Crusaders",
       "images": [
         "../mlp/source/MLP__Cutie_Mark_Crusaders.png"
       ],
-      "x": 587,
+      "x": 577,
       "y": 338,
       "priority": 9,
       "autopick": true,
@@ -50,17 +61,6 @@
       "export_group": "starter"
     },
     {
-      "name": "MLP: Celestia heart",
-      "images": [
-        "../mlp/source/MLP__Celestia_heart.png"
-      ],
-      "x": 563,
-      "y": 435,
-      "priority": 8,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
       "name": "MLP: FoE: Littlepip & Blackjack",
       "images": [
         "../mlp/source/MLP__FoE__Littlepip_&_Blackjack.png"
@@ -68,6 +68,17 @@
       "x": 354,
       "y": 414,
       "priority": 7,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "Geometry Dash",
+      "images": [
+        "../mlp/source/Geometry_Dash.png"
+      ],
+      "x": 541,
+      "y": 736,
+      "priority": 4,
       "autopick": true,
       "export_group": "starter"
     },
@@ -171,17 +182,6 @@
       "export_group": "starter"
     },
     {
-      "name": "MLP: Emo Spike",
-      "images": [
-        "../mlp/source/MLP__Emo_Spike.png"
-      ],
-      "x": 198,
-      "y": 486,
-      "priority": 5,
-      "autopick": true,
-      "export_group": "starter"
-    },
-    {
       "name": "MLP: Misty",
       "images": [
         "../mlp/source/MLP__Misty.png"
@@ -254,6 +254,50 @@
       ],
       "x": 498,
       "y": 270,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: small Sonata",
+      "images": [
+        "../mlp/source/MLP__small_Sonata.png"
+      ],
+      "x": 208,
+      "y": 652,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Ocellus",
+      "images": [
+        "../mlp/source/MLP__Ocellus.png"
+      ],
+      "x": 706,
+      "y": 465,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Emo Spike",
+      "images": [
+        "../mlp/source/MLP__Emo_Spike.png"
+      ],
+      "x": 198,
+      "y": 486,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
+    },
+    {
+      "name": "MLP: Zipp",
+      "images": [
+        "../mlp/source/MLP__Zipp.png"
+      ],
+      "x": 231,
+      "y": 446,
       "priority": 5,
       "autopick": true,
       "export_group": "starter"
