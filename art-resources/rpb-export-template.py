@@ -37,6 +37,41 @@ def getPriority(layerNameMatch):
 def cleanFileName(name):
   return name.replace(':', '_').replace('?', '_').replace(' ', '_')
 
+class Chunk:
+  def __init__(self, type, size, loc):
+    self.type = type
+    self.size = size
+    self.loc = loc
+
+def getChunks(png):
+  loc = 8
+  chunks = []
+  while True:
+    png.seek(loc)
+    bytes = png.read(4)
+    if not bytes:
+      break
+    len = struct.unpack('>I', bytes)[0]
+    type = png.read(4)
+    chunks.append(Chunk(type, len, loc))
+    loc += len + 4 + 4 + 4
+  return chunks
+
+def makePNGDeterministic(png):
+  chunksToSkip = [b'iCCP', b'bKGD', b'pHYs', b'tIME']
+  chunks = getChunks(png)
+  loc = 8
+  for chunk in chunks:
+    if chunk.type in chunksToSkip:
+      continue
+    png.seek(chunk.loc)
+    size = chunk.size + 4 + 4 + 4
+    content = png.read(size)
+    png.seek(loc)
+    png.write(content)
+    loc += size
+  png.truncate(loc)
+
 def exportTemplate(image, dir):
   try:
     for f in os.listdir(os.path.join(dir, "source")):
@@ -79,15 +114,7 @@ def exportTemplate(image, dir):
     }}""".format(layerNameMatch.group('name'), pngName, layer.offsets[0], layer.offsets[1], priority)
       pdb.gimp_file_save(image, layer, os.path.join(dir, "source", pngName), "?")
       png = open(os.path.join(dir, "source", pngName), 'rw+b')
-      content = png.read()
-      index = content.find(b'tIME')
-      png.seek(index + 4)
-      png.write(b'\x00' * 7)
-      png.seek(index)
-      bytes = png.read(11)
-      crc32 = binascii.crc32(bytes) & 0xFFFFFFFF
-      png.seek(index + 4 + 7)
-      png.write(struct.pack('>I', crc32))
+      makePNGDeterministic(png)
       png.close()
       jsonf.write(tl)
     jsonf.write("""\n  ]
