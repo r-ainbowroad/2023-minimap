@@ -455,6 +455,17 @@
       "priority": 6,
       "autopick": true,
       "export_group": "starter"
+    },
+    {
+      "name": "MLP: German Celestia",
+      "images": [
+        "../mlp/source/MLP__German_Celestia.png"
+      ],
+      "x": 549,
+      "y": 363,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
     }
   ]
 }
