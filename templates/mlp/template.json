@@ -466,6 +466,17 @@
       "priority": 5,
       "autopick": true,
       "export_group": "starter"
+    },
+    {
+      "name": "MLP: small Twilight",
+      "images": [
+        "../mlp/source/MLP__small_Twilight.png"
+      ],
+      "x": 733,
+      "y": 801,
+      "priority": 5,
+      "autopick": true,
+      "export_group": "starter"
     }
   ]
 }
