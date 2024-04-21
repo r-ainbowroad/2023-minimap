@@ -135,7 +135,7 @@ export class TemplateController extends EventEmitter {
       const updateCanvas = document.createElement('canvas');
       updateCanvas.width = update.width;
       updateCanvas.height = update.height;
-      const updateCtx = updateCanvas.getContext('2d') as CanvasRenderingContext2D;
+      const updateCtx = updateCanvas.getContext('2d', {willReadFrequently: true}) as CanvasRenderingContext2D;
 
       update.drawTo(updateCtx);
 

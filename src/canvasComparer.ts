@@ -178,7 +178,7 @@ export class CanvasComparer extends Emitter {
 
   computeDiff() {
     // Update the minimap image (necessary for checking the diff)
-    const compareCtx = this.compareCanvas.getContext("2d")!;
+    const compareCtx = this.compareCanvas.getContext("2d", {willReadFrequently: true})!;
     compareCtx.clearRect(0, 0, this.compareCanvas.width, this.compareCanvas.height);
     compareCtx.drawImage(this.templateCanvas, 0, 0);
     compareCtx.globalCompositeOperation = "source-in";
