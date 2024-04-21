@@ -203,9 +203,11 @@ export class TemplateController extends EventEmitter {
         );
       }
 
-      // We convert the RawDiffTemplateUpdate into a DiffTemplateUpdate via processTemplateImage
-      let templateData = await this.fetchImage(diffData.diff);
-      this.currentTemplate = await this.updateTemplate(templateData, diffData.x, diffData.y, diffData.raw ?? false);
+      if (diffData.diff) {
+        // We convert the RawDiffTemplateUpdate into a DiffTemplateUpdate via processTemplateImage
+        let templateData = await this.fetchImage(diffData.diff);
+        this.currentTemplate = await this.updateTemplate(templateData, diffData.x, diffData.y, diffData.raw ?? false);
+      }
       this.emit("update", this.currentTemplate);
       if (diffData.current_id != null)
         this.lastId = diffData.current_id;
@@ -247,7 +249,7 @@ interface DiffTemplateUpdate {
   x: number,
   y: number,
   raw: boolean,
-  diff: string,
+  diff?: string,
   resize?: TemplateResizeUpdate
 }
 
