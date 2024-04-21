@@ -48,6 +48,8 @@ export class Overlay {
   }
 
   updateOverlayStyle() {
+    if (!this.template)
+      return;
     let style = getComputedStyle(this.canvas);
     let shouldApplyTemplate = false;
     const newWidth = this.template.width * 3;
