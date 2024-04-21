@@ -186,16 +186,18 @@ export class Minimap {
       this.ui!.setTemplate(template);
     });
 
-    const actions = this.rPlace!.embed
-      .shadowRoot!.querySelector("garlic-bread-color-picker")!
-      .shadowRoot!.querySelector('div > div > div.actions')! as HTMLDivElement;
-    const button = document.createElement('button');
-    button.innerText = "Pick Priority Pixel";
-    button.setAttribute('style', "height:44px; min-width: 44px; padding: 0px; border: var(--pixel-border); box-sizing: border-box; background-color: #ffffff; flex: 1 1 0%; cursor:pointer;  color: rgb(18, 18, 18); font-size 20px; position:relative; --button-border-width: 4px; border-image-slice: 1; margin-left: 16px;");
-    button.onclick = () => {
-      this.selectRandPix();
-    };
-    actions.appendChild(button);
+    try {
+      const actions = this.rPlace!.embed
+        .shadowRoot!.querySelector("garlic-bread-color-picker")!
+        .shadowRoot!.querySelector('div > div > div.actions')! as HTMLDivElement;
+      const button = document.createElement('button');
+      button.innerText = "Pick Priority Pixel";
+      button.setAttribute('style', "height:44px; min-width: 44px; padding: 0px; border: var(--pixel-border); box-sizing: border-box; background-color: #ffffff; flex: 1 1 0%; cursor:pointer;  color: rgb(18, 18, 18); font-size 20px; position:relative; --button-border-width: 4px; border-image-slice: 1; margin-left: 16px;");
+      button.onclick = () => {
+        this.selectRandPix();
+      };
+      actions.appendChild(button);
+    } catch {}
 
     this.comparer!.setInterval(comparerTimeout);
     this.comparer!.addEventListener("computed", () => {

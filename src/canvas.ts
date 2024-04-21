@@ -103,7 +103,7 @@ class MinimapPosition extends Emitter {
 
 export class RedditCanvas {
   position: MinimapPosition;
-  paletteButtons: NodeListOf<HTMLElement>;
+  paletteButtons?: NodeListOf<HTMLElement>;
   palette: number[][] = [];
   camera: any;
 
@@ -113,19 +113,22 @@ export class RedditCanvas {
     this.camera = this.embed.camera;
 
     this.position = new MinimapPosition(this);
-    this.paletteButtons = this.embed
-      .shadowRoot!.querySelector("garlic-bread-color-picker")!
-      .shadowRoot!.querySelectorAll(".palette button.color")!;
-    for (const paletteButton of this.paletteButtons) {
-      const parsedData = (paletteButton.children[0] as HTMLElement).style.backgroundColor.match(
-        /rgb\(([0-9]{1,3}), ([0-9]{1,3}), ([0-9]{1,3})\)/
-      );
-      const colorID = parseInt(paletteButton.getAttribute("data-color")!);
-      if (parsedData) {
-        this.palette.push([+parsedData[1], +parsedData[2], +parsedData[3], colorID]);
-      } else {
-        this.palette.push([0, 0, 0, -1]);
+    try {
+      this.paletteButtons = this.embed
+        .shadowRoot!.querySelector("garlic-bread-color-picker")!
+        .shadowRoot!.querySelectorAll(".palette button.color")!;
+      for (const paletteButton of this.paletteButtons) {
+        const parsedData = (paletteButton.children[0] as HTMLElement).style.backgroundColor.match(
+          /rgb\(([0-9]{1,3}), ([0-9]{1,3}), ([0-9]{1,3})\)/
+        );
+        const colorID = parseInt(paletteButton.getAttribute("data-color")!);
+        if (parsedData) {
+          this.palette.push([+parsedData[1], +parsedData[2], +parsedData[3], colorID]);
+        } else {
+          this.palette.push([0, 0, 0, -1]);
+        }
       }
+    } catch {
     }
   }
 };
@@ -143,13 +146,6 @@ export async function getRedditCanvas() {
         .shadowRoot!.querySelector("canvas")!;
       if (!rPlaceCanvas) {
         console.log("Failed to find `garlic-bread-canvas`");
-        continue;
-      }
-      const rPlacePaletteButtons = embed
-        .shadowRoot!.querySelector("garlic-bread-color-picker")!
-        .shadowRoot!.querySelectorAll(".palette button.color")!;
-      if (rPlacePaletteButtons.length === 0 && tries > 1) {
-        console.log("rPlace is exists but pallete is empty!");
         continue;
       }
       return new RedditCanvas(rPlaceCanvas, embed);
