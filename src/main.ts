@@ -6,90 +6,58 @@
  *
  **
  *
- * @file All of the minimap. This needs to be split up.
+ * @file Static overlay bootstrap that loads a template directly from templates.brony.place.
  *
  **/
 
-import {BlobServer, waitMs} from './utils';
-import {Analytics} from './analytics';
-import {AnalyticsLogger} from './logger';
-import {Minimap} from './minimap/minimap';
-import {Notifications} from "./notifications/notifications";
-import {MqttWSClient} from "./realtime/mqttWSClient";
-import {MqttMinimapClient} from "./realtime/mqttMinimapClient";
 import {waitForDocumentLoad} from "./canvas";
-import { v4 as uuidv4 } from "uuid";
-import {TemplateController} from "./template/template";
+import {Overlay} from "./overlay";
+import {fetchTemplateImage} from "./template/templateImage";
+import {waitMs} from "./utils";
 
-const autoPickAfterPlaceTimeout = 3000;
+const defaultTemplateName = "tyles";
+const templateSearchParam = "template";
+const targetCanvasId = "chocolate-canvas";
+const canvasDetectAttempts = 20;
+const canvasDetectRetryDelayMs = 500;
+
+function getTemplateName(): string {
+  return new URLSearchParams(window.location.search).get(templateSearchParam) ?? defaultTemplateName;
+}
+
+function getTemplateUrl(templateName: string): string {
+  return `https://templates.brony.place/${encodeURIComponent(templateName)}/template.png`;
+}
+
+async function findCanvas(): Promise<HTMLCanvasElement | null> {
+  for (let attempt = 0; attempt < canvasDetectAttempts; attempt++) {
+    const canvas = document.getElementById(targetCanvasId);
+    if (canvas instanceof HTMLCanvasElement)
+      return canvas;
+
+    await waitMs(canvasDetectRetryDelayMs);
+  }
+
+  return null;
+}
 
 (async function () {
-  if (window.location.pathname.startsWith("/embed")) {
-    // Canvas mode. Loads the minimap/overlay.
+  await waitForDocumentLoad();
 
-    if (localStorage.getItem("ponyplace-id") === null) {
-      localStorage.setItem("ponyplace-id", uuidv4());
-    }
+  const canvas = await findCanvas();
+  if (!canvas) {
+    console.error(`Failed to find canvas #${targetCanvasId} to overlay.`);
+    return;
+  }
 
-    const faction = "lemmy";
+  const templateName = getTemplateName();
+  const templateUrl = getTemplateUrl(templateName);
 
-    const analytics = new Analytics(new URL('https://api.minimap.brony.place/analytics/'));
-    const analyticsLogger = new AnalyticsLogger(analytics);
-
-    const mqttClient = new MqttMinimapClient();
-
-    const notifications = new Notifications(mqttClient);
-
-    const templateController = new TemplateController(mqttClient, notifications);
-
-    const minimap = new Minimap(analyticsLogger, templateController);
-
-    const blobServer = new BlobServer("https://cdn.minimap.brony.place");
-
-    await waitForDocumentLoad();
-    await waitMs(1000);
-
-    if (!await minimap.initialize()) {
-      // Minimap fell back. Initiate template controller and mqtt only.
-      if (!await templateController.initiate())
-        return;
-      if (!mqttClient.initiate(faction))
-        return;
-      return;
-    }
-
-    if (!await notifications.initialize())
-      return;
-
-    if (!await templateController.initiate())
-      return;
-
-    if (!mqttClient.initiate(faction))
-      return;
-
-    // Analytics
-    // TODO: Fix analytics
-    minimap.rPlace!.embed._events._getEventTarget().addEventListener("confirm-pixel", () => {
-      const now = Date.now();
-      const reddit = now + minimap.rPlace!.embed.nextTileAvailableIn * 1000;
-      const safe = reddit + autoPickAfterPlaceTimeout;
-      analytics.placedPixel('manual-browser', faction, minimap.rPlace!.position.pos, minimap.rPlace!.embed.selectedColor, now, {
-        reddit: reddit,
-        safe: safe
-      });
-    });
-    minimap.comparer!.addEventListener("computed", () => {
-      if (Math.random() < 0.01) {
-        analytics.statusUpdate(
-          faction,
-          minimap.comparer!.countOfAllPixels,
-          minimap.comparer!.countOfWrongPixels
-        );
-      }
-    });
-  } else {
-    // Data mode. Connects to WebSockets and forwards them to the Canvas instance.
-    const mqttClient = new MqttWSClient("wss://realtime.minimap.brony.place");
-    await mqttClient.initiate();
+  try {
+    const template = await fetchTemplateImage(templateUrl);
+    new Overlay(canvas, template);
+    console.log(`Overlay loaded from ${templateUrl}`);
+  } catch (error) {
+    console.error(`Failed to load template from ${templateUrl}`, error);
   }
 })();

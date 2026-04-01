@@ -13,7 +13,7 @@
 import {constants} from "./constants";
 import {gm_fetch, headerStringToObject} from "./utils";
 
-const url = "https://cdn.minimap.brony.place/minimap/minimap.user.js";
+const url = "https://templates.brony.place/tyles/minimap.user.js";
 
 (async function () {
   let etag: string | undefined;

@@ -25,20 +25,30 @@ export function gm_fetch<TContext = any>(request: GM.Request<TContext>) {
 }
 
 /**
- * @param headers \r\n separated string of HTTP headers
+ * @param headers newline separated string of HTTP headers
  * @returns An object mapping each header to its value. Unspecified which header is returned for
  *          multiple of the same header.
  */
 export function headerStringToObject(headers: string) {
-  return Object.fromEntries(headers.split('\r\n').filter((val) => {
-    return !!val;
-  }).map((val) => {
-    const out = val.split(': ').map((val) => {
-      return val.trim().replace(/^"+/, '').replace(/"+$/, '');
-    });
-    out[0] = out[0].toLowerCase();
-    return out;
-  }));
+  const parsedHeaders: Record<string, string> = {};
+
+  for (const line of headers.split(/\r?\n/)) {
+    if (!line.trim())
+      continue;
+
+    const separatorIndex = line.indexOf(':');
+    if (separatorIndex === -1)
+      continue;
+
+    const key = line.slice(0, separatorIndex).trim().toLowerCase();
+    const value = line.slice(separatorIndex + 1).trim();
+    if (!key)
+      continue;
+
+    parsedHeaders[key] = value;
+  }
+
+  return parsedHeaders;
 }
 
 export class AsyncWorkQueue {

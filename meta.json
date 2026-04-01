@@ -10,21 +10,18 @@
     "GM.addElement"
   ],
   "include": [
-    "https://hot-potato.reddit.com/embed*",
-    "https://garlic-bread.reddit.com/embed*",
-    "https://place.equestria.horse/embed*",
-    "https://reddit.com/r/place*",
-    "https://www.reddit.com/r/place*",
-    "https://place.equestria.horse/"
+    "https://place.equestria.horse/*",
+    "https://tyles.place/*"
   ],
-  "downloadURL": "https://cdn.minimap.brony.place/minimap/loader.user.js",
-  "updateURL": "https://cdn.minimap.brony.place/minimap/loader.user.js",
+  "downloadURL": "https://templates.brony.place/tyles/loader.user.js",
+  "updateURL": "https://templates.brony.place/tyles/loader.user.js",
   "connect": [
     "raw.githubusercontent.com",
     "media.githubusercontent.com",
     "cdn.minimap.brony.place",
     "realtime.minimap.brony.place",
     "api.minimap.brony.place"
+    "templates.brony.place"
   ],
-  "version": "0.0.2"
+  "version": "0.0.4"
 }

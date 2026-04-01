@@ -10,21 +10,35 @@
  *
  **/
 
-import {TemplateController, TemplateData} from "./template/template";
+import type {TemplateController, TemplateData} from "./template/template";
+import type {TemplateImage} from "./template/templateImage";
+
+type OverlayTemplate = TemplateData | TemplateImage;
+
+interface OverlayTemplateSource {
+  currentTemplate: OverlayTemplate | null;
+  addEventListener(event: string, callback: (template: OverlayTemplate) => void): void;
+}
 
 export class Overlay {
   canvas: HTMLCanvasElement;
-  templateController: TemplateController;
-  template: TemplateData;
-  overlayCanvas: HTMLCanvasElement;
-  overlayContext: CanvasRenderingContext2D;
+  templateController: OverlayTemplateSource | null;
+  template: OverlayTemplate;
+  overlayImage: HTMLImageElement;
+  renderedTemplate: OverlayTemplate | null = null;
+  renderedTemplateUrl: string | null = null;
 
-  constructor(canvas: HTMLCanvasElement, templateController: TemplateController, template: TemplateData) {
+  constructor(canvas: HTMLCanvasElement, templateOrController: OverlayTemplate | OverlayTemplateSource, template?: OverlayTemplate) {
     this.canvas = canvas;
-    this.templateController = templateController;
-    this.template = template;
-    this.overlayCanvas = document.createElement('canvas');
-    this.overlayContext = this.overlayCanvas.getContext('2d')!;
+    if (this.isOverlayTemplate(templateOrController)) {
+      this.templateController = null;
+      this.template = templateOrController;
+    } else {
+      this.templateController = templateOrController;
+      this.template = template ?? templateOrController.currentTemplate!;
+    }
+    this.overlayImage = document.createElement('img');
+    this.overlayImage.alt = "";
     this.inject();
     this.updateOverlayStyle();
   }
@@ -35,7 +49,7 @@ export class Overlay {
 
   collectTransformParents() {
     let nodesToFollow: HTMLElement[] = [];
-    let current: Node | null = this.overlayCanvas;
+    let current: Node | null = this.overlayImage;
     while (current) {
       if (current instanceof HTMLElement) {
         if (current.style.transform.includes("scale"))
@@ -55,7 +69,7 @@ export class Overlay {
   }
 
   inject() {
-    this.canvas.parentElement!.appendChild(this.overlayCanvas);
+    this.canvas.parentElement!.appendChild(this.overlayImage);
     const canvasObserver = new MutationObserver(() => {
       this.updateOverlayStyle();
     });
@@ -68,7 +82,7 @@ export class Overlay {
       canvasZoomObserver.observe(node, {attributes: true, attributeFilter: ["style"]});
     }
 
-    this.templateController.addEventListener("update", (template: TemplateData) => {
+    this.templateController?.addEventListener("update", (template: OverlayTemplate) => {
       console.log("overlay template update");
       this.applyTemplate(template);
       this.updateOverlayStyle();
@@ -77,73 +91,104 @@ export class Overlay {
 
   updateRenderingMode() {
     // TODO: Use visual viewport to be more correct here.
-    const rect = this.overlayCanvas.getBoundingClientRect();
-    if (rect.height < this.template.height * 8)
-      this.overlayCanvas.style.imageRendering = 'auto';
-    else
-      this.overlayCanvas.style.imageRendering = 'pixelated';
+    const rect = this.overlayImage.getBoundingClientRect();
+    this.overlayImage.style.imageRendering = 'pixelated';
   }
 
   updateOverlayStyle() {
     if (!this.template)
       return;
     let style = getComputedStyle(this.canvas);
-    let shouldApplyTemplate = false;
-    const newWidth = this.template.width * 3;
-    const newHeight = this.template.height * 3;
-    if (this.overlayCanvas.width != newWidth) {
-      shouldApplyTemplate = true;
-      this.overlayCanvas.width = newWidth;
-    }
-    if (this.overlayCanvas.height != newWidth) {
-      shouldApplyTemplate = true;
-      this.overlayCanvas.height = newHeight;
-    }
-    this.overlayCanvas.style.position = 'absolute';
+    this.overlayImage.style.position = 'absolute';
     const transformPos = (pos) => {
       if (pos == 'auto')
         return '0';
       return pos;
     };
-    this.overlayCanvas.style.top = transformPos(style.top);
-    this.overlayCanvas.style.left = transformPos(style.left);
-    this.overlayCanvas.style.translate = style.translate;
-    this.overlayCanvas.style.transform = style.transform;
+    this.overlayImage.style.top = transformPos(style.top);
+    this.overlayImage.style.left = transformPos(style.left);
+    this.overlayImage.style.translate = style.translate;
+    this.overlayImage.style.transform = style.transform;
 
-    const widthFactor = parseFloat(style.width) / this.canvas.width;
-    const heightFactor = parseFloat(style.height) / this.canvas.height;
+    const layoutWidth = Number.parseFloat(style.width);
+    const layoutHeight = Number.parseFloat(style.height);
+    const widthFactor = (Number.isNaN(layoutWidth) ? this.canvas.clientWidth : layoutWidth) / this.canvas.width;
+    const heightFactor = (Number.isNaN(layoutHeight) ? this.canvas.clientHeight : layoutHeight) / this.canvas.height;
 
-    this.overlayCanvas.style.width = `${this.template.width * widthFactor}px`;
-    this.overlayCanvas.style.height = `${this.template.height * heightFactor}px`;
-    this.overlayCanvas.style.zIndex = `${parseInt(style.zIndex) + 1}`;
-    this.overlayCanvas.style.pointerEvents = 'none';
+    this.overlayImage.style.width = `${this.template.width * widthFactor}px`;
+    this.overlayImage.style.height = `${this.template.height * heightFactor}px`;
+    const zIndex = Number.parseInt(style.zIndex, 10);
+    this.overlayImage.style.zIndex = Number.isNaN(zIndex) ? '1' : `${zIndex + 1}`;
+    this.overlayImage.style.pointerEvents = 'none';
+    this.overlayImage.style.objectFit = 'fill';
+    this.updateMaskStyle(widthFactor, heightFactor);
     this.updateRenderingMode();
 
-    if (shouldApplyTemplate) {
-      this.overlayContext = this.overlayCanvas.getContext('2d')!;
-      this.applyTemplate();
-    }
+    this.applyTemplate();
   }
 
-  applyTemplate(template: TemplateData | undefined = undefined) {
-    if (template instanceof TemplateData){
+  applyTemplate(template: OverlayTemplate | undefined = undefined) {
+    if (template) {
       this.template = template;
     }
 
-    this.overlayCanvas.width = this.template.width * 3;
-    this.overlayCanvas.height = this.template.height * 3;
-    this.overlayContext.putImageData(this.template.getDithered3x(), 0, 0);
+    if (this.renderedTemplate === this.template && this.renderedTemplateUrl)
+      return;
+
+    const nextTemplateUrl = this.getTemplateUrl(this.template);
+    if (this.renderedTemplateUrl == nextTemplateUrl)
+      return;
+
+    this.overlayImage.src = nextTemplateUrl;
+    this.renderedTemplate = this.template;
+    this.renderedTemplateUrl = nextTemplateUrl;
   }
 
   hide(){
-    this.overlayCanvas.style.display = 'none';
+    this.overlayImage.style.display = 'none';
   }
 
   show(){
-    this.overlayCanvas.style.display = 'unset';
+    this.overlayImage.style.display = 'unset';
+  }
+
+  private isOverlayTemplate(value: OverlayTemplate | OverlayTemplateSource): value is OverlayTemplate {
+    return "width" in value && "height" in value && (
+      "src" in value || "drawTo" in value
+    );
+  }
+
+  private getTemplateUrl(template: OverlayTemplate): string {
+    if ("src" in template)
+      return template.src;
+    if ("drawTo" in template) {
+      const canvas = document.createElement("canvas");
+      canvas.width = template.width;
+      canvas.height = template.height;
+      const context = canvas.getContext("2d")!;
+      template.drawTo(context);
+      return canvas.toDataURL("image/png");
+    }
+
+    throw new Error("Unsupported overlay template type.");
+  }
+
+  private updateMaskStyle(widthFactor: number, heightFactor: number) {
+    const maskImage = "radial-gradient(circle at center, white 45%, transparent 55%)";
+    const maskWidth = `${Math.max(widthFactor, 0.01)}px`;
+    const maskHeight = `${Math.max(heightFactor, 0.01)}px`;
+
+    this.overlayImage.style.setProperty("mask-image", maskImage);
+    this.overlayImage.style.setProperty("mask-repeat", "repeat");
+    this.overlayImage.style.setProperty("mask-position", "0 0");
+    this.overlayImage.style.setProperty("mask-size", `${maskWidth} ${maskHeight}`);
+    this.overlayImage.style.setProperty("-webkit-mask-image", maskImage);
+    this.overlayImage.style.setProperty("-webkit-mask-repeat", "repeat");
+    this.overlayImage.style.setProperty("-webkit-mask-position", "0 0");
+    this.overlayImage.style.setProperty("-webkit-mask-size", `${maskWidth} ${maskHeight}`);
   }
 }
 
 export async function fallbackOverlay(canvas: HTMLCanvasElement, templateController: TemplateController) {
-  const overlay = await Overlay.create(canvas, templateController);
+  return Overlay.create(canvas, templateController);
 }
