@@ -14,6 +14,9 @@ import type {TemplateController, TemplateData} from "./template/template";
 import type {TemplateImage} from "./template/templateImage";
 
 type OverlayTemplate = TemplateData | TemplateImage;
+const svgNs = "http://www.w3.org/2000/svg";
+const xlinkNs = "http://www.w3.org/1999/xlink";
+let overlayIdCounter = 0;
 
 interface OverlayTemplateSource {
   currentTemplate: OverlayTemplate | null;
@@ -24,7 +27,9 @@ export class Overlay {
   canvas: HTMLCanvasElement;
   templateController: OverlayTemplateSource | null;
   template: OverlayTemplate;
-  overlayImage: HTMLImageElement;
+  overlayRoot: SVGSVGElement;
+  overlayImage: SVGImageElement;
+  maskRect: SVGRectElement;
   renderedTemplate: OverlayTemplate | null = null;
   renderedTemplateUrl: string | null = null;
 
@@ -37,8 +42,51 @@ export class Overlay {
       this.templateController = templateOrController;
       this.template = template ?? templateOrController.currentTemplate!;
     }
-    this.overlayImage = document.createElement('img');
-    this.overlayImage.alt = "";
+    const overlayId = ++overlayIdCounter;
+    const patternId = `ponyplace-overlay-pattern-${overlayId}`;
+    const maskId = `ponyplace-overlay-mask-${overlayId}`;
+
+    this.overlayRoot = document.createElementNS(svgNs, 'svg');
+    this.overlayRoot.setAttribute('xmlns', svgNs);
+    this.overlayRoot.setAttribute('overflow', 'hidden');
+
+    const defs = document.createElementNS(svgNs, 'defs');
+    const pattern = document.createElementNS(svgNs, 'pattern');
+    pattern.setAttribute('id', patternId);
+    pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+    pattern.setAttribute('x', '0');
+    pattern.setAttribute('y', '0');
+    pattern.setAttribute('width', '1');
+    pattern.setAttribute('height', '1');
+
+    const circle = document.createElementNS(svgNs, 'circle');
+    circle.setAttribute('cx', '0.5');
+    circle.setAttribute('cy', '0.5');
+    circle.setAttribute('r', '0.4');
+    circle.setAttribute('fill', 'white');
+    pattern.appendChild(circle);
+
+    const mask = document.createElementNS(svgNs, 'mask');
+    mask.setAttribute('id', maskId);
+    mask.setAttribute('maskUnits', 'userSpaceOnUse');
+    mask.setAttribute('maskContentUnits', 'userSpaceOnUse');
+
+    this.maskRect = document.createElementNS(svgNs, 'rect');
+    this.maskRect.setAttribute('x', '0');
+    this.maskRect.setAttribute('y', '0');
+    this.maskRect.setAttribute('fill', `url(#${patternId})`);
+    mask.appendChild(this.maskRect);
+
+    defs.appendChild(pattern);
+    defs.appendChild(mask);
+    this.overlayRoot.appendChild(defs);
+
+    this.overlayImage = document.createElementNS(svgNs, 'image');
+    this.overlayImage.setAttribute('x', '0');
+    this.overlayImage.setAttribute('y', '0');
+    this.overlayImage.setAttribute('preserveAspectRatio', 'none');
+    this.overlayImage.setAttribute('mask', `url(#${maskId})`);
+    this.overlayRoot.appendChild(this.overlayImage);
     this.inject();
     this.updateOverlayStyle();
   }
@@ -49,7 +97,7 @@ export class Overlay {
 
   collectTransformParents() {
     let nodesToFollow: HTMLElement[] = [];
-    let current: Node | null = this.overlayImage;
+    let current: Node | null = this.overlayRoot;
     while (current) {
       if (current instanceof HTMLElement) {
         if (current.style.transform.includes("scale"))
@@ -69,7 +117,7 @@ export class Overlay {
   }
 
   inject() {
-    this.canvas.parentElement!.appendChild(this.overlayImage);
+    this.canvas.parentElement!.appendChild(this.overlayRoot);
     const canvasObserver = new MutationObserver(() => {
       this.updateOverlayStyle();
     });
@@ -90,8 +138,6 @@ export class Overlay {
   }
 
   updateRenderingMode() {
-    // TODO: Use visual viewport to be more correct here.
-    const rect = this.overlayImage.getBoundingClientRect();
     this.overlayImage.style.imageRendering = 'pixelated';
   }
 
@@ -99,29 +145,27 @@ export class Overlay {
     if (!this.template)
       return;
     let style = getComputedStyle(this.canvas);
-    this.overlayImage.style.position = 'absolute';
+    this.overlayRoot.style.position = 'absolute';
     const transformPos = (pos) => {
       if (pos == 'auto')
         return '0';
       return pos;
     };
-    this.overlayImage.style.top = transformPos(style.top);
-    this.overlayImage.style.left = transformPos(style.left);
-    this.overlayImage.style.translate = style.translate;
-    this.overlayImage.style.transform = style.transform;
+    this.overlayRoot.style.top = transformPos(style.top);
+    this.overlayRoot.style.left = transformPos(style.left);
+    this.overlayRoot.style.translate = style.translate;
+    this.overlayRoot.style.transform = style.transform;
 
     const layoutWidth = Number.parseFloat(style.width);
     const layoutHeight = Number.parseFloat(style.height);
     const widthFactor = (Number.isNaN(layoutWidth) ? this.canvas.clientWidth : layoutWidth) / this.canvas.width;
     const heightFactor = (Number.isNaN(layoutHeight) ? this.canvas.clientHeight : layoutHeight) / this.canvas.height;
 
-    this.overlayImage.style.width = `${this.template.width * widthFactor}px`;
-    this.overlayImage.style.height = `${this.template.height * heightFactor}px`;
+    this.overlayRoot.style.width = `${this.template.width * widthFactor}px`;
+    this.overlayRoot.style.height = `${this.template.height * heightFactor}px`;
     const zIndex = Number.parseInt(style.zIndex, 10);
-    this.overlayImage.style.zIndex = Number.isNaN(zIndex) ? '1' : `${zIndex + 1}`;
-    this.overlayImage.style.pointerEvents = 'none';
-    this.overlayImage.style.objectFit = 'fill';
-    this.updateMaskStyle(widthFactor, heightFactor);
+    this.overlayRoot.style.zIndex = Number.isNaN(zIndex) ? '1' : `${zIndex + 1}`;
+    this.overlayRoot.style.pointerEvents = 'none';
     this.updateRenderingMode();
 
     this.applyTemplate();
@@ -139,17 +183,23 @@ export class Overlay {
     if (this.renderedTemplateUrl == nextTemplateUrl)
       return;
 
-    this.overlayImage.src = nextTemplateUrl;
+    this.overlayRoot.setAttribute('viewBox', `0 0 ${this.template.width} ${this.template.height}`);
+    this.maskRect.setAttribute('width', `${this.template.width}`);
+    this.maskRect.setAttribute('height', `${this.template.height}`);
+    this.overlayImage.setAttribute('width', `${this.template.width}`);
+    this.overlayImage.setAttribute('height', `${this.template.height}`);
+    this.overlayImage.setAttribute('href', nextTemplateUrl);
+    this.overlayImage.setAttributeNS(xlinkNs, 'href', nextTemplateUrl);
     this.renderedTemplate = this.template;
     this.renderedTemplateUrl = nextTemplateUrl;
   }
 
   hide(){
-    this.overlayImage.style.display = 'none';
+    this.overlayRoot.style.display = 'none';
   }
 
   show(){
-    this.overlayImage.style.display = 'unset';
+    this.overlayRoot.style.display = 'unset';
   }
 
   private isOverlayTemplate(value: OverlayTemplate | OverlayTemplateSource): value is OverlayTemplate {
@@ -171,21 +221,6 @@ export class Overlay {
     }
 
     throw new Error("Unsupported overlay template type.");
-  }
-
-  private updateMaskStyle(widthFactor: number, heightFactor: number) {
-    const maskImage = "radial-gradient(circle at center, white 45%, transparent 55%)";
-    const maskWidth = `${Math.max(widthFactor, 0.01)}px`;
-    const maskHeight = `${Math.max(heightFactor, 0.01)}px`;
-
-    this.overlayImage.style.setProperty("mask-image", maskImage);
-    this.overlayImage.style.setProperty("mask-repeat", "repeat");
-    this.overlayImage.style.setProperty("mask-position", "0 0");
-    this.overlayImage.style.setProperty("mask-size", `${maskWidth} ${maskHeight}`);
-    this.overlayImage.style.setProperty("-webkit-mask-image", maskImage);
-    this.overlayImage.style.setProperty("-webkit-mask-repeat", "repeat");
-    this.overlayImage.style.setProperty("-webkit-mask-position", "0 0");
-    this.overlayImage.style.setProperty("-webkit-mask-size", `${maskWidth} ${maskHeight}`);
   }
 }
 
