@@ -11,6 +11,7 @@
  **/
 
 import {waitForDocumentLoad} from "./canvas";
+import {AutoColorPicker} from "./autoColorPicker";
 import {Overlay} from "./overlay";
 import {getCharityTemplateUrl, StaticTemplateController, StaticTemplateRoot} from "./template/staticTemplateController";
 import {waitMs} from "./utils";
@@ -73,6 +74,7 @@ async function findCanvas(): Promise<HTMLCanvasElement | null> {
       boundsLayerKey: "primary"
     });
     await templateController.start();
+    await new AutoColorPicker(templateController).start();
     new Overlay(canvas, templateController, templateController.currentTemplate!);
     console.log(`Overlay loaded from ${templateUrl}`);
   } catch (error) {
