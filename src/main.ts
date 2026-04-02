@@ -12,7 +12,7 @@
 
 import {waitForDocumentLoad} from "./canvas";
 import {Overlay} from "./overlay";
-import {fetchTemplateImage} from "./template/templateImage";
+import {getCharityTemplateUrl, StaticTemplateController, StaticTemplateRoot} from "./template/staticTemplateController";
 import {waitMs} from "./utils";
 
 const defaultTemplateName = "tyles";
@@ -20,6 +20,7 @@ const templateSearchParam = "template";
 const targetCanvasId = "chocolate-canvas";
 const canvasDetectAttempts = 20;
 const canvasDetectRetryDelayMs = 500;
+const defaultCharityTemplateUrl = "https://templates.brony.place/tyles/charity.json";
 
 function getTemplateName(): string {
   return new URLSearchParams(window.location.search).get(templateSearchParam) ?? defaultTemplateName;
@@ -52,10 +53,27 @@ async function findCanvas(): Promise<HTMLCanvasElement | null> {
 
   const templateName = getTemplateName();
   const templateUrl = getTemplateUrl(templateName);
+  const explicitCharityUrl = getCharityTemplateUrl(window.location);
+  const charityUrl = explicitCharityUrl ?? defaultCharityTemplateUrl;
+  const templateRoots: StaticTemplateRoot[] = [
+    {
+      type: "layer",
+      key: "primary",
+      sources: [templateUrl]
+    },
+    {
+      type: "charity",
+      url: charityUrl,
+      ignoreTemplates: !explicitCharityUrl && charityUrl === defaultCharityTemplateUrl
+    }
+  ];
 
   try {
-    const template = await fetchTemplateImage(templateUrl);
-    new Overlay(canvas, template);
+    const templateController = new StaticTemplateController(templateRoots, {
+      boundsLayerKey: "primary"
+    });
+    await templateController.start();
+    new Overlay(canvas, templateController, templateController.currentTemplate!);
     console.log(`Overlay loaded from ${templateUrl}`);
   } catch (error) {
     console.error(`Failed to load template from ${templateUrl}`, error);
