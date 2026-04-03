@@ -22,6 +22,7 @@ const targetCanvasId = "chocolate-canvas";
 const canvasDetectAttempts = 20;
 const canvasDetectRetryDelayMs = 500;
 const defaultCharityTemplateUrl = "https://templates.brony.place/tyles/charity.json";
+const overlayEnabledStorageKey = "enableOverlay";
 
 function getTemplateName(): string {
   return new URLSearchParams(window.location.search).get(templateSearchParam) ?? defaultTemplateName;
@@ -41,6 +42,44 @@ async function findCanvas(): Promise<HTMLCanvasElement | null> {
   }
 
   return null;
+}
+
+function installOverlayToggle(overlay: Overlay, enabled: boolean) {
+  const toggleButton = document.createElement("button");
+  toggleButton.type = "button";
+  toggleButton.setAttribute("aria-label", "Toggle template overlay");
+  toggleButton.style.position = "fixed";
+  toggleButton.style.top = "16px";
+  toggleButton.style.right = "16px";
+  toggleButton.style.zIndex = "2147483647";
+  toggleButton.style.padding = "8px 12px";
+  toggleButton.style.border = "1px solid rgba(0, 0, 0, 0.35)";
+  toggleButton.style.borderRadius = "8px";
+  toggleButton.style.background = "rgba(255, 255, 255, 0.92)";
+  toggleButton.style.color = "#111";
+  toggleButton.style.font = "600 13px sans-serif";
+  toggleButton.style.cursor = "pointer";
+  toggleButton.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.18)";
+  toggleButton.style.backdropFilter = "blur(4px)";
+
+  const applyState = (nextEnabled: boolean) => {
+    if (nextEnabled) {
+      overlay.show();
+    } else {
+      overlay.hide();
+    }
+
+    toggleButton.textContent = `Template: ${nextEnabled ? "On" : "Off"}`;
+  };
+
+  toggleButton.addEventListener("click", async () => {
+    const nextEnabled = toggleButton.textContent?.endsWith("Off") ?? false;
+    applyState(nextEnabled);
+    await GM.setValue(overlayEnabledStorageKey, nextEnabled);
+  });
+
+  applyState(enabled);
+  document.body.appendChild(toggleButton);
 }
 
 (async function () {
@@ -75,7 +114,9 @@ async function findCanvas(): Promise<HTMLCanvasElement | null> {
     });
     await templateController.start();
     await new AutoColorPicker(templateController).start();
-    new Overlay(canvas, templateController, templateController.currentTemplate!);
+    const overlay = new Overlay(canvas, templateController, templateController.currentTemplate!);
+    const overlayEnabled = await GM.getValue<boolean>(overlayEnabledStorageKey, true);
+    installOverlayToggle(overlay, overlayEnabled);
     console.log(`Overlay loaded from ${templateUrl}`);
   } catch (error) {
     console.error(`Failed to load template from ${templateUrl}`, error);
