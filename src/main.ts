@@ -23,6 +23,7 @@ const canvasDetectAttempts = 20;
 const canvasDetectRetryDelayMs = 500;
 const defaultCharityTemplateUrl = "https://templates.brony.place/tyles/charity.json";
 const overlayEnabledStorageKey = "enableOverlay";
+const localStorageKeyPrefix = "ponyplace-minimap:";
 
 function getTemplateName(): string {
   return new URLSearchParams(window.location.search).get(templateSearchParam) ?? defaultTemplateName;
@@ -42,6 +43,44 @@ async function findCanvas(): Promise<HTMLCanvasElement | null> {
   }
 
   return null;
+}
+
+async function getStoredValue<T extends GM.Value>(key: string, defaultValue: T): Promise<T> {
+  if (typeof GM !== "undefined" && typeof GM.getValue === "function")
+    return GM.getValue<T>(key, defaultValue);
+
+  const userscriptApi = globalThis as typeof globalThis & {
+    GM_getValue?: <TValue>(key: string, defaultValue?: TValue) => TValue;
+  };
+  if (typeof userscriptApi.GM_getValue === "function")
+    return userscriptApi.GM_getValue(key, defaultValue);
+
+  const storedValue = localStorage.getItem(`${localStorageKeyPrefix}${key}`);
+  if (storedValue === null)
+    return defaultValue;
+
+  try {
+    return JSON.parse(storedValue) as T;
+  } catch {
+    return defaultValue;
+  }
+}
+
+async function setStoredValue<T extends GM.Value>(key: string, value: T) {
+  if (typeof GM !== "undefined" && typeof GM.setValue === "function") {
+    await GM.setValue(key, value);
+    return;
+  }
+
+  const userscriptApi = globalThis as typeof globalThis & {
+    GM_setValue?: <TValue>(key: string, value: TValue) => void;
+  };
+  if (typeof userscriptApi.GM_setValue === "function") {
+    userscriptApi.GM_setValue(key, value);
+    return;
+  }
+
+  localStorage.setItem(`${localStorageKeyPrefix}${key}`, JSON.stringify(value));
 }
 
 function installOverlayToggle(overlay: Overlay, enabled: boolean) {
@@ -75,7 +114,7 @@ function installOverlayToggle(overlay: Overlay, enabled: boolean) {
   toggleButton.addEventListener("click", async () => {
     const nextEnabled = toggleButton.textContent?.endsWith("Off") ?? false;
     applyState(nextEnabled);
-    await GM.setValue(overlayEnabledStorageKey, nextEnabled);
+    await setStoredValue(overlayEnabledStorageKey, nextEnabled);
   });
 
   applyState(enabled);
@@ -115,7 +154,7 @@ function installOverlayToggle(overlay: Overlay, enabled: boolean) {
     await templateController.start();
     await new AutoColorPicker(templateController).start();
     const overlay = new Overlay(canvas, templateController, templateController.currentTemplate!);
-    const overlayEnabled = await GM.getValue<boolean>(overlayEnabledStorageKey, true);
+    const overlayEnabled = await getStoredValue(overlayEnabledStorageKey, true);
     installOverlayToggle(overlay, overlayEnabled);
     console.log(`Overlay loaded from ${templateUrl}`);
   } catch (error) {

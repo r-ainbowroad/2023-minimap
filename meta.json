@@ -7,6 +7,8 @@
     "GM.xmlHttpRequest",
     "GM.getValue",
     "GM.setValue",
+    "GM_getValue",
+    "GM_setValue",
     "GM.addElement"
   ],
   "include": [
